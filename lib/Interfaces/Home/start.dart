@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../Components/components.dart';
+
 class Start extends StatefulWidget {
   const Start({super.key});
 
@@ -52,26 +54,11 @@ class _StartState extends State<Start> {
           SizedBox(
             height: 60,
           ),
-          ElevatedButton(
+          BtnComponent(
             onPressed: () {
-              // Add your button click logic here
+              print("pressed");
             },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Theme.of(context)
-                  .primaryColor, 
-              backgroundColor:
-                  Theme.of(context).primaryColorLight, 
-              padding: EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 10), 
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8), 
-              ),
-            ),
-            child: Text(
-              "Allons-y",
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
+          )
         ],
       )),
     );
