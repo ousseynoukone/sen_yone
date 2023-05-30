@@ -10,16 +10,7 @@ class Home extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
           child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Theme.of(context).primaryColorDark,
-              Theme.of(context).primaryColor,
-            ],
-          ),
-        ),
+        color: Theme.of(context).primaryColorLight,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -27,14 +18,26 @@ class Home extends StatelessWidget {
               height: 10,
             ),
             Padding(
-                padding: EdgeInsets.all(10),
-                child: SearchInputComponent(
-                  onPressed: () {},
-                )),
-            Expanded(
-              // Add this Expanded widget
-              child: MapScreen(),
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Theme.of(context).canvasColor,
+                  ),
+                  child: SearchInputComponent(
+                    onPressed: () {},
+                  )),
             ),
+            Expanded(
+                child: Container(
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Theme.of(context).primaryColorLight,
+              ),
+              child: MapScreen(),
+            )),
           ],
         ),
       )),

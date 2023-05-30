@@ -10,13 +10,14 @@ class MapScreen extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: 20,
           title: Text(''),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColorDark,
+                  Theme.of(context).primaryColorLight,
+                  Theme.of(context).canvasColor,
                 ], // Define your gradient colors
                 begin: Alignment.topCenter, // Align to the top center
                 end: Alignment.bottomCenter, // Align to the bottom center
