@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sen_yone/Interfaces/Home/home.dart';
 
 import '../../Components/components.dart';
 
@@ -56,7 +57,12 @@ class _StartState extends State<Start> {
           ),
           BtnComponent(
             onPressed: () {
-              print("pressed");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Home(),
+                ),
+              );
             },
           )
         ],

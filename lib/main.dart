@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.red,
         primaryColorDark: const Color.fromARGB(221, 19, 18, 18),
         primaryColorLight: Color.fromARGB(255, 255, 253, 253),
+        canvasColor: Color.fromARGB(218, 250, 246, 246),
         useMaterial3: true,
       ),
       home: const Start(),
