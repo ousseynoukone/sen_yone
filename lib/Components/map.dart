@@ -13,18 +13,24 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   LatLng latLng = LatLng(14.7645042, -17.3660286);
+  //  void _fetchCurrentPosition() async {
+  //   try {
+  //     Position position = await getPosition.determinePosition();
+  //     setState(() {
+  //       print(latLng);
 
-  void getCurrentPosition() async {
-    Position position = await getPosition.determinePosition();
-    setState(() {
-      latLng = LatLng(position.latitude, position.longitude);
-    });
-  }
+  //       latLng = LatLng(position.latitude, position.longitude);
+  //       print(latLng);
+  //     });
+  //   } catch (ex) {
+  //     print(ex);
+  //   }
+  // }
 
   @override
   void initState() {
-    getCurrentPosition();
     super.initState();
+    //_fetchCurrentPosition();
   }
 
   @override
@@ -50,31 +56,71 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
         ),
-        body: Container(
-          child: FlutterMap(
-            options: MapOptions(
-              center: latLng,
-              zoom: 9.2,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.app',
-              ),
-            ],
-            nonRotatedChildren: [
-              RichAttributionWidget(
-                attributions: [
-                  TextSourceAttribution(
-                    'OpenStreetMap contributors',
-                    onTap: () {},
-                  ),
-                ],
-              ),
-            ],
-          ),
+        body: FutureBuilder<Position>(
+          future: getPosition.determinePosition(), // async work
+          builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Center(child: CircularProgressIndicator());
+              default:
+                if (snapshot.hasError)
+                  return Text('Error: ${snapshot.error}');
+                else if (snapshot.hasData == false) {
+                  print(" does not have data");
+                  return Maps(
+                      latLng:latLng);
+                } else {
+                  return Maps(
+                      latLng: LatLng(
+                          snapshot.data!.latitude, snapshot.data!.longitude));
+                }
+            }
+          },
         ),
       ),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+class Maps extends StatefulWidget {
+  final LatLng latLng;
+  const Maps({required this.latLng});
+
+  @override
+  State<Maps> createState() => _MapsState();
+}
+
+class _MapsState extends State<Maps> {
+  @override
+  Widget build(BuildContext context) {
+    return FlutterMap(
+      options: MapOptions(
+        center: widget.latLng,
+        zoom: 17.2,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'com.example.app',
+        ),
+      ],
+      nonRotatedChildren: [
+        RichAttributionWidget(
+          attributions: [
+            TextSourceAttribution(
+              'OpenStreetMap contributors',
+              onTap: () {},
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
