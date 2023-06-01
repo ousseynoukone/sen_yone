@@ -16,10 +16,9 @@ class MyApp extends StatelessWidget {
       title: 'SenYone',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        primaryColor: Colors.red,
+        primaryColor: Color.fromRGBO(138, 21, 56, 1),
         primaryColorDark: const Color.fromARGB(221, 19, 18, 18),
         primaryColorLight: Color.fromARGB(255, 255, 255, 255),
-        canvasColor: Colors.grey[200],
         useMaterial3: true,
       ),
       home: const Start(),
