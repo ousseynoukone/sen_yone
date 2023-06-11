@@ -67,8 +67,7 @@ class _MapScreenState extends State<MapScreen> {
                   return Text('Error: ${snapshot.error}');
                 else if (snapshot.hasData == false) {
                   print(" does not have data");
-                  return Maps(
-                      latLng:latLng);
+                  return Maps(latLng: latLng);
                 } else {
                   return Maps(
                       latLng: LatLng(
@@ -81,13 +80,6 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 }
-
-
-
-
-
-
-
 
 class Maps extends StatefulWidget {
   final LatLng latLng;
@@ -109,6 +101,24 @@ class _MapsState extends State<Maps> {
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'com.example.app',
+        ),
+        MarkerLayer(
+          markers: [
+            Marker(
+              point: widget.latLng,
+              width: 20,
+              height: 20,
+              builder: (context) => Container(
+                width: 80,
+                height: 80,
+                child: Icon(
+                  Icons.location_on_sharp,
+                  color: const Color.fromARGB(255, 182, 0, 0),
+                  size: 40,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
       nonRotatedChildren: [
