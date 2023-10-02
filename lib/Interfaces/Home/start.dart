@@ -28,6 +28,9 @@ class _StartState extends State<Start> {
               fit: BoxFit.cover,
             ),
           ),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             "SenBus",
             style: TextStyle(
@@ -41,17 +44,7 @@ class _StartState extends State<Start> {
           SizedBox(
             height: 10,
           ),
-          Text(
-            "Votre destination , Notre préocupation...",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 15,
-              color: Theme.of(context).primaryColorLight,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2.0,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
+          // CircularProgressIndicator(color: Theme.of(context).primaryColorLight),
           SizedBox(
             height: 60,
           ),
