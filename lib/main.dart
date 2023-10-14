@@ -12,8 +12,12 @@ void main() async {
 
     Future<void> _initHive() async{
   await Hive.initFlutter();
+  // Here is stored email,password , isLogged  variable
   await Hive.openBox("login");
-  await Hive.openBox("accounts");
+
+  //Here is stored username & token data
+  await Hive.openBox("account_data");
+
 }
    
 

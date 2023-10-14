@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:sen_yone/Models/Dto/user_dto.dart';
+import 'package:sen_yone/Models/user.dart';
+import '../../Services/auth_service.dart';
 import '../Home/home.dart';
 import './register.dart';
 
@@ -15,21 +19,49 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-
+  var email = "";
+  var password = "";
+  bool isLogin = false;
+  bool isAnyError = false;
   final FocusNode _focusNodePassword = FocusNode();
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
   bool _obscurePassword = true;
   final Box _boxLogin = Hive.box("login");
-  final Box _boxAccounts = Hive.box("accounts");
+  final Box _boxAccount = Hive.box("account_data");
+
+  login() async {
+    UserDtoLogin u = UserDtoLogin(email: email, password: password);
+    var response = await AuthService.login(u);
+    if (response != null) {
+      setState(() {
+        isLogin = false;
+      });
+      if (response.statusCode == 200) {
+        var responseJson = jsonDecode(response.body);
+        _boxAccount.put("username", responseJson['username']);
+        _boxAccount.put("token", responseJson['token']);
+        _boxLogin.put("login", email);
+        _boxLogin.put("password", password);
+        _boxLogin.put("loginStatus", true);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(),
+          ),
+        );
+      }
+      if (response.statusCode == 401) {
+        setState(() {
+          isAnyError = true;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (_boxLogin.get("loginStatus") ?? false) {
-      return Home();
-    }
-
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
       body: Form(
@@ -66,9 +98,8 @@ class _LoginState extends State<Login> {
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return "Veuillez saisir votre  email.";
-                  } else if (!_boxAccounts.containsKey(value)) {
-                    return "Ce compte n'existe pas.";
                   }
+                  email = value;
 
                   return null;
                 },
@@ -79,7 +110,6 @@ class _LoginState extends State<Login> {
                 focusNode: _focusNodePassword,
                 obscureText: _obscurePassword,
                 keyboardType: TextInputType.visiblePassword,
-                style: TextStyle(color: Colors.blue),
                 decoration: InputDecoration(
                   labelText: "Mots de passe",
                   prefixIcon: const Icon(Icons.password_outlined),
@@ -102,10 +132,8 @@ class _LoginState extends State<Login> {
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return "Veillez saisir votre mots de passe.";
-                  } else if (value !=
-                      _boxAccounts.get(_controllerUsername.text)) {
-                    return "Mots de passe incorrecte.";
                   }
+                  password = value;
 
                   return null;
                 },
@@ -120,27 +148,32 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        _boxLogin.put("loginStatus", true);
-                        _boxLogin.put("userName", _controllerUsername.text);
-
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Home();
-                            },
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text("Se connecter"),
+                    onPressed: isLogin
+                        ? null
+                        : () {
+                            if (_formKey.currentState?.validate() ?? false) {
+                              login();
+                              setState(() {
+                                isLogin = true;
+                              });
+                              // Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) {
+                              //       return Home();
+                              //     },
+                              //   ),
+                              // );
+                            }
+                          },
+                    child: isLogin
+                        ? CircularProgressIndicator()
+                        : const Text("Se connecter"),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Vous n'avez pas de compte?"),
+                      const Text("Vous n'avez pas de compte ?"),
                       TextButton(
                         onPressed: () {
                           _formKey.currentState?.reset();
@@ -156,6 +189,17 @@ class _LoginState extends State<Login> {
                         },
                         child: const Text("Créer un compte"),
                       ),
+                      SizedBox(
+                        height: 60,
+                      ),
+                      Text(
+                        isAnyError
+                            ? "Votre compte est ou a été désactivée"
+                            : "",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorLight,
+                        ),
+                      )
                     ],
                   ),
                 ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sen_yone/Interfaces/ChatBot/chatbot.dart';
 import 'package:sen_yone/Interfaces/Line/lines.dart';
 import '../../Components/components.dart';
@@ -12,6 +13,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+    final Box _boxAccount = Hive.box("account_data");
+
   int _selectedIndex = 1;
   void _onItemTapped(int index) {
     if (index == 0) {
@@ -49,6 +52,7 @@ class _HomeState extends State<Home> {
                         onPressed: () {},
                       )),
                 ),
+                
                 Container(
                   height: 610,
                   width: 400,
