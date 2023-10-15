@@ -1,5 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:sen_yone/Interfaces/Auth/login.dart';
+import 'package:sen_yone/Models/user.dart';
+
+import '../../Models/Dto/user_dto.dart';
+import '../../Services/auth_service.dart';
+import 'activate_account.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -19,13 +27,59 @@ class _SignupState extends State<Signup> {
   final TextEditingController _controllerPassword = TextEditingController();
   final TextEditingController _controllerConFirmPassword =
       TextEditingController();
-
-  final Box _boxAccounts = Hive.box("accounts");
+  bool isRegistering = false;
   bool _obscurePassword = true;
+  var isAnyMessageOrError = "";
+
+  register() async {
+    User u = User(
+        email: _controllerEmail.text,
+        password: _controllerPassword.text,
+        name: _controllerUsername.text);
+    var response = await AuthService.register(u);
+    print(response.statusCode);
+    if (response.statusCode == 422) {
+      final Map<String, dynamic> responseJson = json.decode(response.body);
+
+      if (responseJson.containsKey("errors") &&
+          responseJson["errors"].containsKey("email")) {
+        setState(() {
+          isAnyMessageOrError = "L'email saisit existe déjà ! ";
+        });
+      }
+    } else {
+      setState(() {
+        isAnyMessageOrError = response.body;
+      });
+    }
+    if (response != null) {
+      setState(() {
+        isRegistering = false;
+      });
+
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Active_Account(),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Activation de votre compte"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop(); // Go back when the button is pressed
+          },
+        ),
+      ),
       backgroundColor: Theme.of(context).primaryColorLight,
       body: Form(
         key: _formKey,
@@ -60,8 +114,6 @@ class _SignupState extends State<Signup> {
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return "Veuillez saisir votre nom d'utilisateur.";
-                  } else if (_boxAccounts.containsKey(value)) {
-                    return "Ce nom d'utilisateur existe deja";
                   }
 
                   return null;
@@ -163,6 +215,11 @@ class _SignupState extends State<Signup> {
                   return null;
                 },
               ),
+              const SizedBox(height: 10),
+              // Text(
+              //   isAnyMessageOrError.isNotEmpty ? isAnyMessageOrError : "",
+              //   style: TextStyle(color: Theme.of(context).primaryColor),
+              // ),
               const SizedBox(height: 50),
               Column(
                 children: [
@@ -175,37 +232,31 @@ class _SignupState extends State<Signup> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState?.validate() ?? false) {
-                        _boxAccounts.put(
-                          _controllerUsername.text,
-                          _controllerConFirmPassword.text,
-                        );
+                        setState(() {
+                          isRegistering = true;
+                        });
+                        register();
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            width: 200,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.secondary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                            content: const Text("Compte crée avec sucess ! "),
-                          ),
-                        );
-
-                        _formKey.currentState?.reset();
-
-                        Navigator.pop(context);
+                        // _formKey.currentState?.reset();
                       }
                     },
-                    child: const Text("S'inscrire"),
+                    child: isRegistering
+                        ? CircularProgressIndicator()
+                        : const Text("S'inscrire"),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text("Vous-avez déjà un compte ?"),
                       TextButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Login(),
+                            ),
+                          )
+                        },
                         child: const Text("Se connecter"),
                       ),
                     ],
@@ -217,17 +268,5 @@ class _SignupState extends State<Signup> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _focusNodeEmail.dispose();
-    _focusNodePassword.dispose();
-    _focusNodeConfirmPassword.dispose();
-    _controllerUsername.dispose();
-    _controllerEmail.dispose();
-    _controllerPassword.dispose();
-    _controllerConFirmPassword.dispose();
-    super.dispose();
   }
 }

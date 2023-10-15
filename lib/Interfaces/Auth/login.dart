@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:sen_yone/Interfaces/Auth/activate_account.dart';
 import 'package:sen_yone/Models/Dto/user_dto.dart';
 import 'package:sen_yone/Models/user.dart';
 import '../../Services/auth_service.dart';
@@ -22,7 +23,7 @@ class _LoginState extends State<Login> {
   var email = "";
   var password = "";
   bool isLogin = false;
-  bool isAnyError = false;
+  var isAnyError = "";
   final FocusNode _focusNodePassword = FocusNode();
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
@@ -52,11 +53,17 @@ class _LoginState extends State<Login> {
           ),
         );
       }
-      if (response.statusCode == 401) {
-        setState(() {
-          isAnyError = true;
-        });
-      }
+
+      setState(() {
+        isLogin = false;
+        if (response.statusCode == 401) {
+          isAnyError = "Votre compte est ou a été désactivée";
+        } else if (response.statusCode == 403) {
+          isAnyError = "Email et/ou mots de passe incorrecte !";
+        } else if (response.statusCode != 200) {
+          isAnyError = "Une erreur réseau s'est produite. Veuillez réessayer.";
+        }
+      });
     }
   }
 
@@ -138,6 +145,13 @@ class _LoginState extends State<Login> {
                   return null;
                 },
               ),
+              const SizedBox(height: 10),
+              Text(
+                isAnyError,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
               const SizedBox(height: 60),
               Column(
                 children: [
@@ -187,19 +201,28 @@ class _LoginState extends State<Login> {
                             ),
                           );
                         },
-                        child: const Text("Créer un compte"),
+                        child: const Text("Créer un compte."),
                       ),
-                      SizedBox(
-                        height: 60,
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          _formKey.currentState?.reset();
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const Active_Account();
+                              },
+                            ),
+                          );
+                        },
+                        child: const Text("Activer votre compte."),
                       ),
-                      Text(
-                        isAnyError
-                            ? "Votre compte est ou a été désactivée"
-                            : "",
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColorLight,
-                        ),
-                      )
                     ],
                   ),
                 ],

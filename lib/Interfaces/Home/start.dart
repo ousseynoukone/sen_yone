@@ -28,7 +28,7 @@ class _StartState extends State<Start> {
   void initState() {
     super.initState();
     if (_boxLogin.get("loginStatus") ?? false) {
-      login();
+      // login();
     }
   }
 

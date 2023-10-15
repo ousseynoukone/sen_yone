@@ -4,17 +4,14 @@ import '../Shared/shared_config.dart';
 import 'package:http/http.dart' as http;
 
 class HttpAuthRequest {
-
   static Future<http.Response> loginUser(UserDtoLogin u) async {
     String endpoint = "api/login";
     String url = SharedConfig().BASE_URL + endpoint;
-        _setHeaders() => {
-    'Content-type' : 'application/json',
-    'Accept' : 'application/json',
-   
-  };
-    return await http.post(Uri.parse(url),
-        body: u.toBody());
+    _setHeaders() => {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        };
+    return await http.post(Uri.parse(url), body: u.toBody());
   }
 
   static Future<http.Response> registerUser(User u) async {
@@ -25,8 +22,9 @@ class HttpAuthRequest {
 
   static Future<http.Response> activeAccount(String code) async {
     String endpoint = "api/active-account";
+
     return await http.post(Uri.parse(SharedConfig().BASE_URL + endpoint),
-        body: {code: code});
+        body: {"code": code});
   }
 
   static Future<http.Response> sendEmailForForgetPassword(String email) async {
