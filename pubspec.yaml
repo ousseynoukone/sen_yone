@@ -34,6 +34,7 @@ dependencies:
   flutter_map: ^4.0.0
   hive_flutter: ^1.1.0
   flutter_native_splash: ^2.3.2
+  google_fonts: 4.0.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -63,8 +64,133 @@ flutter:
     - assets/imgs/transport1.jpg
     - assets/imgs/DDD.jpg
     - assets/imgs/AFTU.jpg
-
-
+    - assets/page-1/images/wi-fi.png
+    - assets/page-1/images/vector.png
+    - assets/page-1/images/vector-wcv.png
+    - assets/page-1/images/vector-LCJ.png
+    - assets/page-1/images/vector-rrW.png
+    - assets/page-1/images/vector-yxE.png
+    - assets/page-1/images/vector-tux.png
+    - assets/page-1/images/vector-4Ur.png
+    - assets/page-1/images/vector-thQ.png
+    - assets/page-1/images/auto-group-ecqq.png
+    - assets/page-1/images/wi-fi-4Qi.png
+    - assets/page-1/images/vector-Fgn.png
+    - assets/page-1/images/vector-VZc.png
+    - assets/page-1/images/vector-Qkz.png
+    - assets/page-1/images/vector-fRL.png
+    - assets/page-1/images/vector-C74.png
+    - assets/page-1/images/vector-EM8.png
+    - assets/page-1/images/vector-6rE.png
+    - assets/page-1/images/vector-zpJ.png
+    - assets/page-1/images/rectangle-4384-bg.png
+    - assets/page-1/images/battery.png
+    - assets/page-1/images/rectangle-4384.png
+    - assets/page-1/images/vector-bUe.png
+    - assets/page-1/images/combined-shape.png
+    - assets/page-1/images/vector-96A.png
+    - assets/page-1/images/vector-j1k.png
+    - assets/page-1/images/vector-N26.png
+    - assets/page-1/images/combined-shape-mTY.png
+    - assets/page-1/images/vector-cnE.png
+    - assets/page-1/images/vector-dmC.png
+    - assets/page-1/images/vector-gcz.png
+    - assets/page-1/images/wi-fi-od4.png
+    - assets/page-1/images/auto-group-ggn6.png
+    - assets/page-1/images/auto-group-eq8w.png
+    - assets/page-1/images/vector-Ffx.png
+    - assets/page-1/images/auto-group-snqa.png
+    - assets/page-1/images/vector-tLr.png
+    - assets/page-1/images/vector-rPU.png
+    - assets/page-1/images/vector-a5p.png
+    - assets/page-1/images/vector-uhk.png
+    - assets/page-1/images/vector-TjG.png
+    - assets/page-1/images/auto-group-wezx.png
+    - assets/page-1/images/auto-group-osae.png
+    - assets/page-1/images/vector-e8S.png
+    - assets/page-1/images/battery-Ppe.png
+    - assets/page-1/images/auto-group-rt9q.png
+    - assets/page-1/images/auto-group-kd5t.png
+    - assets/page-1/images/auto-group-57qn.png
+    - assets/page-1/images/vector-dQ6.png
+    - assets/page-1/images/auto-group-hyqz.png
+    - assets/page-1/images/vector-8bk.png
+    - assets/page-1/images/vector-5kN.png
+    - assets/page-1/images/vector-Fgn-S74.png
+    - assets/page-1/images/vector-fnz.png
+    - assets/page-1/images/vector-p5G.png
+    - assets/page-1/images/vector-wQn.png
+    - assets/page-1/images/vector-Y1p.png
+    - assets/page-1/images/vector-RFG.png
+    - assets/page-1/images/vector-sKY.png
+    - assets/page-1/images/combined-shape-7jg.png
+    - assets/page-1/images/battery-K8v.png
+    - assets/page-1/images/vector-EMg.png
+    - assets/page-1/images/battery-Har.png
+    - assets/page-1/images/battery-PcW.png
+    - assets/page-1/images/vector-ya2.png
+    - assets/page-1/images/wi-fi-VYv.png
+    - assets/page-1/images/rectangle-4384-qHC.png
+    - assets/page-1/images/vector-434.png
+    - assets/page-1/images/vector-wMk.png
+    - assets/page-1/images/auto-group-5gkj.png
+    - assets/page-1/images/wi-fi-hNA.png
+    - assets/page-1/images/vector-Bbp.png
+    - assets/page-1/images/vector-WhG.png
+    - assets/page-1/images/combined-shape-D1L.png
+    - assets/page-1/images/battery-DvS.png
+    - assets/page-1/images/vector-NoL.png
+    - assets/page-1/images/vector-Uzn.png
+    - assets/page-1/images/vector-A6v.png
+    - assets/page-1/images/wi-fi-83k.png
+    - assets/page-1/images/vector-1za.png
+    - assets/page-1/images/vector-68r.png
+    - assets/page-1/images/combined-shape-o5C.png
+    - assets/page-1/images/vector-k1Q.png
+    - assets/page-1/images/vector-sri.png
+    - assets/page-1/images/vector-daz.png
+    - assets/page-1/images/vector-PKG.png
+    - assets/page-1/images/vector-8Jn.png
+    - assets/page-1/images/combined-shape-sGN.png
+    - assets/page-1/images/vector-2Mx.png
+    - assets/page-1/images/vector-Zcn.png
+    - assets/page-1/images/vector-QNW.png
+    - assets/page-1/images/wi-fi-xev.png
+    - assets/page-1/images/vector-pKk.png
+    - assets/page-1/images/vector-JE6.png
+    - assets/page-1/images/vector-F9L.png
+    - assets/page-1/images/vector-cEn.png
+    - assets/page-1/images/vector-aBc.png
+    - assets/page-1/images/vector-LwU.png
+    - assets/page-1/images/vector-XzJ.png
+    - assets/page-1/images/vector-bFQ.png
+    - assets/page-1/images/battery-REz.png
+    - assets/page-1/images/vector-ATU.png
+    - assets/page-1/images/auto-group-52zg.png
+    - assets/page-1/images/vector-QMg.png
+    - assets/page-1/images/vector-vqp.png
+    - assets/page-1/images/vector-HJz.png
+    - assets/page-1/images/auto-group-ujvg.png
+    - assets/page-1/images/vector-t3t.png
+    - assets/page-1/images/wi-fi-cVg.png
+    - assets/page-1/images/vector-AGJ.png
+    - assets/page-1/images/rectangle-4384-jn2.png
+    - assets/page-1/images/battery-VHk.png
+    - assets/page-1/images/battery-cdG.png
+    - assets/page-1/images/combined-shape-TNS.png
+    - assets/page-1/images/vector-F3Q.png
+    - assets/page-1/images/vector-P9c.png
+    - assets/page-1/images/vector-YHQ.png
+    - assets/page-1/images/wi-fi-y7p.png
+    - assets/page-1/images/combined-shape-unA.png
+    - assets/page-1/images/vector-PSS.png
+    - assets/page-1/images/vector-kXt.png
+    - assets/page-1/images/vector-77Y.png
+    - assets/page-1/images/vector-DAa.png
+    - assets/page-1/images/auto-group-aqx8.png
+    - assets/page-1/images/rectangle-4384-7mk.png
+    - assets/page-1/images/combined-shape-3tE.png
+    - assets/page-1/images/vector-Jsk.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

@@ -44,12 +44,14 @@ class _Active_AccountState extends State<Active_Account> {
       isActivating = false;
     });
     if (response.statusCode == 200) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Login(),
-        ),
-      );
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Login(),
+          ),
+        );
+      });
     }
   }
 

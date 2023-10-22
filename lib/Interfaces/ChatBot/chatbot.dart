@@ -25,24 +25,41 @@ class _chatBotState extends State<chatBot> {
 
   @override
   Widget build(BuildContext context) {
+    double baseWidth = 428;
+    double fem = MediaQuery.of(context).size.width / baseWidth;
+    double ffem = fem * 0.97;
     return Scaffold(
-             appBar: AppBar(
+        appBar: AppBar(
           automaticallyImplyLeading: false, // Remove the back button
           // Other AppBar properties and widgets
         ),
         bottomNavigationBar: BottomNavigationBar(
-      selectedItemColor: Theme.of(context).primaryColor,
-      unselectedItemColor: Theme.of(context).primaryColorDark,
-      type: BottomNavigationBarType.fixed,
-      items: [
-        BottomNavigationBarItem(
-            icon: Icon(Icons.remove_red_eye_rounded), label: 'Les lignes'),
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.message_rounded), label: 'Chatbot'),
-      ],
-      currentIndex: _selectedIndex,
-      onTap: _onItemTapped,
-    ));
+          selectedLabelStyle: TextStyle(
+            fontFamily: 'Red Hat Display',
+            fontSize: 14 * ffem,
+            fontWeight: FontWeight.w700,
+            height: 1.3225 * ffem / fem,
+            color: Theme.of(context).primaryColorLight,
+          ),
+          unselectedLabelStyle: TextStyle(
+            fontFamily: 'Red Hat Display',
+            fontSize: 12 * ffem,
+            fontWeight: FontWeight.w700,
+            height: 1.3225 * ffem / fem,
+            color: Theme.of(context).primaryColorLight,
+          ),
+          selectedItemColor: Theme.of(context).primaryColor,
+          unselectedItemColor: Theme.of(context).primaryColorDark,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.route), label: 'Les lignes'),
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.message_rounded), label: 'Chatbot'),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ));
   }
 }

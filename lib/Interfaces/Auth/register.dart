@@ -72,7 +72,7 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Activation de votre compte"),
+        title: Text("Creation de votre compte"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

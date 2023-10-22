@@ -35,27 +35,12 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double baseWidth = 428;
+    double fem = MediaQuery.of(context).size.width / baseWidth;
+    double ffem = fem * 0.97;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(0),
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          toolbarHeight: 20,
-          automaticallyImplyLeading: false,
-          title: Text(''),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColor,
-                ], // Define your gradient colors
-                begin: Alignment.topCenter, // Align to the top center
-                end: Alignment.bottomCenter, // Align to the bottom center
-              ),
-            ),
-          ),
-        ),
         body: FutureBuilder<Position>(
           future: getPosition.determinePosition(), // async work
           builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
@@ -69,9 +54,22 @@ class _MapScreenState extends State<MapScreen> {
                   print(" does not have data");
                   return Maps(latLng: latLng);
                 } else {
-                  return Maps(
-                      latLng: LatLng(
-                          snapshot.data!.latitude, snapshot.data!.longitude));
+                  return Column(children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 23 * fem,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10 * fem),
+                            color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+                    Expanded(
+                      child: Maps(
+                          latLng: LatLng(snapshot.data!.latitude,
+                              snapshot.data!.longitude)),
+                    ),
+                  ]);
                 }
             }
           },
@@ -92,45 +90,51 @@ class Maps extends StatefulWidget {
 class _MapsState extends State<Maps> {
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
-      options: MapOptions(
-        center: widget.latLng,
-        zoom: 17.2,
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.app',
-        ),
-        MarkerLayer(
-          markers: [
-            Marker(
-              point: widget.latLng,
-              width: 20,
-              height: 20,
-              builder: (context) => Container(
-                width: 80,
-                height: 80,
-                child: Icon(
-                  Icons.location_on_sharp,
-                  color: const Color.fromARGB(255, 182, 0, 0),
-                  size: 40,
+    double baseWidth = 428;
+    double fem = MediaQuery.of(context).size.width / baseWidth;
+    double ffem = fem * 0.97;
+
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(10 * fem),
+        child: FlutterMap(
+          options: MapOptions(
+            center: widget.latLng,
+            zoom: 17.2,
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.example.app',
+            ),
+            MarkerLayer(
+              markers: [
+                Marker(
+                  point: widget.latLng,
+                  width: 20,
+                  height: 20,
+                  builder: (context) => Container(
+                    width: 80,
+                    height: 80,
+                    child: Icon(
+                      Icons.location_on_sharp,
+                      color: Theme.of(context).primaryColor,
+                      size: 40,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
-        ),
-      ],
-      nonRotatedChildren: [
-        RichAttributionWidget(
-          attributions: [
-            TextSourceAttribution(
-              'OpenStreetMap contributors',
-              onTap: () {},
+          nonRotatedChildren: [
+            RichAttributionWidget(
+              attributions: [
+                TextSourceAttribution(
+                  'OpenStreetMap contributors',
+                  onTap: () {},
+                ),
+              ],
             ),
           ],
-        ),
-      ],
-    );
+        ));
   }
 }
