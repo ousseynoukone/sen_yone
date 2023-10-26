@@ -10,6 +10,9 @@ void main() async {
 
   runApp(const MyApp());
 }
+Color hexToColor(String code) {
+  return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
+}
 
 Future<void> _initHive() async {
   await Hive.initFlutter();
@@ -32,7 +35,7 @@ class MyApp extends StatelessWidget {
       title: 'SenYone',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        primaryColor: Color(0xe5b10000),
+        primaryColor: hexToColor('#B10000'), // Use the color string with a hash (#) here
         primaryColorDark: const Color.fromARGB(221, 19, 18, 18),
         primaryColorLight: Color.fromARGB(255, 255, 255, 255),
         useMaterial3: true,

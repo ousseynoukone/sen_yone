@@ -33,6 +33,7 @@ class _HomeState extends State<Home> {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+    print(_boxAccount.get("username"));
 
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColorLight,
@@ -59,12 +60,10 @@ class _HomeState extends State<Home> {
                   ),
                   //Bottom bar
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    // crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        // group34022ECa (210:894)
-                        margin: EdgeInsets.fromLTRB(
-                            0 * fem, 0 * fem, 144 * fem, 0 * fem),
                         child: TextButton(
                           onPressed: () {
                             print("History");
@@ -85,7 +84,7 @@ class _HomeState extends State<Home> {
                                     'Historique',
                                     style: SafeGoogleFont(
                                       'Red Hat Display',
-                                      fontSize: 14 * ffem,
+                                      fontSize: 16 * ffem,
                                       fontWeight: FontWeight.w700,
                                       height: 1.3225 * ffem / fem,
                                       color:
@@ -108,39 +107,55 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      Container(
-                        // ousseynoukon9yk (207:654)
-                        margin: EdgeInsets.fromLTRB(
-                            0 * fem, 0 * fem, 10 * fem, 2 * fem),
-                        child: Text(
-                          'Ousseynou Koné',
-                          style: SafeGoogleFont(
-                            'Red Hat Display',
-                            fontSize: 13 * ffem,
-                            fontWeight: FontWeight.w400,
-                            height: 1.3225 * ffem / fem,
-                            color: Color(0xffffffff),
+                      TextButton(
+                        onPressed: () {
+                          print("History");
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                        ),
+                        child: Container(
+                          height: double.infinity,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                // ousseynoukon9yk (207:654)
+                                margin: EdgeInsets.fromLTRB(
+                                    0 * fem, 0 * fem, 5 * fem, 1 * fem),
+                                child: Text(
+                                  'Ousseynou Koné',
+                                  style: SafeGoogleFont(
+                                    'Red Hat Display',
+                                    fontSize: 16 * ffem,
+                                    fontWeight: FontWeight.w400,
+                                    height: 1.3225 * ffem / fem,
+                                    color: Color(0xffffffff),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                // vectorG2n (207:656)
+                                width: 18 * fem,
+                                height: 18 * fem,
+                                child: TextButton(
+                                  onPressed: () {
+                                    print("logOut");
+                                  },
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                  child: Image.asset(
+                                    'assets/page-1/images/vector-A6v.png',
+                                    width: 18 * fem,
+                                    height: 18 * fem,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
-                      Container(
-                        // vectorG2n (207:656)
-                        width: 18 * fem,
-                        height: 18 * fem,
-                        child: TextButton(
-                          onPressed: () {
-                            print("logOut");
-                          },
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                          ),
-                          child: Image.asset(
-                            'assets/page-1/images/vector-A6v.png',
-                            width: 18 * fem,
-                            height: 18 * fem,
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -175,13 +190,12 @@ class _HomeState extends State<Home> {
                           borderRadius: BorderRadius.circular(8 * fem),
                         ),
                         child: Container(
-                            width: 165,
-                            child:
-                                // Second search bar
-
-                                TextField(
+                          width: 130,
+                          child: Center(
+                            // Center the TextField contents
+                            child: TextField(
                               decoration: InputDecoration(
-                                hintText: 'Lieu de depart...',
+                                hintText: 'Départ...',
                                 hintStyle: TextStyle(
                                     color: Theme.of(context).primaryColorDark),
                                 border: InputBorder.none,
@@ -189,36 +203,41 @@ class _HomeState extends State<Home> {
                                     color: Theme.of(context).primaryColorDark),
                               ),
                               onChanged: (value) {},
-                            )),
+                            ),
+                          ),
+                        ),
                       ),
                       Container(
-                        // autogroupenaeyE2 (NxMJTjVF3cRmshPuB7enae)
-                        padding: EdgeInsets.fromLTRB(
-                            9 * fem, 13 * fem, 11 * fem, 13 * fem),
-                        height: double.infinity,
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Theme.of(context).primaryColor),
-                          color: Theme.of(context).primaryColorLight,
-                          borderRadius: BorderRadius.circular(8 * fem),
-                        ),
-                        child: Container(
-                            width: 165,
-                            child:
-                                // Second search bar
-
-                                TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Lieu d\'arrivé...',
-                                hintStyle: TextStyle(
-                                    color: Theme.of(context).primaryColorDark),
-                                border: InputBorder.none,
-                                suffixIcon: Icon(Icons.search,
-                                    color: Theme.of(context).primaryColorDark),
+                          // autogroupenaeyE2 (NxMJTjVF3cRmshPuB7enae)
+                          padding: EdgeInsets.fromLTRB(
+                              9 * fem, 13 * fem, 11 * fem, 13 * fem),
+                          height: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor),
+                            color: Theme.of(context).primaryColorLight,
+                            borderRadius: BorderRadius.circular(8 * fem),
+                          ),
+                          child: Container(
+                            width: 130,
+                            child: Container(
+                              alignment: Alignment
+                                  .center, // Align the contents of the inner container to the center
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Arrivé...',
+                                  hintStyle: TextStyle(
+                                      color:
+                                          Theme.of(context).primaryColorDark),
+                                  border: InputBorder.none,
+                                  suffixIcon: Icon(Icons.search,
+                                      color:
+                                          Theme.of(context).primaryColorDark),
+                                ),
+                                onChanged: (value) {},
                               ),
-                              onChanged: (value) {},
-                            )),
-                      ),
+                            ),
+                          )),
                     ],
                   ),
                 ),
@@ -228,21 +247,16 @@ class _HomeState extends State<Home> {
                     margin: EdgeInsets.fromLTRB(
                         13 * fem, 0 * fem, 12 * fem, 0 * fem),
                     width: double.infinity,
-                    height: 630 * fem,
+                    height: 580 * fem,
                     child: MapScreen()),
                 SizedBox(height: 10),
 
                 Container(
                   // autogroup9sfcXYN (NxMJhE6m1x6MzaXkjG9SfC)
-                  margin:
-                      EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 7 * fem),
-                  padding: EdgeInsets.fromLTRB(
-                      134 * fem, 8 * fem, 123 * fem, 6 * fem),
+
                   width: double.infinity,
                   height: 53 * fem,
-                  decoration: BoxDecoration(
-                    color: Color(0xffb10000),
-                  ),
+
                   child: TextButton(
                     // group34007Rte (208:741)
                     onPressed: () {
@@ -257,39 +271,51 @@ class _HomeState extends State<Home> {
                       width: double.infinity,
                       height: double.infinity,
                       decoration: BoxDecoration(
-                        color: Color(0xff810000),
+                        color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(10 * fem),
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            // vectorKUE (208:672)
-                            margin: EdgeInsets.fromLTRB(
-                                0 * fem, 0 * fem, 6 * fem, 0 * fem),
-                            width: 22 * fem,
-                            height: 24 * fem,
-                            child: Image.asset(
-                              'assets/page-1/images/vector-fnz.png',
-                              width: 22 * fem,
-                              height: 24 * fem,
-                            ),
-                          ),
-                          Container(
-                            // trouveruntrajetdzi (207:669)
-                            margin: EdgeInsets.fromLTRB(
-                                0 * fem, 1 * fem, 0 * fem, 0 * fem),
-                            child: Text(
-                              'Trouver un trajet',
-                              style: SafeGoogleFont(
-                                'Red Hat Display',
-                                fontSize: 14 * ffem,
-                                fontWeight: FontWeight.w700,
-                                height: 1.3225 * ffem / fem,
-                                color: Theme.of(context).primaryColorLight,
+                              width: 175,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                color: Color(0xff810000),
+                                borderRadius: BorderRadius.circular(10 * fem),
                               ),
-                            ),
-                          ),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      // vectorKUE (208:672)
+                                      margin: EdgeInsets.fromLTRB(
+                                          0 * fem, 0 * fem, 6 * fem, 0 * fem),
+                                      width: 22 * fem,
+                                      height: 24 * fem,
+                                      child: Image.asset(
+                                        'assets/page-1/images/vector-6HY.png',
+                                        width: 22 * fem,
+                                        height: 24 * fem,
+                                      ),
+                                    ),
+                                    Container(
+                                      // trouveruntrajetdzi (207:669)
+                                      margin: EdgeInsets.fromLTRB(
+                                          0 * fem, 1 * fem, 0 * fem, 0 * fem),
+                                      child: Text(
+                                        'Trouver un trajet',
+                                        style: SafeGoogleFont(
+                                          'Red Hat Display',
+                                          fontSize: 16 * ffem,
+                                          fontWeight: FontWeight.w700,
+                                          height: 1.3225 * ffem / fem,
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                        ),
+                                      ),
+                                    ),
+                                  ]))
                         ],
                       ),
                     ),
@@ -307,21 +333,21 @@ class _HomeState extends State<Home> {
           type: BottomNavigationBarType.fixed,
           selectedLabelStyle: TextStyle(
             fontFamily: 'Red Hat Display',
-            fontSize: 14 * ffem,
+            fontSize: 20 * ffem,
             fontWeight: FontWeight.w700,
             height: 1.3225 * ffem / fem,
             color: Theme.of(context).primaryColorLight,
           ),
           unselectedLabelStyle: TextStyle(
             fontFamily: 'Red Hat Display',
-            fontSize: 12 * ffem,
+            fontSize: 16 * ffem,
             fontWeight: FontWeight.w700,
             height: 1.3225 * ffem / fem,
             color: Theme.of(context).primaryColorLight,
           ),
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.route), label: 'Les lignes'),
+                icon: Icon(Icons.timeline), label: 'Les lignes'),
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.message_rounded), label: 'Chatbot'),
