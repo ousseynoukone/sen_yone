@@ -74,7 +74,6 @@ flutter:
     - assets/page-1/images/vector-4Ur.png
     - assets/page-1/images/vector-thQ.png
     - assets/page-1/images/auto-group-ecqq.png
-    - assets/page-1/images/wi-fi-4Qi.png
     - assets/page-1/images/vector-Fgn.png
     - assets/page-1/images/vector-VZc.png
     - assets/page-1/images/vector-Qkz.png
@@ -192,7 +191,7 @@ flutter:
     - assets/page-1/images/combined-shape-3tE.png
     - assets/page-1/images/vector-Jsk.png
     - assets/page-1/images/vector-EzW.png
-     - assets/page-1/images/vector.png
+    - assets/page-1/images/vector.png
     - assets/page-1/images/vector-fpE.png
     - assets/page-1/images/vector-jWa.png
     - assets/page-1/images/vector-wZL.png

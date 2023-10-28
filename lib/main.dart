@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         primaryColorLight: Color.fromARGB(255, 255, 255, 255),
         useMaterial3: true,
       ),
-      home: const Home(),
+      home: const Login(),
     );
   }
 }

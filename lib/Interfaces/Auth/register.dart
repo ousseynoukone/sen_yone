@@ -43,9 +43,12 @@ class _SignupState extends State<Signup> {
 
       if (responseJson.containsKey("errors") &&
           responseJson["errors"].containsKey("email")) {
-        setState(() {
-          isAnyMessageOrError = "L'email saisit existe déjà ! ";
-        });
+        final scaffoldContext = ScaffoldMessenger.of(context);
+        scaffoldContext.showSnackBar(
+          SnackBar(
+            content: Text("L'email saisit existe déjà ! "),
+          ),
+        );
       }
     } else {
       setState(() {

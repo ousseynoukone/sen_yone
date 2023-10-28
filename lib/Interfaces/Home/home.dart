@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    print(_boxAccount.get("username"));
+    var username = _boxAccount.get("username");
 
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColorLight,
@@ -124,7 +124,9 @@ class _HomeState extends State<Home> {
                                 margin: EdgeInsets.fromLTRB(
                                     0 * fem, 0 * fem, 5 * fem, 1 * fem),
                                 child: Text(
-                                  'Ousseynou Koné',
+                                  username.length <= 13
+                                      ? username
+                                      : '${username.substring(0, 10)}...',
                                   style: SafeGoogleFont(
                                     'Red Hat Display',
                                     fontSize: 16 * ffem,

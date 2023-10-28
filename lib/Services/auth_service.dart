@@ -21,4 +21,15 @@ class AuthService {
   }
 
 
+
+  static sendResetEmail(String email) async {
+    var result = await HttpAuthRequest.sendEmailForForgetPassword(email);   
+    return result;
+  }
+
+    static resetPassword(String code , String password) async {
+    var result = await HttpAuthRequest.resetPassword (code  , password);   
+    return result;
+  }
+
 }

@@ -30,13 +30,14 @@ class HttpAuthRequest {
   static Future<http.Response> sendEmailForForgetPassword(String email) async {
     String endpoint = "api/reset-mail-sender";
     return await http.post(Uri.parse(SharedConfig().BASE_URL + endpoint),
-        body: {email: email});
+        body: {"email": email});
   }
 
   static Future<http.Response> resetPassword(
       String code, String password) async {
+        
     String endpoint = "api/reset";
     return await http.post(Uri.parse(SharedConfig().BASE_URL + endpoint),
-        body: {password: password, code: code});
+        body: {"password": password, "code": code});
   }
 }

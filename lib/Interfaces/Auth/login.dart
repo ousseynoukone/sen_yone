@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sen_yone/Interfaces/Auth/activate_account.dart';
+import 'package:sen_yone/Interfaces/Auth/forget_password.dart';
 import 'package:sen_yone/Models/Dto/user_dto.dart';
 import 'package:sen_yone/Models/user.dart';
 import '../../Services/auth_service.dart';
@@ -31,6 +32,36 @@ class _LoginState extends State<Login> {
   bool _obscurePassword = true;
   final Box _boxLogin = Hive.box("login");
   final Box _boxAccount = Hive.box("account_data");
+  var isLoading = false;
+  sendResetPassword() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    var response = await AuthService.sendResetEmail(email);
+
+    setState(() {
+      isLoading = false;
+    });
+
+    print(email);
+
+    if (response.statusCode == 200) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => forgetPassword(),
+        ),
+      );
+    } else {
+      final scaffoldContext = ScaffoldMessenger.of(context);
+      scaffoldContext.showSnackBar(
+        SnackBar(
+          content: Text(response.body),
+        ),
+      );
+    }
+  }
 
   login() async {
     UserDtoLogin u = UserDtoLogin(email: email, password: password);
@@ -90,7 +121,8 @@ class _LoginState extends State<Login> {
               const SizedBox(height: 60),
               TextFormField(
                 controller: _controllerUsername,
-                keyboardType: TextInputType.name,
+                keyboardType:
+                    TextInputType.emailAddress, // Use email address type
                 decoration: InputDecoration(
                   labelText: "Email",
                   prefixIcon: const Icon(Icons.person_outline),
@@ -102,11 +134,13 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 onEditingComplete: () => _focusNodePassword.requestFocus(),
+                onChanged: (value) {
+                  email = value; // Update the email variable as the user types
+                },
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return "Veuillez saisir votre  email.";
+                    return "Veuillez saisir votre email.";
                   }
-                  email = value;
 
                   return null;
                 },
@@ -225,6 +259,26 @@ class _LoginState extends State<Login> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 10),
+                  Visibility(
+                    visible: isAnyError
+                        .isNotEmpty, // Show the widget when anyError is not empty
+                    child: Column(
+                      children: [
+                        const Text("Mots de passe oublié ?"),
+                        TextButton(
+                          onPressed: isLoading
+                              ? null
+                              : () async {
+                                  sendResetPassword();
+                                },
+                          child: isLoading
+                              ? CircularProgressIndicator()
+                              : const Text("Réinitialiser votre mot de passe"),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ],
