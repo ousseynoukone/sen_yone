@@ -33,19 +33,20 @@ class _chatBotState extends State<chatBot> {
           automaticallyImplyLeading: false, // Remove the back button
           // Other AppBar properties and widgets
         ),
+        // Bottom navigation
         bottomNavigationBar: BottomNavigationBar(
           selectedLabelStyle: TextStyle(
             fontFamily: 'Red Hat Display',
-            fontSize: 14 * ffem,
+            fontSize: 14,
             fontWeight: FontWeight.w700,
-            height: 1.3225 * ffem / fem,
+            height: 1.3225,
             color: Theme.of(context).primaryColorLight,
           ),
           unselectedLabelStyle: TextStyle(
             fontFamily: 'Red Hat Display',
-            fontSize: 12 * ffem,
+            fontSize: 12,
             fontWeight: FontWeight.w700,
-            height: 1.3225 * ffem / fem,
+            height: 1.3225,
             color: Theme.of(context).primaryColorLight,
           ),
           selectedItemColor: Theme.of(context).primaryColor,

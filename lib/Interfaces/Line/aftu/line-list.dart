@@ -42,6 +42,8 @@ class _LineListState extends State<LineList> {
             ),
           ),
 
+          SizedBox(height: 10),
+
           // checkpoint
           Expanded(
             child: SingleChildScrollView(
@@ -54,6 +56,98 @@ class _LineListState extends State<LineList> {
                   CheckpointItem('Dakar plateau', fem, ffem),
                   // Add more CheckpointItem widgets with different text as needed
                 ],
+              ),
+            ),
+          ),
+
+          Container(
+            width: double.infinity,
+            height: 53 * fem,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Center(
+              child: Text(
+                'Arrivé Terminus Parcelles Assainies',
+                style: TextStyle(
+                  fontFamily: 'Red Hat Display',
+                  fontSize: 18 * ffem,
+                  fontWeight: FontWeight.w400,
+                  height: 1.3225 * ffem / fem,
+                  color: Color(0xffffffff),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+
+          Container(
+            // autogroup9sfcXYN (NxMJhE6m1x6MzaXkjG9SfC)
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+
+            width: double.infinity,
+            height: 40,
+
+            child: TextButton(
+              // group34007Rte (208:741)
+              onPressed: () {
+                print("search traject ! ");
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+              ),
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10 * fem),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        width: 175,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          color: Color(0xff810000),
+                          borderRadius: BorderRadius.circular(10 * fem),
+                        ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                // trouveruntrajetdzi (207:669)
+                                margin: EdgeInsets.fromLTRB(
+                                    0 * fem, 1 * fem, 0 * fem, 0 * fem),
+                                child: Text(
+                                  'Visualiser',
+                                  style: SafeGoogleFont(
+                                    'Red Hat Display',
+                                    fontSize: 16 * ffem,
+                                    fontWeight: FontWeight.w700,
+                                    height: 1.3225 * ffem / fem,
+                                    color: Theme.of(context).primaryColorLight,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Container(
+                                // vectorKUE (208:672)
+                                margin: EdgeInsets.fromLTRB(
+                                    0 * fem, 0 * fem, 6 * fem, 0 * fem),
+                                width: 22 * fem,
+                                height: 24 * fem,
+                                child: Image.asset(
+                                  'assets/page-1/images/vector-7zS.png',
+                                  width: 22 * fem,
+                                  height: 24 * fem,
+                                ),
+                              ),
+                            ]))
+                  ],
+                ),
               ),
             ),
           ),
@@ -73,23 +167,25 @@ class CheckpointItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
       width: double.infinity,
       height: 30 * fem, // Adjust the height as needed
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            margin: EdgeInsets.only(right: 8),
-            width: 10 * fem,
-            height: 10 * fem,
+            width: 10,
+            height: 10,
+            margin: EdgeInsets.fromLTRB(0, 0, 5, 6),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5 * fem),
+              borderRadius: BorderRadius.circular(100),
               color: Color(0xffb10000),
             ),
           ),
           Expanded(
             child: Container(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     text,

@@ -161,7 +161,7 @@ class _lineState extends State<line> {
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.route), label: 'Les lignes'),
+                icon: Icon(Icons.moving_outlined), label: 'Les lignes'),
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.message_rounded), label: 'Chatbot'),

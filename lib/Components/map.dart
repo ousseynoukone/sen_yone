@@ -35,9 +35,6 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 428;
-    double fem = MediaQuery.of(context).size.width / baseWidth;
-    double ffem = fem * 0.97;
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Scaffold(
@@ -57,13 +54,14 @@ class _MapScreenState extends State<MapScreen> {
                   return Column(children: [
                     SizedBox(
                       width: double.infinity,
-                      height: 23 * fem,
+                      height: 23,
                       child: Container(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10 * fem),
+                            borderRadius: BorderRadius.circular(10),
                             color: Theme.of(context).primaryColor),
                       ),
                     ),
+                    SizedBox(height: 10),
                     Expanded(
                       child: Maps(
                           latLng: LatLng(snapshot.data!.latitude,

@@ -19,12 +19,24 @@ class _HomeState extends State<Home> {
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: !isLoading, // user must tap button!
+      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Déconnexion'),
-          content: Center(
-            child: CircularProgressIndicator(),
+          content: Container(
+            height: 100, // Set your desired height here
+
+            child: Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Déconnexion...',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                SizedBox(height: 20),
+                CircularProgressIndicator(),
+              ],
+            )),
           ),
         );
       },
@@ -60,7 +72,7 @@ class _HomeState extends State<Home> {
       setState(() {
         isLoading = false;
       });
-      if (response.statusCode == 200) {
+      if (response.toString().isNotEmpty) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => Login()));
       }
@@ -140,7 +152,8 @@ class _HomeState extends State<Home> {
                       ),
                       TextButton(
                         onPressed: () {
-                          print("History");
+                          _showMyDialog();
+                          logOut();
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -172,11 +185,7 @@ class _HomeState extends State<Home> {
                                 width: 18 * fem,
                                 height: 18 * fem,
                                 child: TextButton(
-                                  onPressed: () {
-                                    _showMyDialog();
-
-                                    logOut();
-                                  },
+                                  onPressed: () {},
                                   style: TextButton.styleFrom(
                                     padding: EdgeInsets.zero,
                                   ),
@@ -279,8 +288,7 @@ class _HomeState extends State<Home> {
                       padding: EdgeInsets.zero,
                     ),
                     child: Container(
-                      padding: EdgeInsets.fromLTRB(
-                          16 * fem, 7 * fem, 15 * fem, 8 * fem),
+                      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                       width: double.infinity,
                       height: double.infinity,
                       decoration: BoxDecoration(
@@ -292,7 +300,7 @@ class _HomeState extends State<Home> {
                         children: [
                           Container(
                               width: 175,
-                              height: 90,
+                              height: 50,
                               decoration: BoxDecoration(
                                 color: Color(0xff810000),
                                 borderRadius: BorderRadius.circular(10 * fem),
@@ -302,8 +310,7 @@ class _HomeState extends State<Home> {
                                   children: [
                                     Container(
                                       // vectorKUE (208:672)
-                                      margin: EdgeInsets.fromLTRB(
-                                          0 * fem, 0 * fem, 6 * fem, 0 * fem),
+
                                       width: 22 * fem,
                                       height: 24 * fem,
                                       child: Image.asset(
@@ -314,8 +321,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     Container(
                                       // trouveruntrajetdzi (207:669)
-                                      margin: EdgeInsets.fromLTRB(
-                                          0 * fem, 1 * fem, 0 * fem, 0 * fem),
+
                                       child: Text(
                                         'Trouver un trajet',
                                         style: SafeGoogleFont(
@@ -360,7 +366,7 @@ class _HomeState extends State<Home> {
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.route), label: 'Les lignes'),
+                icon: Icon(Icons.moving_outlined), label: 'Les lignes'),
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.message_rounded), label: 'Chatbot'),
