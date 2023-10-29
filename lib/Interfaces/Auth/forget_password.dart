@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:sen_yone/Interfaces/Auth/login.dart';
-import 'package:sen_yone/Services/auth_service.dart';
+import 'package:SenYone/Interfaces/Auth/login.dart';
+import 'package:SenYone/Services/auth_service.dart';
 
 class forgetPassword extends StatefulWidget {
   const forgetPassword({super.key});

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:sen_yone/Interfaces/ChatBot/chatbot.dart';
-import 'package:sen_yone/Interfaces/Line/lines.dart';
+import 'package:SenYone/Interfaces/Auth/login.dart';
+import 'package:SenYone/Interfaces/ChatBot/chatbot.dart';
+import 'package:SenYone/Interfaces/Line/lines.dart';
 import '../../Components/components.dart';
 import '../../Components/map.dart';
 import '../../utils.dart';
+import '../../Services/auth_service.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,8 +16,23 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final Box _boxAccount = Hive.box("account_data");
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: !isLoading, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Déconnexion'),
+          content: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
+  }
 
+  final Box _boxAccount = Hive.box("account_data");
+  var isLoading = false;
   int _selectedIndex = 1;
   void _onItemTapped(int index) {
     if (index == 0) {
@@ -34,6 +51,20 @@ class _HomeState extends State<Home> {
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     var username = _boxAccount.get("username");
+
+    logOut() async {
+      setState(() {
+        isLoading = true;
+      });
+      var response = AuthService.logOut();
+      setState(() {
+        isLoading = false;
+      });
+      if (response.statusCode == 200) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Login()));
+      }
+    }
 
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColorLight,
@@ -142,7 +173,9 @@ class _HomeState extends State<Home> {
                                 height: 18 * fem,
                                 child: TextButton(
                                   onPressed: () {
-                                    print("logOut");
+                                    _showMyDialog();
+
+                                    logOut();
                                   },
                                   style: TextButton.styleFrom(
                                     padding: EdgeInsets.zero,
@@ -164,100 +197,78 @@ class _HomeState extends State<Home> {
 
 // body
                 Container(
-                  // autogroupfltkPt6 (NxMJDf4N64TQbveGAAFLTk)
-                  margin:
-                      EdgeInsets.fromLTRB(13 * fem, 0 * fem, 12 * fem, 9 * fem),
-                  padding: EdgeInsets.fromLTRB(
-                      17 * fem, 11 * fem, 12 * fem, 10 * fem),
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  padding: EdgeInsets.all(5),
                   width: double.infinity,
-                  height: 68 * fem,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10 * fem),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  child: Column(
                     children: [
                       Container(
-                        // autogroup23naUee (NxMJNZyBTAHT66nfwP23NA)
-                        margin: EdgeInsets.fromLTRB(
-                            0 * fem, 0 * fem, 44 * fem, 0 * fem),
-                        padding: EdgeInsets.fromLTRB(
-                            9 * fem, 13 * fem, 11 * fem, 13 * fem),
-                        height: double.infinity,
                         decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Theme.of(context).primaryColor),
-                          color: Theme.of(context).primaryColorLight,
-                          borderRadius: BorderRadius.circular(8 * fem),
+                          color: Theme.of(context)
+                              .primaryColorLight, // Background color
+                          borderRadius:
+                              BorderRadius.circular(10), // Border radius
                         ),
-                        child: Container(
-                          width: 130,
-                          child: Center(
-                            // Center the TextField contents
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Départ...',
-                                hintStyle: TextStyle(
-                                    color: Theme.of(context).primaryColorDark),
-                                border: InputBorder.none,
-                                suffixIcon: Icon(Icons.search,
-                                    color: Theme.of(context).primaryColorDark),
-                              ),
-                              onChanged: (value) {},
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Lieu de départ...',
+                            hintStyle: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                            border: InputBorder.none,
+                            suffixIcon: Icon(
+                              Icons.search,
+                              color: Theme.of(context).primaryColorDark,
                             ),
                           ),
+                          onChanged: (value) {},
                         ),
                       ),
+                      SizedBox(
+                          height:
+                              10), // Adjust the space between the two search bars
                       Container(
-                          // autogroupenaeyE2 (NxMJTjVF3cRmshPuB7enae)
-                          padding: EdgeInsets.fromLTRB(
-                              9 * fem, 13 * fem, 11 * fem, 13 * fem),
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Theme.of(context).primaryColor),
-                            color: Theme.of(context).primaryColorLight,
-                            borderRadius: BorderRadius.circular(8 * fem),
-                          ),
-                          child: Container(
-                            width: 130,
-                            child: Container(
-                              alignment: Alignment
-                                  .center, // Align the contents of the inner container to the center
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Arrivé...',
-                                  hintStyle: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColorDark),
-                                  border: InputBorder.none,
-                                  suffixIcon: Icon(Icons.search,
-                                      color:
-                                          Theme.of(context).primaryColorDark),
-                                ),
-                                onChanged: (value) {},
-                              ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .primaryColorLight, // Background color
+                          borderRadius:
+                              BorderRadius.circular(10), // Border radius
+                        ),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: "Lieu d'arrivé...",
+                            hintStyle: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
                             ),
-                          )),
+                            border: InputBorder.none,
+                            suffixIcon: Icon(
+                              Icons.search,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                          ),
+                          onChanged: (value) {},
+                        ),
+                      ),
                     ],
                   ),
                 ),
-
                 Container(
                     // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
-                    margin: EdgeInsets.fromLTRB(
-                        13 * fem, 0 * fem, 12 * fem, 0 * fem),
+                    margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.infinity,
-                    height: 580 * fem,
+                    height: 480 * fem,
                     child: MapScreen()),
-                SizedBox(height: 10),
 
                 Container(
                   // autogroup9sfcXYN (NxMJhE6m1x6MzaXkjG9SfC)
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
 
                   width: double.infinity,
-                  height: 53 * fem,
+                  height: 40,
 
                   child: TextButton(
                     // group34007Rte (208:741)
@@ -330,26 +341,26 @@ class _HomeState extends State<Home> {
 
         // Bottom navigation
         bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Theme.of(context).primaryColorDark,
-          type: BottomNavigationBarType.fixed,
           selectedLabelStyle: TextStyle(
             fontFamily: 'Red Hat Display',
-            fontSize: 20 * ffem,
+            fontSize: 14,
             fontWeight: FontWeight.w700,
-            height: 1.3225 * ffem / fem,
+            height: 1.3225,
             color: Theme.of(context).primaryColorLight,
           ),
           unselectedLabelStyle: TextStyle(
             fontFamily: 'Red Hat Display',
-            fontSize: 16 * ffem,
+            fontSize: 12,
             fontWeight: FontWeight.w700,
-            height: 1.3225 * ffem / fem,
+            height: 1.3225,
             color: Theme.of(context).primaryColorLight,
           ),
+          selectedItemColor: Theme.of(context).primaryColor,
+          unselectedItemColor: Theme.of(context).primaryColorDark,
+          type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.timeline), label: 'Les lignes'),
+                icon: Icon(Icons.route), label: 'Les lignes'),
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.message_rounded), label: 'Chatbot'),

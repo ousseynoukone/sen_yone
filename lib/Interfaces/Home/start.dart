@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:sen_yone/Interfaces/Auth/login.dart';
-import 'package:sen_yone/Interfaces/Home/home.dart';
+import 'package:SenYone/Interfaces/Auth/login.dart';
+import 'package:SenYone/Interfaces/Home/home.dart';
 import '../../Models/Dto/user_dto.dart';
 import '../../Services/auth_service.dart';
 
@@ -23,12 +23,11 @@ class _StartState extends State<Start> {
   var isAnyError = false;
   String email = "";
   String password = "";
-
   @override
   void initState() {
     super.initState();
     if (_boxLogin.get("loginStatus") ?? false) {
-      // login();
+      login();
     }
   }
 
@@ -94,7 +93,7 @@ class _StartState extends State<Start> {
             height: 10,
           ),
           Text(
-            "SenBus",
+            "SenYone",
             style: TextStyle(
               fontSize: 30,
               color: Theme.of(context).primaryColorLight,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sen_yone/Interfaces/ChatBot/chatbot.dart';
-import 'package:sen_yone/Interfaces/Home/home.dart';
-import 'package:sen_yone/Interfaces/Line/aftu/line-list.dart';
+import 'package:SenYone/Interfaces/ChatBot/chatbot.dart';
+import 'package:SenYone/Interfaces/Home/home.dart';
+import 'package:SenYone/Interfaces/Line/aftu/line-list.dart';
 
 class line extends StatefulWidget {
   const line({super.key});
@@ -25,9 +25,6 @@ class _lineState extends State<line> {
 
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 428;
-    double fem = MediaQuery.of(context).size.width / baseWidth;
-    double ffem = fem * 0.97;
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(60.0), // Adjust the height as needed
@@ -54,7 +51,7 @@ class _lineState extends State<line> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 7,
+                  height: 20,
                 ),
                 Container(
                     child: Center(
@@ -71,8 +68,8 @@ class _lineState extends State<line> {
                           borderRadius: BorderRadius.circular(10),
                           color: Theme.of(context).primaryColor,
                         ),
-                        height: 300,
-                        width: 300,
+                        height: 250,
+                        width: 250,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -91,8 +88,8 @@ class _lineState extends State<line> {
                             // Add an Image widget here
                             Image.asset(
                               'assets/imgs/AFTU.jpg',
-                              width: 290,
-                              height: 251,
+                              width: 240,
+                              height: 201,
                               fit: BoxFit.cover,
                             ),
                           ],
@@ -100,7 +97,7 @@ class _lineState extends State<line> {
                       ),
                     ),
                     SizedBox(
-                      height: 7,
+                      height: 30,
                     ),
                     InkWell(
                       onTap: () {},
@@ -109,8 +106,8 @@ class _lineState extends State<line> {
                           borderRadius: BorderRadius.circular(10),
                           color: Theme.of(context).primaryColor,
                         ),
-                        height: 300,
-                        width: 300,
+                        height: 250,
+                        width: 250,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -130,8 +127,8 @@ class _lineState extends State<line> {
                             // Add an Image widget here
                             Image.asset(
                               'assets/imgs/DDD.jpg',
-                              width: 290,
-                              height: 250,
+                              width: 240,
+                              height: 200,
                               fit: BoxFit.cover,
                             ),
                           ],
@@ -147,16 +144,16 @@ class _lineState extends State<line> {
         bottomNavigationBar: BottomNavigationBar(
           selectedLabelStyle: TextStyle(
             fontFamily: 'Red Hat Display',
-            fontSize: 14 * ffem,
+            fontSize: 14,
             fontWeight: FontWeight.w700,
-            height: 1.3225 * ffem / fem,
+            height: 1.3225,
             color: Theme.of(context).primaryColorLight,
           ),
           unselectedLabelStyle: TextStyle(
             fontFamily: 'Red Hat Display',
-            fontSize: 12 * ffem,
+            fontSize: 12,
             fontWeight: FontWeight.w700,
-            height: 1.3225 * ffem / fem,
+            height: 1.3225,
             color: Theme.of(context).primaryColorLight,
           ),
           selectedItemColor: Theme.of(context).primaryColor,

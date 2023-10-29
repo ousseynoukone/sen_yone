@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sen_yone/Interfaces/Line/lines.dart';
+import 'package:SenYone/Interfaces/Line/lines.dart';
 
 import '../Home/home.dart';
 

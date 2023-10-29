@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:sen_yone/Interfaces/Auth/login.dart';
+import 'package:SenYone/Interfaces/Auth/login.dart';
 
 import 'Interfaces/Home/start.dart';
 import 'Interfaces/Home/home.dart';
@@ -10,6 +10,7 @@ void main() async {
 
   runApp(const MyApp());
 }
+
 Color hexToColor(String code) {
   return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
 }
@@ -35,12 +36,13 @@ class MyApp extends StatelessWidget {
       title: 'SenYone',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        primaryColor: hexToColor('#B10000'), // Use the color string with a hash (#) here
+        primaryColor:
+            hexToColor('#B10000'), // Use the color string with a hash (#) here
         primaryColorDark: const Color.fromARGB(221, 19, 18, 18),
         primaryColorLight: Color.fromARGB(255, 255, 255, 255),
         useMaterial3: true,
       ),
-      home: const Login(),
+      home: const Start(),
     );
   }
 }

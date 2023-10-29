@@ -1,4 +1,4 @@
-# sen_yone
+# SenYone
 
 A new Flutter project.
 

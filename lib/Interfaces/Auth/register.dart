@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:sen_yone/Interfaces/Auth/login.dart';
-import 'package:sen_yone/Models/user.dart';
+import 'package:SenYone/Interfaces/Auth/login.dart';
+import 'package:SenYone/Models/user.dart';
 
 import '../../Models/Dto/user_dto.dart';
 import '../../Services/auth_service.dart';

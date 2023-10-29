@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:sen_yone/Interfaces/Auth/activate_account.dart';
-import 'package:sen_yone/Interfaces/Auth/forget_password.dart';
-import 'package:sen_yone/Models/Dto/user_dto.dart';
-import 'package:sen_yone/Models/user.dart';
+import 'package:SenYone/Interfaces/Auth/activate_account.dart';
+import 'package:SenYone/Interfaces/Auth/forget_password.dart';
+import 'package:SenYone/Models/Dto/user_dto.dart';
+import 'package:SenYone/Models/user.dart';
 import '../../Services/auth_service.dart';
 import '../Home/home.dart';
 import './register.dart';
@@ -91,6 +91,8 @@ class _LoginState extends State<Login> {
           isAnyError = "Votre compte est ou a été désactivée";
         } else if (response.statusCode == 403) {
           isAnyError = "Email et/ou mots de passe incorrecte !";
+        } else if (response.statusCode == 404) {
+          isAnyError = response.body;
         } else if (response.statusCode != 200) {
           isAnyError = "Une erreur réseau s'est produite. Veuillez réessayer.";
         }
@@ -105,7 +107,7 @@ class _LoginState extends State<Login> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
               const SizedBox(height: 150),

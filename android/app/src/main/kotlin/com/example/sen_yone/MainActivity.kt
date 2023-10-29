@@ -1,4 +1,4 @@
-package com.example.sen_yone
+package com.example.SenYone
 
 import io.flutter.embedding.android.FlutterActivity
 

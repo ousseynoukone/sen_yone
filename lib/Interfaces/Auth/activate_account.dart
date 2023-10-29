@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:sen_yone/Interfaces/Auth/login.dart';
+import 'package:SenYone/Interfaces/Auth/login.dart';
 import '../../Rest_Request/http_request_auth.dart' as httpRequest;
 import '../../Services/auth_service.dart';
 import '../Home/home.dart';
