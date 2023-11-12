@@ -1,3 +1,4 @@
+import 'package:SenYone/Interfaces/Line/aftu/line-liste.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:SenYone/Interfaces/Auth/login.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
         primaryColorLight: Color.fromARGB(255, 255, 255, 255),
         useMaterial3: true,
       ),
-      home: const Start(),
+      home: const LineListe(),
     );
   }
 }

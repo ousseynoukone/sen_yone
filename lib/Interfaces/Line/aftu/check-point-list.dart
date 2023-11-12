@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:SenYone/utils.dart';
 
-class LineList extends StatefulWidget {
-  const LineList({Key? key}) : super(key: key);
+class CheckPointListe extends StatefulWidget {
+  const CheckPointListe({Key? key}) : super(key: key);
 
   @override
-  State<LineList> createState() => _LineListState();
+  State<CheckPointListe> createState() => _CheckPointListeState();
 }
 
-class _LineListState extends State<LineList> {
+class _CheckPointListeState extends State<CheckPointListe> {
   @override
   Widget build(BuildContext context) {
     double baseWidth = 428;

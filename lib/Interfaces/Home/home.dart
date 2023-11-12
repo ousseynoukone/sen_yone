@@ -224,7 +224,7 @@ class _HomeState extends State<Home> {
                         ),
                         child: TextField(
                           decoration: InputDecoration(
-                            hintText: 'Lieu de départ...',
+                            hintText: '  Lieu de départ...',
                             hintStyle: TextStyle(
                               color: Theme.of(context).primaryColorDark,
                             ),
@@ -249,7 +249,7 @@ class _HomeState extends State<Home> {
                         ),
                         child: TextField(
                           decoration: InputDecoration(
-                            hintText: "Lieu d'arrivé...",
+                            hintText: "  Lieu d'arrivé...",
                             hintStyle: TextStyle(
                               color: Theme.of(context).primaryColorDark,
                             ),
@@ -269,7 +269,7 @@ class _HomeState extends State<Home> {
                     // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.infinity,
-                    height: 480 * fem,
+                    height: 480,
                     child: MapScreen()),
 
                 Container(
@@ -303,7 +303,7 @@ class _HomeState extends State<Home> {
                               height: 50,
                               decoration: BoxDecoration(
                                 color: Color(0xff810000),
-                                borderRadius: BorderRadius.circular(10 * fem),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -311,12 +311,12 @@ class _HomeState extends State<Home> {
                                     Container(
                                       // vectorKUE (208:672)
 
-                                      width: 22 * fem,
-                                      height: 24 * fem,
+                                      width: 22,
+                                      height: 24,
                                       child: Image.asset(
                                         'assets/page-1/images/vector-6HY.png',
-                                        width: 22 * fem,
-                                        height: 24 * fem,
+                                        width: 22,
+                                        height: 24,
                                       ),
                                     ),
                                     Container(
@@ -326,9 +326,9 @@ class _HomeState extends State<Home> {
                                         'Trouver un trajet',
                                         style: SafeGoogleFont(
                                           'Red Hat Display',
-                                          fontSize: 16 * ffem,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w700,
-                                          height: 1.3225 * ffem / fem,
+                                          height: 1.3225,
                                           color: Theme.of(context)
                                               .primaryColorLight,
                                         ),

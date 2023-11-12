@@ -1,7 +1,8 @@
+import 'package:SenYone/Interfaces/Line/aftu/line-liste.dart';
 import 'package:flutter/material.dart';
 import 'package:SenYone/Interfaces/ChatBot/chatbot.dart';
 import 'package:SenYone/Interfaces/Home/home.dart';
-import 'package:SenYone/Interfaces/Line/aftu/line-list.dart';
+import 'package:SenYone/Interfaces/Line/aftu/check-point-list.dart';
 
 class line extends StatefulWidget {
   const line({super.key});
@@ -61,7 +62,7 @@ class _lineState extends State<line> {
                     InkWell(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => LineList()));
+                            builder: (context) => LineListe()));
                       },
                       child: Container(
                         decoration: BoxDecoration(

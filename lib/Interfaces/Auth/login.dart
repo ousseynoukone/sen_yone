@@ -66,6 +66,7 @@ class _LoginState extends State<Login> {
   login() async {
     UserDtoLogin u = UserDtoLogin(email: email, password: password);
     var response = await AuthService.login(u);
+    print(response.body);
     if (response != null) {
       setState(() {
         isLogin = false;
@@ -110,7 +111,7 @@ class _LoginState extends State<Login> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              const SizedBox(height: 150),
+              const SizedBox(height: 100),
               Text(
                 "Bienvenue",
                 style: Theme.of(context).textTheme.headlineLarge,
