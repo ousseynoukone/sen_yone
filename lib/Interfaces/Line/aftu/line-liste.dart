@@ -150,8 +150,8 @@ class LineItems extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => CheckPointListe()));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CheckPointListe(ligne: ligne)));
       },
       child: Container(
         decoration: BoxDecoration(
