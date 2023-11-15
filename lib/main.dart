@@ -36,14 +36,14 @@ class MyApp extends StatelessWidget {
 
       title: 'SenYone',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        primaryColor:
-            hexToColor('#B10000'), // Use the color string with a hash (#) here
-        primaryColorDark: const Color.fromARGB(221, 19, 18, 18),
-        primaryColorLight: Color.fromARGB(255, 255, 255, 255),
-        useMaterial3: true,
-      ),
-      home: const LineListe(),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
+          primaryColor: hexToColor(
+              '#B10000'), // Use the color string with a hash (#) here
+          primaryColorDark: const Color.fromARGB(221, 19, 18, 18),
+          primaryColorLight: Color.fromARGB(255, 255, 255, 255),
+          useMaterial3: true,
+          indicatorColor: Colors.blue),
+      home: const Start(),
     );
   }
 }

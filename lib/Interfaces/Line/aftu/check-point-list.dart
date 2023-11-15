@@ -1,3 +1,4 @@
+import 'package:SenYone/Interfaces/Line/aftu/details-line/detail-line.dart';
 import 'package:SenYone/Models/ligne.dart';
 import 'package:flutter/material.dart';
 import 'package:SenYone/utils.dart';
@@ -78,7 +79,7 @@ class _CheckPointListeState extends State<CheckPointListe> {
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                   height: 1.3225,
-                  color: Color(0xffffffff),
+                  color: Theme.of(context).primaryColorLight,
                 ),
               ),
             ),
@@ -95,7 +96,12 @@ class _CheckPointListeState extends State<CheckPointListe> {
             child: TextButton(
               // group34007Rte (208:741)
               onPressed: () {
-                print("search traject ! ");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailLine(ligne: widget.ligne),
+                  ),
+                );
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,

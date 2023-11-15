@@ -101,7 +101,24 @@ class _lineState extends State<line> {
                       height: 30,
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        final snackBar = SnackBar(
+                          content: Text('En cours de développement.'),
+                          duration: Duration(
+                              seconds:
+                                  4), // Duration for which the SnackBar will be displayed
+                          action: SnackBarAction(
+                            label:
+                                'Cette fonctionnalité sera bientôt disponible ! ',
+                            onPressed: () {
+                              // Code to undo the user's action
+                            },
+                          ),
+                        );
+
+                        // Show the SnackBar
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
