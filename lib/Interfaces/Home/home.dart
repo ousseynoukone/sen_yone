@@ -222,19 +222,22 @@ class _HomeState extends State<Home> {
                           borderRadius:
                               BorderRadius.circular(10), // Border radius
                         ),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: '  Lieu de départ...',
-                            hintStyle: TextStyle(
-                              color: Theme.of(context).primaryColorDark,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: '  Lieu de départ...',
+                              hintStyle: TextStyle(
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                              border: InputBorder.none,
+                              suffixIcon: Icon(
+                                Icons.search,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
                             ),
-                            border: InputBorder.none,
-                            suffixIcon: Icon(
-                              Icons.search,
-                              color: Theme.of(context).primaryColorDark,
-                            ),
+                            onChanged: (value) {},
                           ),
-                          onChanged: (value) {},
                         ),
                       ),
                       SizedBox(
@@ -247,19 +250,22 @@ class _HomeState extends State<Home> {
                           borderRadius:
                               BorderRadius.circular(10), // Border radius
                         ),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: "  Lieu d'arrivé...",
-                            hintStyle: TextStyle(
-                              color: Theme.of(context).primaryColorDark,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: "  Lieu d'arrivé...",
+                              hintStyle: TextStyle(
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                              border: InputBorder.none,
+                              suffixIcon: Icon(
+                                Icons.search,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
                             ),
-                            border: InputBorder.none,
-                            suffixIcon: Icon(
-                              Icons.search,
-                              color: Theme.of(context).primaryColorDark,
-                            ),
+                            onChanged: (value) {},
                           ),
-                          onChanged: (value) {},
                         ),
                       ),
                     ],

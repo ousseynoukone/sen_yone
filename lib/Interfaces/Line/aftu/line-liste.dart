@@ -16,7 +16,9 @@ class LineListe extends StatefulWidget {
 }
 
 class _LineListeState extends State<LineListe> {
-  Future<List<Ligne>>? _LigneListe;
+  Future<List<Ligne>>? _ligneListe;
+  final TextEditingController _controllerSearch = TextEditingController();
+  List<Ligne> _filteredLines = [];
 
   @override
   void initState() {
@@ -26,10 +28,31 @@ class _LineListeState extends State<LineListe> {
   }
 
   getAllLine() {
-    _LigneListe = OpsServices.getAllLines();
+    _ligneListe = OpsServices.getAllLines();
+    _ligneListe?.then((value) {
+      setState(() {
+        _filteredLines = value;
+      });
+    });
   }
 
-  void refresh() {}
+// SearchLineByNumeroLine
+  searchLine(String searchValue) {
+    setState(() {
+      _ligneListe!.then((lines) {
+        _filteredLines = lines;
+        _filteredLines = _filteredLines
+            .where(
+              (element) => element.numero.toString().contains(searchValue),
+            )
+            .toList();
+      });
+    });
+  }
+
+  void refresh() {
+    getAllLine();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,21 +71,26 @@ class _LineListeState extends State<LineListe> {
               border: Border.all(color: Theme.of(context).primaryColor),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "  Rechercher une ligne...",
-                hintStyle: TextStyle(
-                  color: Theme.of(context).primaryColorDark,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: TextField(
+                controller: _controllerSearch,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: "  Rechercher une ligne...",
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                  ),
+                  border: InputBorder.none,
+                  suffixIcon: Icon(
+                    Icons.search,
+                    color: Theme.of(context).primaryColorDark,
+                  ),
                 ),
-                border: InputBorder.none,
-                suffixIcon: Icon(
-                  Icons.search,
-                  color: Theme.of(context).primaryColorDark,
-                ),
+                onChanged: (value) {
+                  searchLine(value);
+                },
               ),
-              onChanged: (value) {
-                // Implement your logic for handling text changes here
-              },
             ),
           ),
           SizedBox(
@@ -92,20 +120,22 @@ class _LineListeState extends State<LineListe> {
                   },
                   child: SingleChildScrollView(
                     child: FutureBuilder<List<Ligne>>(
-                        future: _LigneListe,
+                        future: _ligneListe,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             return const CircularProgressIndicator();
                           } else if (snapshot.hasData) {
-                            if (snapshot.data?.isEmpty == true) {
+                            if (_filteredLines.isEmpty) {
                               return SingleChildScrollView(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SizedBox(height: 20),
-                                    Text("Aucune ligne de bus trouvée.",
-                                        style: TextStyle(color: Colors.white)),
+                                    Text(
+                                      "Aucune ligne de bus trouvée.",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ],
                                 ),
                               );
@@ -114,14 +144,14 @@ class _LineListeState extends State<LineListe> {
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   padding: const EdgeInsets.all(8),
-                                  itemCount: snapshot.data?.length,
+                                  itemCount: _filteredLines.length,
                                   itemBuilder: (context, index) {
                                     return Column(
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: LineItems(
-                                              ligne: snapshot.data!
+                                              ligne: _filteredLines
                                                   .elementAt(index)),
                                         )
                                       ],
