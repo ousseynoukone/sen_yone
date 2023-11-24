@@ -1,4 +1,7 @@
+import 'package:SenYone/Interfaces/Home/start.dart';
+import 'package:SenYone/Layouts/mainLayout.dart';
 import 'package:SenYone/REST_REQUEST/maps_request.dart';
+import 'package:SenYone/Services/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:SenYone/Interfaces/Auth/login.dart';
@@ -17,10 +20,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
-  bool switchValue = false;
-
   final Box _boxAccount = Hive.box("account_data");
+    bool switchValue =  true;
+
   var isLoading = false;
+  bool positionPermisionCheck = false;
 
   final GeoapifyAutocompleteApi geoapifyApi = GeoapifyAutocompleteApi();
   //Tableau qui vas tocker les prediction de completion D pour depart et A pour arrivé
@@ -28,6 +32,29 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   List<String> autocompleteSuggestionsA = [];
   final TextEditingController _controllerDeparture = TextEditingController();
   final TextEditingController _controllerArrival = TextEditingController();
+
+  positionPermistionChecker() async {
+    var _positionPermisionCheck =
+        await PermissionHandler.handleLocationPermission(context);
+    setState(() {
+      positionPermisionCheck = _positionPermisionCheck;
+    });
+
+    if (positionPermisionCheck == false) {
+      setState(() {
+        switchValue = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     switchValue =  _boxAccount.get("isUsingLocalisation")??false;
+
+    positionPermistionChecker();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +184,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                                         ),
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       // vectorG2n (207:656)
                                       width: 18 * fem,
                                       height: 18 * fem,
@@ -203,6 +230,20 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                                 padding: const EdgeInsets.only(left: 8),
                                 child: Column(
                                   children: [
+                                    Visibility(
+                                      visible: switchValue,
+                                      child: Container(
+                                          height: height * 0.047,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text("Lieu de départ"),
+                                              Icon(Icons.arrow_forward_rounded),
+                                              Text("Votre postition actuelle"),
+                                            ],
+                                          )),
+                                    ),
                                     Visibility(
                                       visible: !switchValue,
                                       child: TextField(
@@ -385,7 +426,13 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                             value: switchValue,
                             onChanged: (bool value) {
                               setState(() {
+                                positionPermistionChecker();
+
                                 switchValue = value;
+                                _boxAccount.put(
+                                    "isUsingLocalisation", switchValue);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => MainLayout()));
                               });
                             },
                           ),
