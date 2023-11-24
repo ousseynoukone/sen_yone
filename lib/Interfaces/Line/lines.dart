@@ -11,181 +11,145 @@ class line extends StatefulWidget {
   State<line> createState() => _lineState();
 }
 
-class _lineState extends State<line> {
-  int _selectedIndex = 0;
-  void _onItemTapped(int index) {
-    if (index == 1) {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Home(),
-      ));
-    } else if (index == 2) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => chatBot()));
-    }
+class _lineState extends State<line> with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0), // Adjust the height as needed
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+          ),
+          child: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text(
+              " Réseau des bus ",
+              style: TextStyle(
+                color: Theme.of(context).primaryColorLight,
+              ),
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0, // Remove the appbar shadow
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => LineListe()));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      height: height * 0.3,
+                      width: width * 0.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "AFTU",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColorLight,
+                              fontSize: 17,
+                              // Use Noto Serif without custom setup
+                            ),
+                          ),
+                          SizedBox(
+                            height: 7,
+                          ),
+
+                          // Add an Image widget here
+                          Image.asset(
+                            'assets/imgs/AFTU.jpg',
+                            height: height * 0.25,
+                            width: width * 0.485,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      final snackBar = SnackBar(
+                        content: Text('En cours de développement.'),
+                        duration: Duration(
+                            seconds:
+                                4), // Duration for which the SnackBar will be displayed
+                        action: SnackBarAction(
+                          label:
+                              'Cette fonctionnalité sera bientôt disponible ! ',
+                          onPressed: () {
+                            // Code to undo the user's action
+                          },
+                        ),
+                      );
+
+                      // Show the SnackBar
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      height: height * 0.3,
+                      width: width * 0.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "DAKAR DEM DIKK",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColorLight,
+                              fontSize: 17,
+                              // Use Noto Serif without custom setup
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: 7,
+                          ),
+
+                          // Add an Image widget here
+                          Image.asset(
+                            'assets/imgs/DDD.jpg',
+                            height: height * 0.25,
+                            width: width * 0.485,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.0), // Adjust the height as needed
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.all(Radius.circular(0)),
-            ),
-            child: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text(
-                " Réseau des bus ",
-                style: TextStyle(
-                  color: Theme.of(context).primaryColorLight,
-                ),
-              ),
-              backgroundColor: Colors.transparent,
-              elevation: 0, // Remove the appbar shadow
-            ),
-          ),
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                    child: Center(
-                        child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => LineListe()));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        height: 250,
-                        width: 250,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "AFTU",
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColorLight,
-                                fontSize: 17,
-                                // Use Noto Serif without custom setup
-                              ),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-
-                            // Add an Image widget here
-                            Image.asset(
-                              'assets/imgs/AFTU.jpg',
-                              width: 240,
-                              height: 201,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        final snackBar = SnackBar(
-                          content: Text('En cours de développement.'),
-                          duration: Duration(
-                              seconds:
-                                  4), // Duration for which the SnackBar will be displayed
-                          action: SnackBarAction(
-                            label:
-                                'Cette fonctionnalité sera bientôt disponible ! ',
-                            onPressed: () {
-                              // Code to undo the user's action
-                            },
-                          ),
-                        );
-
-                        // Show the SnackBar
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        height: 250,
-                        width: 250,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "DAKAR DEM DIKK",
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColorLight,
-                                fontSize: 17,
-                                // Use Noto Serif without custom setup
-                              ),
-                            ),
-
-                            SizedBox(
-                              height: 7,
-                            ),
-
-                            // Add an Image widget here
-                            Image.asset(
-                              'assets/imgs/DDD.jpg',
-                              width: 240,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                )))
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          selectedLabelStyle: TextStyle(
-            fontFamily: 'Red Hat Display',
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            height: 1.3225,
-            color: Theme.of(context).primaryColorLight,
-          ),
-          unselectedLabelStyle: TextStyle(
-            fontFamily: 'Red Hat Display',
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            height: 1.3225,
-            color: Theme.of(context).primaryColorLight,
-          ),
-          selectedItemColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Theme.of(context).primaryColorDark,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.moving_outlined), label: 'Les lignes'),
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.message_rounded), label: 'Chatbot'),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ));
-  }
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

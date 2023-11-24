@@ -1,13 +1,18 @@
+import 'package:SenYone/Interfaces/ChatBot/chatbot.dart';
 import 'package:SenYone/Interfaces/Line/aftu/line-liste.dart';
+import 'package:SenYone/Layouts/mainLayout.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:SenYone/Interfaces/Auth/login.dart';
+import 'package:get/get.dart';
+import 'dependency_injection.dart';
 
 import 'Interfaces/Home/start.dart';
 import 'Interfaces/Home/home.dart';
 
 void main() async {
   await _initHive();
+  DependencyInjection.init();
 
   runApp(const MyApp());
 }
@@ -31,7 +36,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false, // Disable the debug banner
 
       title: 'SenYone',
@@ -42,6 +47,7 @@ class MyApp extends StatelessWidget {
           primaryColorDark: const Color.fromARGB(221, 19, 18, 18),
           primaryColorLight: Color.fromARGB(255, 255, 255, 255),
           useMaterial3: true,
+          focusColor: hexToColor('#FFD7D7'),
           indicatorColor: Colors.blue),
       home: const Start(),
     );

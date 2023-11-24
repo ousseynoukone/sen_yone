@@ -1,3 +1,4 @@
+import 'package:SenYone/REST_REQUEST/maps_request.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:SenYone/Interfaces/Auth/login.dart';
@@ -15,53 +16,26 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Container(
-            height: 100, // Set your desired height here
-
-            child: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Déconnexion...',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                SizedBox(height: 20),
-                CircularProgressIndicator(),
-              ],
-            )),
-          ),
-        );
-      },
-    );
-  }
+class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
+  bool switchValue = false;
 
   final Box _boxAccount = Hive.box("account_data");
   var isLoading = false;
-  int _selectedIndex = 1;
-  void _onItemTapped(int index) {
-    if (index == 0) {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => line(),
-      ));
-    } else if (index == 2) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => chatBot()));
-    }
-  }
+
+  final GeoapifyAutocompleteApi geoapifyApi = GeoapifyAutocompleteApi();
+  //Tableau qui vas tocker les prediction de completion D pour depart et A pour arrivé
+  List<String> autocompleteSuggestionsD = [];
+  List<String> autocompleteSuggestionsA = [];
+  final TextEditingController _controllerDeparture = TextEditingController();
+  final TextEditingController _controllerArrival = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+    double height = MediaQuery.of(context).size.height;
+
     var username = _boxAccount.get("username");
 
     logOut() async {
@@ -78,307 +52,431 @@ class _HomeState extends State<Home> {
       }
     }
 
-    return Scaffold(
-        backgroundColor: Theme.of(context).primaryColorLight,
-        body: SafeArea(
-            child: Container(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  // group340239S2 (210:902)
-                  margin:
-                      EdgeInsets.fromLTRB(13 * fem, 0 * fem, 12 * fem, 9 * fem),
-                  padding:
-                      EdgeInsets.fromLTRB(17 * fem, 7 * fem, 21 * fem, 5 * fem),
-                  width: double.infinity,
-                  height: 34 * fem,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10 * fem),
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: Theme.of(context).primaryColorLight,
+          body: SingleChildScrollView(
+            child: SizedBox(
+              height: height * 0.91,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        // group340239S2 (210:902)
+                        margin: EdgeInsets.fromLTRB(
+                            13 * fem, 0 * fem, 12 * fem, 9 * fem),
+                        padding: EdgeInsets.fromLTRB(
+                            17 * fem, 7 * fem, 21 * fem, 5 * fem),
+                        width: double.infinity,
+                        height: 34 * fem,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10 * fem),
+                        ),
+                        //Bottom bar
+                        child: Row(
+                          // crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: TextButton(
+                                onPressed: () {
+                                  print("History");
+                                },
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                ),
+                                child: Container(
+                                  height: double.infinity,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        // historiquevr6 (210:896)
+                                        margin: EdgeInsets.fromLTRB(
+                                            0 * fem, 0 * fem, 5 * fem, 1 * fem),
+                                        child: Text(
+                                          'Historique',
+                                          style: SafeGoogleFont(
+                                            'Red Hat Display',
+                                            fontSize: 10 * ffem,
+                                            fontWeight: FontWeight.w700,
+                                            height: 1.3225 * ffem / fem,
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        // vectorELz (210:895)
+                                        width: 20 * fem,
+                                        height: 22 * fem,
+                                        child: Image.asset(
+                                          'assets/page-1/images/vector-daz.png',
+                                          width: 20 * fem,
+                                          height: 22 * fem,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                showLogOutModal(context);
+                                logOut();
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                              ),
+                              child: Container(
+                                height: double.infinity,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          0 * fem, 0 * fem, 5 * fem, 1 * fem),
+                                      child: Text(
+                                        username,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: SafeGoogleFont(
+                                          'Red Hat Display',
+                                          fontSize: 10 * ffem,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.3225 * ffem / fem,
+                                          color: Color(0xffffffff),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      // vectorG2n (207:656)
+                                      width: 18 * fem,
+                                      height: 18 * fem,
+                                      child: TextButton(
+                                        onPressed: () {},
+                                        style: TextButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+                                        ),
+                                        child: Image.asset(
+                                          'assets/page-1/images/vector-A6v.png',
+                                          width: 18 * fem,
+                                          height: 18 * fem,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // body
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        padding: EdgeInsets.all(5),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .primaryColorLight, // Background color
+                                borderRadius:
+                                    BorderRadius.circular(10), // Border radius
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Column(
+                                  children: [
+                                    Visibility(
+                                      visible: !switchValue,
+                                      child: TextField(
+                                        controller: _controllerDeparture,
+                                        decoration: InputDecoration(
+                                          hintText: 'Lieu de départ...',
+                                          hintStyle: TextStyle(
+                                            color: Theme.of(context)
+                                                .primaryColorDark,
+                                          ),
+                                          border: InputBorder.none,
+                                          suffixIcon: Icon(
+                                            Icons.search,
+                                            color: Theme.of(context)
+                                                .primaryColorDark,
+                                          ),
+                                        ),
+                                        onChanged: (value) async {
+                                          final suggestions = await geoapifyApi
+                                              .getAutocompleteSuggestions(
+                                                  value);
+                                          setState(() {
+                                            autocompleteSuggestionsD =
+                                                suggestions;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    if (autocompleteSuggestionsD.isNotEmpty)
+                                      Container(
+                                        width: double.infinity,
+                                        margin: EdgeInsets.only(top: 4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 1,
+                                              blurRadius: 3,
+                                              offset: Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              autocompleteSuggestionsD.length,
+                                          itemBuilder: (context, index) {
+                                            final suggestion =
+                                                autocompleteSuggestionsD[index];
+                                            return InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  _controllerDeparture.text =
+                                                      suggestion;
+                                                  autocompleteSuggestionsD =
+                                                      []; // Clear suggestions
+                                                  FocusScope.of(context)
+                                                      .unfocus(); // Dismiss keyboard
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(suggestion),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                                height:
+                                    10), // Adjust the space between the two search bars
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .primaryColorLight, // Background color
+                                borderRadius:
+                                    BorderRadius.circular(10), // Border radius
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Column(
+                                  children: [
+                                    TextField(
+                                      controller: _controllerArrival,
+                                      decoration: InputDecoration(
+                                        hintText: 'Lieu de arrivé...',
+                                        hintStyle: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                        ),
+                                        border: InputBorder.none,
+                                        suffixIcon: Icon(
+                                          Icons.search,
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                        ),
+                                      ),
+                                      onChanged: (value) async {
+                                        final suggestions = await geoapifyApi
+                                            .getAutocompleteSuggestions(value);
+                                        setState(() {
+                                          autocompleteSuggestionsA =
+                                              suggestions;
+                                        });
+                                      },
+                                    ),
+                                    if (autocompleteSuggestionsA.isNotEmpty)
+                                      Container(
+                                        width: double.infinity,
+                                        margin: EdgeInsets.only(top: 4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 1,
+                                              blurRadius: 3,
+                                              offset: Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              autocompleteSuggestionsA.length,
+                                          itemBuilder: (context, index) {
+                                            final suggestion =
+                                                autocompleteSuggestionsA[index];
+                                            return InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  _controllerArrival.text =
+                                                      suggestion;
+                                                  autocompleteSuggestionsA =
+                                                      []; // Clear suggestions
+                                                  FocusScope.of(context)
+                                                      .unfocus(); // Dismiss keyboard
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(suggestion),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Utiliser ma position actuelle',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          Switch(
+                            inactiveThumbColor: Colors.grey,
+                            inactiveTrackColor: Colors.grey.shade300,
+                            value: switchValue,
+                            onChanged: (bool value) {
+                              setState(() {
+                                switchValue = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+
+                      Container(
+                          // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
+                          margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                          width: double.infinity,
+                          height: 0.58 * height,
+                          child: const MapScreen()),
+                    ],
                   ),
-                  //Bottom bar
-                  child: Row(
-                    // crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
                     children: [
                       Container(
+                        // autogroup9sfcXYN (NxMJhE6m1x6MzaXkjG9SfC)
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+
+                        width: double.infinity,
+                        height: 40,
+
                         child: TextButton(
-                          onPressed: () {
-                            print("History");
+                          // group34007Rte (208:741)
+                          onPressed: () async {
+                            showModalBottom(context);
                           },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
                           ),
                           child: Container(
+                            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            width: double.infinity,
                             height: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(10 * fem),
+                            ),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  // historiquevr6 (210:896)
-                                  margin: EdgeInsets.fromLTRB(
-                                      0 * fem, 0 * fem, 5 * fem, 1 * fem),
-                                  child: Text(
-                                    'Historique',
-                                    style: SafeGoogleFont(
-                                      'Red Hat Display',
-                                      fontSize: 16 * ffem,
-                                      fontWeight: FontWeight.w700,
-                                      height: 1.3225 * ffem / fem,
-                                      color:
-                                          Theme.of(context).primaryColorLight,
+                                    width: 175,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xff810000),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                  ),
-                                ),
-                                Container(
-                                  // vectorELz (210:895)
-                                  width: 20 * fem,
-                                  height: 22 * fem,
-                                  child: Image.asset(
-                                    'assets/page-1/images/vector-daz.png',
-                                    width: 20 * fem,
-                                    height: 22 * fem,
-                                  ),
-                                ),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            // vectorKUE (208:672)
+
+                                            width: 22,
+                                            height: 24,
+                                            child: Image.asset(
+                                              'assets/page-1/images/vector-6HY.png',
+                                              width: 22,
+                                              height: 24,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Trouver un trajet',
+                                            style: SafeGoogleFont(
+                                              'Red Hat Display',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1.3225,
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                            ),
+                                          ),
+                                        ]))
                               ],
                             ),
                           ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          _showMyDialog();
-                          logOut();
-                        },
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                        ),
-                        child: Container(
-                          height: double.infinity,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                // ousseynoukon9yk (207:654)
-                                margin: EdgeInsets.fromLTRB(
-                                    0 * fem, 0 * fem, 5 * fem, 1 * fem),
-                                child: Text(
-                                  username.length <= 13
-                                      ? username
-                                      : '${username.substring(0, 10)}...',
-                                  style: SafeGoogleFont(
-                                    'Red Hat Display',
-                                    fontSize: 16 * ffem,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.3225 * ffem / fem,
-                                    color: Color(0xffffffff),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                // vectorG2n (207:656)
-                                width: 18 * fem,
-                                height: 18 * fem,
-                                child: TextButton(
-                                  onPressed: () {},
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                  child: Image.asset(
-                                    'assets/page-1/images/vector-A6v.png',
-                                    width: 18 * fem,
-                                    height: 18 * fem,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
                     ],
-                  ),
-                ),
-
-// body
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  padding: EdgeInsets.all(5),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .primaryColorLight, // Background color
-                          borderRadius:
-                              BorderRadius.circular(10), // Border radius
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: '  Lieu de départ...',
-                              hintStyle: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                              ),
-                              border: InputBorder.none,
-                              suffixIcon: Icon(
-                                Icons.search,
-                                color: Theme.of(context).primaryColorDark,
-                              ),
-                            ),
-                            onChanged: (value) {},
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                          height:
-                              10), // Adjust the space between the two search bars
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .primaryColorLight, // Background color
-                          borderRadius:
-                              BorderRadius.circular(10), // Border radius
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: "  Lieu d'arrivé...",
-                              hintStyle: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                              ),
-                              border: InputBorder.none,
-                              suffixIcon: Icon(
-                                Icons.search,
-                                color: Theme.of(context).primaryColorDark,
-                              ),
-                            ),
-                            onChanged: (value) {},
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                    // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
-                    margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                    width: double.infinity,
-                    height: 480,
-                    child: MapScreen()),
-
-                Container(
-                  // autogroup9sfcXYN (NxMJhE6m1x6MzaXkjG9SfC)
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-
-                  width: double.infinity,
-                  height: 40,
-
-                  child: TextButton(
-                    // group34007Rte (208:741)
-                    onPressed: () {
-                      print("search traject ! ");
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(10 * fem),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                              width: 175,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: Color(0xff810000),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      // vectorKUE (208:672)
-
-                                      width: 22,
-                                      height: 24,
-                                      child: Image.asset(
-                                        'assets/page-1/images/vector-6HY.png',
-                                        width: 22,
-                                        height: 24,
-                                      ),
-                                    ),
-                                    Container(
-                                      // trouveruntrajetdzi (207:669)
-
-                                      child: Text(
-                                        'Trouver un trajet',
-                                        style: SafeGoogleFont(
-                                          'Red Hat Display',
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          height: 1.3225,
-                                          color: Theme.of(context)
-                                              .primaryColorLight,
-                                        ),
-                                      ),
-                                    ),
-                                  ]))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-        )),
-
-        // Bottom navigation
-        bottomNavigationBar: BottomNavigationBar(
-          selectedLabelStyle: TextStyle(
-            fontFamily: 'Red Hat Display',
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            height: 1.3225,
-            color: Theme.of(context).primaryColorLight,
-          ),
-          unselectedLabelStyle: TextStyle(
-            fontFamily: 'Red Hat Display',
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            height: 1.3225,
-            color: Theme.of(context).primaryColorLight,
-          ),
-          selectedItemColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Theme.of(context).primaryColorDark,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.moving_outlined), label: 'Les lignes'),
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.message_rounded), label: 'Chatbot'),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ));
+          )),
+    );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

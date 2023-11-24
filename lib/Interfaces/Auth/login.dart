@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:SenYone/Layouts/mainLayout.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -81,7 +82,7 @@ class _LoginState extends State<Login> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Home(),
+            builder: (context) => MainLayout(),
           ),
         );
       }
@@ -109,6 +110,7 @@ class _LoginState extends State<Login> {
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
@@ -204,6 +206,9 @@ class _LoginState extends State<Login> {
                           ? null
                           : () {
                               if (_formKey.currentState?.validate() ?? false) {
+                                FocusScope.of(context)
+                                    .unfocus(); // Unfocus any active text fields
+
                                 login();
                                 setState(() {
                                   isLogin = true;

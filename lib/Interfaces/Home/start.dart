@@ -1,13 +1,11 @@
 import 'dart:convert';
 
+import 'package:SenYone/Layouts/mainLayout.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:SenYone/Interfaces/Auth/login.dart';
-import 'package:SenYone/Interfaces/Home/home.dart';
 import '../../Models/Dto/user_dto.dart';
 import '../../Services/auth_service.dart';
-
-import '../../Components/components.dart';
 
 class Start extends StatefulWidget {
   const Start({super.key});
@@ -55,7 +53,7 @@ class _StartState extends State<Start> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Home(),
+            builder: (context) => MainLayout(),
           ),
         );
       }

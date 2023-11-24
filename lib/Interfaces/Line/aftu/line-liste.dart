@@ -196,12 +196,13 @@ class LineItems extends StatelessWidget {
                 SizedBox(
                   child: Image.asset(
                     'assets/page-1/images/vector-siz.png',
-                    width: width * 0.1, // Adjust the width as needed
-                    height: width * 0.12, // Adjust the height as needed
+                    width: width * 0.08, // Adjust the width as needed
+                    height: width * 0.10, // Adjust the height as needed
                   ),
                 ),
                 SizedBox(
                   child: Text(
+                    overflow: TextOverflow.ellipsis,
                     ligne.numero.toString(),
                     style: TextStyle(
                       fontFamily: 'Red Hat Display',
@@ -238,41 +239,38 @@ class LineItems extends StatelessWidget {
                           width: width * 0.02, // Adjust the width as needed
                         ),
                         SizedBox(
-                          width: width * 0.1, // Adjust the width as needed
-                          height: width * 0.12, // Adjust the height as needed
+                          width: width * 0.08, // Adjust the width as needed
+                          height: width * 0.10, // Adjust the height as needed
                           child: Image.asset(
                             'assets/page-1/images/vector-fpE.png',
-                            width: width * 0.1, // Adjust the width as needed
-                            height: width * 0.12, // Adjust the height as needed
+                            width: width * 0.08, // Adjust the width as needed
+                            height: width * 0.10, // Adjust the height as needed
                           ),
                         ),
                       ],
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          height: 16,
-                          child: Text(
-                            'Arrivé',
-                            style: TextStyle(
-                              fontFamily: 'Red Hat Display',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              height: 1,
-                              color: Theme.of(context).primaryColorDark,
-                            ),
+                        Text(
+                          'Arrivé',
+                          style: TextStyle(
+                            fontFamily: 'Red Hat Display',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            height: 1,
+                            color: Theme.of(context).primaryColorDark,
                           ),
                         ),
                         SizedBox(
                           width: width * 0.02, // Adjust the width as needed
                         ),
                         SizedBox(
-                          width: width * 0.1, // Adjust the width as needed
-                          height: width * 0.12, // Adjust the height as needed
+                          width: width * 0.08, // Adjust the width as needed
+                          height: width * 0.10, // Adjust the height as needed
                           child: Image.asset(
                             'assets/page-1/images/vector-fpE.png',
-                            width: width * 0.1, // Adjust the width as needed
-                            height: width * 0.12, // Adjust the height as needed
+                            width: width * 0.08, // Adjust the width as needed
+                            height: width * 0.10, // Adjust the height as needed
                           ),
                         ),
                       ],
@@ -287,12 +285,10 @@ class LineItems extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      SizedBox(
-                        height: 16,
+                      Expanded(
                         child: Text(
-                          ligne.check_points.firstOrNull.trim().length >= 25
-                              ? '${ligne.check_points.firstOrNull?.trim().substring(0, 22)}...'
-                              : '${ligne.check_points.firstOrNull.trim()}',
+                          ligne.check_points.firstOrNull,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontFamily: 'Red Hat Display',
                             fontSize: 14,
@@ -310,12 +306,10 @@ class LineItems extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 16,
+                      Expanded(
                         child: Text(
-                          ligne.check_points.lastOrNull.trim().length >= 25
-                              ? '${ligne.check_points.lastOrNull?.trim().substring(0, 22)}...'
-                              : '${ligne.check_points.lastOrNull.trim()}',
+                          ligne.check_points.lastOrNull,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontFamily: 'Red Hat Display',
                             fontSize: 14,
@@ -334,12 +328,12 @@ class LineItems extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: width * 0.1, // Adjust the width as needed
-                  height: width * 0.12, // Adjust the height as needed
+                  width: width * 0.08, // Adjust the width as needed
+                  height: width * 0.10, // Adjust the height as needed
                   child: Image.asset(
                     'assets/page-1/images/vector-FNz.png',
-                    width: width * 0.1, // Adjust the width as needed
-                    height: width * 0.12, // Adjust the height as needed
+                    width: width * 0.08, // Adjust the width as needed
+                    height: width * 0.10, // Adjust the height as needed
                   ),
                 ),
               ],

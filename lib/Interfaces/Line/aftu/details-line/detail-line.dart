@@ -44,65 +44,74 @@ class _DetailLineState extends State<DetailLine> {
         title: Text("Ligne " + widget.ligne.numero.toString()),
       ),
       body: SafeArea(
-          child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            height: 35,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Center(
-              child: Text(
-                'Depart ' +
-                    (widget.ligne.check_points.firstOrNull.length > 50
-                        ? '${widget.ligne.check_points.firstOrNull.substring(0, 47)}...'
-                        : widget.ligne.check_points.firstOrNull ?? ''),
-                style: TextStyle(
-                  fontFamily: 'Red Hat Display',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                  height: 1.3225,
-                  color: Theme.of(context).primaryColorLight,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Depart ' +
+                          (widget.ligne.check_points.firstOrNull.length > 50
+                              ? '${widget.ligne.check_points.firstOrNull.substring(0, 47)}...'
+                              : widget.ligne.check_points.firstOrNull ?? ''),
+                      style: TextStyle(
+                        fontFamily: 'Red Hat Display',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        height: 1.3225,
+                        color: Theme.of(context).primaryColorLight,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                    // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
+                    margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    width: double.infinity,
+                    height: height * 0.82,
+                    child: MapScreenWithPolyline(
+                      polylineCoordinates: polylineCoordinates,
+                    )),
+              ],
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-              // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
-              margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            Container(
               width: double.infinity,
-              height: height * 0.75,
-              child: MapScreenWithPolyline(
-                polylineCoordinates: polylineCoordinates,
-              )),
-          Container(
-            width: double.infinity,
-            height: 35,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Center(
-              child: Text(
-                'Arrivé ' +
-                    (widget.ligne.check_points.lastOrNull.length > 50
-                        ? '${widget.ligne.check_points.lastOrNull.substring(0, 47)}...'
-                        : widget.ligne.check_points.lastOrNull ?? ''),
-                style: TextStyle(
-                  fontFamily: 'Red Hat Display',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                  height: 1.3225,
-                  color: Theme.of(context).primaryColorLight,
+              height: 35,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+              ),
+              child: Center(
+                child: Text(
+                  'Arrivé ' +
+                      (widget.ligne.check_points.lastOrNull.length > 50
+                          ? '${widget.ligne.check_points.lastOrNull.substring(0, 47)}...'
+                          : widget.ligne.check_points.lastOrNull ?? ''),
+                  style: TextStyle(
+                    fontFamily: 'Red Hat Display',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    height: 1.3225,
+                    color: Theme.of(context).primaryColorLight,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      )),
+            SizedBox(
+              height: 5,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
