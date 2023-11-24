@@ -27,14 +27,14 @@ class getPosition {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+        return Future.error('Les autorisations de localisation sont refusées');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
       return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+          'Les autorisations de localisation sont définitivement refusées, nous ne pouvons pas demander les autorisations.');
     }
 
     // When we reach here, permissions are granted and we can

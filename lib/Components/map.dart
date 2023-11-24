@@ -46,37 +46,7 @@ class MapScreenState extends State<MapScreen> {
                 return Center(child: CircularProgressIndicator());
               default:
                 if (snapshot.hasError)
-                  return Card(
-                    margin: EdgeInsets.all(16.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Icon(
-                            Icons.location_off,
-                            color: Colors.red,
-                            size: 50.0,
-                          ),
-                          SizedBox(height: 16.0),
-                          Text(
-                            'Accès à la localisation désactivé',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 16.0),
-                          Text(
-                            'Veuillez activer les services de localisation dans les paramètres de votre appareil pour utiliser cette fonctionnalité.',
-                            style: TextStyle(fontSize: 16.0),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return noLocationError(snapshot.error);
                 else if (snapshot.hasData == false) {
                   print(" does not have data");
                   return Maps(latLng: latLng);
@@ -165,4 +135,38 @@ class _MapsState extends State<Maps> {
           ],
         ));
   }
+}
+
+Widget noLocationError(errorMessage) {
+  return Card(
+    margin: EdgeInsets.all(16.0),
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Icon(
+            Icons.location_off,
+            color: Colors.red,
+            size: 50.0,
+          ),
+          SizedBox(height: 16.0),
+          Text(
+            errorMessage,
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 16.0),
+          Text(
+            " Impossible d\'accéder à votre position. Veuillez vérifier les paramètres de localisation de votre appareil pour utiliser cette fonctionalité.",
+            style: TextStyle(fontSize: 16.0),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    ),
+  );
 }
