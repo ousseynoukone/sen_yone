@@ -21,7 +21,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   final Box _boxAccount = Hive.box("account_data");
-    bool switchValue =  true;
+  bool switchValue = true;
 
   var isLoading = false;
   bool positionPermisionCheck = false;
@@ -51,7 +51,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-     switchValue =  _boxAccount.get("isUsingLocalisation")??false;
+    switchValue = _boxAccount.get("isUsingLocalisation") ?? false;
 
     positionPermistionChecker();
   }
@@ -425,15 +425,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                             inactiveTrackColor: Colors.grey.shade300,
                             value: switchValue,
                             onChanged: (bool value) {
-                              setState(() {
-                                positionPermistionChecker();
-
-                                switchValue = value;
-                                _boxAccount.put(
-                                    "isUsingLocalisation", switchValue);
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => MainLayout()));
-                              });
+                              usePosition(value);
                             },
                           ),
                         ],
@@ -526,4 +518,14 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  Future<void> usePosition(bool value) async {
+    await positionPermistionChecker();
+    if (positionPermisionCheck == true) {
+      switchValue = value;
+    }
+    _boxAccount.put("isUsingLocalisation", switchValue);
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => MainLayout()));
+  }
 }
