@@ -47,8 +47,11 @@ class _lineState extends State<line> with AutomaticKeepAliveClientMixin {
                 children: [
                   InkWell(
                     onTap: () {
+                      FocusScope.of(context)
+                          .unfocus(); // Ensure focus is cleared before navigation
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => LineListe()));
+                        MaterialPageRoute(builder: (context) => LineListe()),
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(

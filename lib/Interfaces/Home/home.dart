@@ -1,8 +1,17 @@
+import 'dart:developer';
+
 import 'package:SenYone/Interfaces/Home/start.dart';
 import 'package:SenYone/Layouts/mainLayout.dart';
+import 'package:SenYone/Models/Dto/custom_position_dto.dart';
+import 'package:SenYone/Models/Dto/globals_dto.dart';
+import '../../Shared/globals.dart' as globals;
 import 'package:SenYone/REST_REQUEST/maps_request.dart';
+import 'package:SenYone/Services/geo_service.dart';
+import 'package:SenYone/Services/operations_service.dart';
 import 'package:SenYone/Services/permission_handler.dart';
+import 'package:SenYone/Shared/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:SenYone/Interfaces/Auth/login.dart';
 import 'package:SenYone/Interfaces/ChatBot/chatbot.dart';
@@ -26,7 +35,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   var isLoading = false;
   bool positionPermisionCheck = false;
 
-  final GeoapifyAutocompleteApi geoapifyApi = GeoapifyAutocompleteApi();
+  final GeoapifyApi geoapifyApi = GeoapifyApi();
   //Tableau qui vas tocker les prediction de completion D pour depart et A pour arrivé
   List<String> autocompleteSuggestionsD = [];
   List<String> autocompleteSuggestionsA = [];
@@ -446,12 +455,12 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
 
                         width: double.infinity,
-                        height: 40,
+                        height: 50,
 
                         child: TextButton(
                           // group34007Rte (208:741)
                           onPressed: () async {
-                            showModalBottom(context);
+                            searchForTraject();
                           },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
@@ -469,7 +478,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                               children: [
                                 Container(
                                     width: 175,
-                                    height: 50,
+                                    height: 90,
                                     decoration: BoxDecoration(
                                       color: Color(0xff810000),
                                       borderRadius: BorderRadius.circular(10),
@@ -527,5 +536,48 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     _boxAccount.put("isUsingLocalisation", switchValue);
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => MainLayout()));
+  }
+
+  Future<void> searchForTraject() async {
+    // showLoadingModal(context);
+    CustumPostionDto userPosition = globals.userLocation;
+    if (switchValue == true) {
+      log(" actuall positipon");
+
+      if (userPosition != null) {
+        var arrivalLocation =
+            await GeoapifyService.fetchCoordinates(_controllerArrival.text);
+
+        RouteRequestDTO routeRequestDTO = new RouteRequestDTO(
+            departLatitude: userPosition.latitude,
+            departLongitude: userPosition.longitude,
+            arriveLatitude: arrivalLocation!.latitude,
+            arriveLongitude: arrivalLocation!.longitude,
+            approximation: 1);
+        OpsServices.searchForTraject(routeRequestDTO);
+      }
+    } else {
+      log("not actuall positipon");
+
+      var userPosition =
+          await GeoapifyService.fetchCoordinates(_controllerDeparture.text);
+      var arrivalLocation =
+          await GeoapifyService.fetchCoordinates(_controllerArrival.text);
+
+      log(userPosition!.latitude.toString());
+      log(userPosition!.longitude.toString());
+      log(arrivalLocation!.latitude.toString());
+      log(arrivalLocation!.longitude.toString());
+
+      RouteRequestDTO routeRequestDTO = new RouteRequestDTO(
+          departLatitude: userPosition!.latitude,
+          departLongitude: userPosition!.longitude,
+          arriveLatitude: arrivalLocation!.latitude,
+          arriveLongitude: arrivalLocation!.longitude,
+          approximation: 1);
+      OpsServices.searchForTraject(routeRequestDTO);
+    }
+
+    // showModalBottom(context);
   }
 }

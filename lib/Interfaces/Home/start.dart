@@ -50,7 +50,7 @@ class _StartState extends State<Start> {
         var responseJson = jsonDecode(response.body);
         _boxAccount.put("username", responseJson['username']);
         _boxAccount.put("token", responseJson['token']);
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => MainLayout(),

@@ -2,7 +2,7 @@ import 'package:SenYone/Shared/shared_config.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class GeoapifyAutocompleteApi {
+class GeoapifyApi {
   // Replace with your Geoapify API key
     var apiKey =  SharedConfig().geoApiFyApiKeyForPredictionLocation;
 
@@ -41,4 +41,42 @@ class GeoapifyAutocompleteApi {
     }
     return [];
   }
+
+
+
+   Future<Map<String, double>?> getGeocodeCoordinates(String query) async {
+    final apiUrl =
+        'https://api.geoapify.com/v1/geocode/search?text=$query,Dakar,Sénégal&apiKey=$apiKey';
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response, parse the JSON
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        if (data['features'] != null && data['features'].isNotEmpty) {
+          final coordinates = data['features'][0]['geometry']['coordinates'];
+          final double latitude = coordinates[1];
+          final double longitude = coordinates[0];
+
+          return {'latitude': latitude, 'longitude': longitude};
+        } else {
+          print('No features found in the response.');
+          return null;
+        }
+      } else {
+        // If the server did not return a 200 OK response,
+        // throw an exception.
+        print('Failed to load data. Status Code: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      // Handle potential errors such as a timeout or network error.
+      print('Error: $e');
+      return null;
+    }
+  }
 }
+
+

@@ -120,7 +120,7 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "Se connecter à  votre compte",
+                  "Se connecter à  votre compte.",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 60),
@@ -286,7 +286,7 @@ class _LoginState extends State<Login> {
                             child: isLoading
                                 ? CircularProgressIndicator()
                                 : const Text(
-                                    "Réinitialiser votre mot de passe"),
+                                    "Réinitialiser votre mot de passe."),
                           ),
                         ],
                       ),

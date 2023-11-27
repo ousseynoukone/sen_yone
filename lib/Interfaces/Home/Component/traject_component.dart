@@ -1,8 +1,8 @@
 import 'package:SenYone/utils.dart';
 import 'package:flutter/material.dart';
 
-class Scene extends StatelessWidget {
-  const Scene({super.key});
+class TrajectComponent extends StatelessWidget {
+  const TrajectComponent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -251,7 +251,6 @@ class Scene extends StatelessWidget {
             ],
           ),
         ),
-  
         Row(
           children: [
             Row(
@@ -279,9 +278,9 @@ class Scene extends StatelessWidget {
                 ),
               ],
             ),
-                  SizedBox(
-          width: width / 5,
-        ),
+            SizedBox(
+              width: width / 1.94,
+            ),
             Container(
               // group34007exS (210:813)
               padding: EdgeInsets.all(10),

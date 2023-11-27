@@ -1,3 +1,5 @@
+import 'package:SenYone/Models/Dto/custom_position_dto.dart';
+import '../../Shared/globals.dart' as globals;
 import 'package:geolocator/geolocator.dart';
 
 class getPosition {
@@ -39,6 +41,9 @@ class getPosition {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
+    Position position =await Geolocator.getCurrentPosition();
+   globals.userLocation= new CustumPostionDto(latitude: position.latitude, longitude: position.longitude);
+
+    return position;
   }
 }

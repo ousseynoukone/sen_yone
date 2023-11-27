@@ -9,6 +9,7 @@ import 'dependency_injection.dart';
 
 import 'Interfaces/Home/start.dart';
 import 'Interfaces/Home/home.dart';
+import 'package:SenYone/Labs/test.dart';
 
 void main() async {
   await _initHive();
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
           primaryColor: hexToColor(
               '#B10000'), // Use the color string with a hash (#) here
           primaryColorDark: const Color.fromARGB(221, 19, 18, 18),
+          hintColor: hexToColor('#820000'),
           primaryColorLight: Color.fromARGB(255, 255, 255, 255),
           useMaterial3: true,
           focusColor: hexToColor('#FFD7D7'),

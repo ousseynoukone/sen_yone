@@ -3,11 +3,17 @@ import 'dart:io';
 
 import 'package:SenYone/Interfaces/ChatBot/chatbot.dart';
 import 'package:SenYone/Interfaces/ChatBot/message.dart';
+import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
+import 'package:SenYone/Models/Dto/globals_dto.dart';
 import 'package:SenYone/Models/ligne.dart';
 import 'package:SenYone/REST_REQUEST/gpt_request.dart';
 import 'package:SenYone/REST_REQUEST/http_request_operation.dart';
 import 'package:SenYone/Shared/globals.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:http/src/response.dart';
+import 'package:logger/logger.dart';
+import 'dart:developer';
 
 import '../REST_REQUEST/http_request_auth.dart';
 import '../Models/user.dart';
@@ -58,5 +64,45 @@ class OpsServices {
     ];
 
     return await OpenAIHttpRequest.sendMessage(messages);
+  }
+
+  static void printLongString(String text) {
+    final RegExp pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+    pattern
+        .allMatches(text)
+        .forEach((RegExpMatch match) => print(match.group(0)));
+  }
+
+  static searchForTraject(RouteRequestDTO routeRequestDTO) async {
+    var rep = await HttpOpsRequest.searchForTraject(routeRequestDTO);
+
+    print(routeRequestDTO.departLatitude);
+    print(routeRequestDTO.departLongitude);
+    print(routeRequestDTO.arriveLatitude);
+    print(routeRequestDTO.arriveLongitude);
+
+    if (rep.statusCode == 200) {
+      // Parse JSON response
+
+      try {
+        Map<String, dynamic> jsonResponse = json.decode(rep.body);
+
+        // Extract DirectLines list
+        List<dynamic> directLinesJson = jsonResponse['DirectLines'];
+        List<dynamic> indirectLinesJson = jsonResponse['IndirectLines'];
+
+        // Create DirectLine objects
+        List<DirectLine> directLines = directLinesJson
+            .map((directLineJson) => DirectLine.fromJson(directLineJson))
+            .toList();
+
+        print(directLines.length.toString());
+      } catch (e) {
+        log(e.toString());
+      }
+    } else {
+      // Handle error
+      print("Error: ${rep.statusCode}");
+    }
   }
 }
