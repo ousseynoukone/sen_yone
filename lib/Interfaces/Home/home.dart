@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:SenYone/Interfaces/Home/Component/modal.dart';
 import 'package:SenYone/Interfaces/Home/start.dart';
 import 'package:SenYone/Layouts/mainLayout.dart';
 import 'package:SenYone/Models/Dto/custom_position_dto.dart';
@@ -539,7 +540,8 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   Future<void> searchForTraject() async {
-    // showLoadingModal(context);
+    ModalManager.showLoadingModal(context);
+
     CustumPostionDto userPosition = globals.userLocation;
     if (switchValue == true) {
       log(" actuall positipon");
@@ -554,7 +556,12 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
             arriveLatitude: arrivalLocation!.latitude,
             arriveLongitude: arrivalLocation!.longitude,
             approximation: 1);
-        OpsServices.searchForTraject(routeRequestDTO);
+        var response = await OpsServices.searchForTraject(routeRequestDTO);
+
+        if (response != null) {
+          ModalManager.dismissLoadingModal(); // Dismiss the loading modal
+          showModalBottom(context);
+        }
       }
     } else {
       log("not actuall positipon");
@@ -575,7 +582,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
           arriveLatitude: arrivalLocation!.latitude,
           arriveLongitude: arrivalLocation!.longitude,
           approximation: 1);
-      OpsServices.searchForTraject(routeRequestDTO);
+      var response = OpsServices.searchForTraject(routeRequestDTO);
     }
 
     // showModalBottom(context);

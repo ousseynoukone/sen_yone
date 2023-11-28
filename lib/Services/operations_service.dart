@@ -6,6 +6,7 @@ import 'package:SenYone/Interfaces/ChatBot/message.dart';
 import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
 import 'package:SenYone/Models/Dto/globals_dto.dart';
 import 'package:SenYone/Models/ligne.dart';
+import 'package:SenYone/Models/trajet.dart';
 import 'package:SenYone/REST_REQUEST/gpt_request.dart';
 import 'package:SenYone/REST_REQUEST/http_request_operation.dart';
 import 'package:SenYone/Shared/globals.dart';
@@ -15,6 +16,7 @@ import 'package:http/src/response.dart';
 import 'package:logger/logger.dart';
 import 'dart:developer';
 
+import '../Models/Dto/undirect_trajet_dto.dart';
 import '../REST_REQUEST/http_request_auth.dart';
 import '../Models/user.dart';
 import '../Models/Dto/user_dto.dart';
@@ -73,7 +75,8 @@ class OpsServices {
         .forEach((RegExpMatch match) => print(match.group(0)));
   }
 
-  static searchForTraject(RouteRequestDTO routeRequestDTO) async {
+  static Future<Trajet ?>  searchForTraject(
+      RouteRequestDTO routeRequestDTO) async {
     var rep = await HttpOpsRequest.searchForTraject(routeRequestDTO);
 
     print(routeRequestDTO.departLatitude);
@@ -89,20 +92,25 @@ class OpsServices {
 
         // Extract DirectLines list
         List<dynamic> directLinesJson = jsonResponse['DirectLines'];
-        List<dynamic> indirectLinesJson = jsonResponse['IndirectLines'];
+        List<dynamic> indirectLinesJson = jsonResponse['IndirectLines'][0];
+
+        List<IndirectLine> indirectLines = indirectLinesJson
+            .map((indirectLineJson) => IndirectLine.fromJson(indirectLineJson))
+            .toList();
 
         // Create DirectLine objects
         List<DirectLine> directLines = directLinesJson
             .map((directLineJson) => DirectLine.fromJson(directLineJson))
             .toList();
 
-        print(directLines.length.toString());
+        return Trajet(directLines: directLines, indirectLines: indirectLines);
       } catch (e) {
         log(e.toString());
       }
     } else {
       // Handle error
       print("Error: ${rep.statusCode}");
+      return null;
     }
   }
 }

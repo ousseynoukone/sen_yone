@@ -1,34 +1,78 @@
-class IndirectLineDTO {
-  List<List<Map<String, dynamic>>> indirectLines;
+class IndirectLine {
+  List<double> startingPoint;
+  List<List<dynamic>> line;
+  int numero;
+  List<double>? endingPoint;
+  BusStop busStop;
 
-  IndirectLineDTO({required this.indirectLines});
+  IndirectLine({
+    required this.startingPoint,
+    required this.line,
+    required this.endingPoint,
+    required this.busStop,
+    required this.numero,
+  });
 
-  factory IndirectLineDTO.fromJson(Map<String, dynamic> json) {
-    return IndirectLineDTO(
-      indirectLines: List<List<Map<String, dynamic>>>.from(json['IndirectLines'].map<List<Map<String, dynamic>>>((line) {
-        return List<Map<String, dynamic>>.from(line.map<Map<String, dynamic>>((data) {
-          return {
-            'StartingPoint': List<double>.from(data['StartingPoint'].map<double>((point) => point.toDouble())),
-            'busStop': {
-              'coordinates': {
-                'lon': data['busStop']['coordinates']['lon'].toDouble(),
-                'lat': data['busStop']['coordinates']['lat'].toDouble(),
-              },
-              'distance': data['busStop']['distance'],
-              'operator': data['busStop']['operator'],
-              'street': data['busStop']['street'],
-            },
-            'points': List<Map<String, dynamic>>.from(data['0'][1].map<Map<String, dynamic>>((point) {
-              return {
-                '0': point[0],
-                '1': List<List<double>>.from(point[1].map<List<double>>((coord) {
-                  return [coord[0].toDouble(), coord[1].toDouble()];
-                })),
-              };
-            })),
-          };
-        }));
-      })),
+  factory IndirectLine.fromJson(Map<String, dynamic> json) {
+    //toute cette gimnastique aurait pu etre eviter si j'avait envoyé les données toutes avec le meme format , hélas je suis trop con , et j'ai pas le temps d'aller réctifier cela :( .
+    List<List<double>> lineList = json['0'][1] != null
+        ? List<List<double>>.from(
+            json['0'][1].map((point) => List<double>.from(point)))
+        : List<List<double>>.from(
+            json['0']['0'][1].map((point) => List<double>.from(point)));
+    int numero = json['0'][0] ?? json['0']['0'][0];
+
+
+        List<double> startingPoint = json['StartingPoint'] != null
+    ? List<double>.from(json['StartingPoint'])
+    : List<double>.from(json['0']['StartingPoint'] ?? []);
+
+    BusStop busStop = json['busStop']!=null ?  BusStop.fromJson(json['busStop']) :  BusStop.fromJson(json['0']['busStop']);
+    return IndirectLine(
+      line: lineList,
+      numero: numero,
+      startingPoint: startingPoint,
+      endingPoint: json['EndingPoint'] != null
+          ? List<double>.from(json['EndingPoint'])
+          : null,
+      busStop: busStop,
+    );
+  }
+}
+
+class BusStop {
+  Coordinates coordinates;
+  int distance;
+  String street;
+
+  BusStop({
+    required this.coordinates,
+    required this.distance,
+    required this.street,
+  });
+
+  factory BusStop.fromJson(Map<String, dynamic> json) {
+    return BusStop(
+      coordinates: Coordinates.fromJson(json['coordinates']),
+      distance: json['distance'],
+      street: json['street'],
+    );
+  }
+}
+
+class Coordinates {
+  double lon;
+  double lat;
+
+  Coordinates({
+    required this.lon,
+    required this.lat,
+  });
+
+  factory Coordinates.fromJson(Map<String, dynamic> json) {
+    return Coordinates(
+      lon: json['lon'],
+      lat: json['lat'],
     );
   }
 }

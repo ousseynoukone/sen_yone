@@ -1,35 +1,15 @@
-import 'package:flutter/material.dart';
 
-import 'ligne.dart';
+
+import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
+import 'package:SenYone/Models/Dto/undirect_trajet_dto.dart';
 
 class Trajet {
-  int id;
-  Ligne ligne;
-  double duree;
-  TimeOfDay heureDepart;
-  TimeOfDay heureArrivee;
-  double prix;
-  double distance;
+  List<DirectLine> directLines;
+  List<IndirectLine> indirectLines;
+  DateTime dateTime = DateTime.now();
 
-  Trajet(
-      {required this.id,
-      required this.ligne,
-      required this.duree,
-      required this.heureDepart,
-      required this.heureArrivee,
-      required this.prix,
-      required this.distance});
-
-
-  void afficherDetails() {
-    
-    print('ID: $id');
-    print('Ligne: ${ligne.id}');
-    print('Durée: $duree');
-    print('Heure de départ: $heureDepart');
-    print('Heure d\'arrivée: $heureArrivee');
-    print('Prix: $prix');
-    print('Distance: $distance');
-
-  }
+  Trajet({
+    required this.directLines,
+    required this.indirectLines,
+  });
 }

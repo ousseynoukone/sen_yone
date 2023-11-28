@@ -76,29 +76,4 @@ Future<void> showLogOutModal(context) async {
   );
 }
 
-Future<void> showLoadingModal(context) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        content: Container(
-          height: 100, // Set your desired height here
 
-          child: Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Nous somme entrain de chercher pour vous :) ...',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              SizedBox(height: 20),
-              CircularProgressIndicator(),
-            ],
-          )),
-        ),
-      );
-    },
-  );
-}
