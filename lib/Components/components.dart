@@ -1,3 +1,4 @@
+import 'package:SenYone/Models/trajet.dart';
 import 'package:flutter/material.dart';
 import 'package:SenYone/Interfaces/Home/Component/traject_component.dart';
 
@@ -37,13 +38,13 @@ class SearchInputComponent extends StatelessWidget {
   }
 }
 
-Future<void> showModalBottom(context) async {
+Future<void> showModalBottom(context, Trajet trajet) async {
   return showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
       return Padding(
         padding: const EdgeInsets.all(15),
-        child: TrajectComponent(),
+        child: TrajectComponent(trajet: trajet),
       );
     },
   );

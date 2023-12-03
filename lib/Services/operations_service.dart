@@ -75,7 +75,7 @@ class OpsServices {
         .forEach((RegExpMatch match) => print(match.group(0)));
   }
 
-  static Future<Trajet ?>  searchForTraject(
+  static Future<Trajet?> searchForTraject(
       RouteRequestDTO routeRequestDTO) async {
     var rep = await HttpOpsRequest.searchForTraject(routeRequestDTO);
 
@@ -93,6 +93,8 @@ class OpsServices {
         // Extract DirectLines list
         List<dynamic> directLinesJson = jsonResponse['DirectLines'];
         List<dynamic> indirectLinesJson = jsonResponse['IndirectLines'][0];
+
+        log(jsonResponse.toString());
 
         List<IndirectLine> indirectLines = indirectLinesJson
             .map((indirectLineJson) => IndirectLine.fromJson(indirectLineJson))

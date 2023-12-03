@@ -3,13 +3,15 @@ class DirectLine {
   List<List<dynamic>> line;
   int numero;
   List<double> endingPoint;
-  BusStop busStop;
+  BusStop busStopD;
+  BusStop busStopA;
 
   DirectLine({
     required this.startingPoint,
     required this.line,
     required this.endingPoint,
-    required this.busStop,
+    required this.busStopD,
+    required this.busStopA,
     required this.numero,
   });
 
@@ -19,7 +21,8 @@ class DirectLine {
       line: List<List<dynamic>>.from(json['0'][1]),
       numero: json['0'][0],
       endingPoint: List<double>.from(json['EndingPoint']),
-      busStop: BusStop.fromJson(json['busStop']),
+      busStopA: BusStop.fromJson(json['busStopA']),
+      busStopD: BusStop.fromJson(json['busStopD']),
     );
   }
 }

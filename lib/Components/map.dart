@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:logger/logger.dart';
 import '../Components/map_request/map_get_current_position.dart';
 
 class MapScreen extends StatefulWidget {
@@ -13,19 +17,6 @@ class MapScreen extends StatefulWidget {
 
 class MapScreenState extends State<MapScreen> {
   LatLng latLng = LatLng(14.7645042, -17.3660286);
-  //  void _fetchCurrentPosition() async {
-  //   try {
-  //     Position position = await getPosition.determinePosition();
-  //     setState(() {
-  //       print(latLng);
-
-  //       latLng = LatLng(position.latitude, position.longitude);
-  //       print(latLng);
-  //     });
-  //   } catch (ex) {
-  //     print(ex);
-  //   }
-  // }
 
   @override
   void initState() {
@@ -86,6 +77,40 @@ class Maps extends StatefulWidget {
 }
 
 class _MapsState extends State<Maps> {
+  late LatLng latLng;
+  final _locationStreamController = StreamController<LocationMarkerPosition>();
+  final _headingStreamController = StreamController<LocationMarkerHeading?>();
+
+  late Stream<LocationMarkerPosition> _locationStream;
+  late Stream<LocationMarkerHeading?> _headingStream;
+
+  @override
+  void initState() {
+    super.initState();
+    latLng = widget.latLng;
+    _initLocationTracking();
+  }
+
+  _initLocationTracking() {
+    _locationStream = Geolocator.getPositionStream().map((position) {
+      return LocationMarkerPosition(
+          latitude: position.latitude,
+          longitude: position.longitude,
+          accuracy: position.accuracy);
+    });
+
+    _headingStream = Geolocator.getPositionStream().map((position) {
+      return LocationMarkerHeading(
+        heading: position.heading ?? 0.0,
+        accuracy: position.headingAccuracy ?? (pi * 0.2),
+      );
+    });
+
+    _headingStreamController.addStream(_headingStream);
+
+    _locationStreamController.addStream(_locationStream);
+  }
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 428;
@@ -104,24 +129,12 @@ class _MapsState extends State<Maps> {
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               userAgentPackageName: 'com.example.app',
             ),
-            MarkerLayer(
-              markers: [
-                Marker(
-                  point: widget.latLng,
-                  width: 20,
-                  height: 20,
-                  builder: (context) => Container(
-                    width: 80,
-                    height: 80,
-                    child: Icon(
-                      Icons.location_on_sharp,
-                      color: Theme.of(context).primaryColor,
-                      size: 40,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            CurrentLocationLayer(
+                headingStream: _headingStream,
+                positionStream: _locationStreamController.stream,
+                turnOnHeadingUpdate: TurnOnHeadingUpdate.always,
+                style: LocationMarkerStyle(
+                    headingSectorColor: Theme.of(context).primaryColor)),
           ],
           nonRotatedChildren: [
             RichAttributionWidget(
