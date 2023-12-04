@@ -2,6 +2,8 @@ class DirectLine {
   List<double> startingPoint;
   List<List<dynamic>> line;
   int numero;
+  double distance;
+  bool status;
   List<double> endingPoint;
   BusStop busStopD;
   BusStop busStopA;
@@ -13,6 +15,8 @@ class DirectLine {
     required this.busStopD,
     required this.busStopA,
     required this.numero,
+    required this.distance,
+    required this.status,
   });
 
   factory DirectLine.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,8 @@ class DirectLine {
       endingPoint: List<double>.from(json['EndingPoint']),
       busStopA: BusStop.fromJson(json['busStopA']),
       busStopD: BusStop.fromJson(json['busStopD']),
+      distance: json['distance'],
+      status: json['status'],
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:SenYone/Interfaces/Home/start.dart';
 import 'package:SenYone/Layouts/mainLayout.dart';
 import 'package:SenYone/Models/Dto/custom_position_dto.dart';
 import 'package:SenYone/Models/Dto/globals_dto.dart';
+import 'package:logger/logger.dart';
 import '../../Shared/globals.dart' as globals;
 import 'package:SenYone/REST_REQUEST/maps_request.dart';
 import 'package:SenYone/Services/geo_service.dart';
@@ -21,6 +22,7 @@ import '../../Components/components.dart';
 import '../../Components/map.dart';
 import '../../utils.dart';
 import '../../Services/auth_service.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -559,8 +561,18 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         var response = await OpsServices.searchForTraject(routeRequestDTO);
 
         if (response != null) {
+          Logger().w(response!.indirectLinesDistance);
+
           ModalManager.dismissLoadingModal(); // Dismiss the loading modal
-          showModalBottom(context,response);
+          showModalBottom(context, response);
+        } else {
+          ModalManager.dismissLoadingModal();
+          //displaying error message on  snackbar
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+                Text("Oups , une erreur s'est produite...Veuillez réesayer."),
+            duration: Duration(milliseconds: 3000),
+          ));
         }
       }
     } else {

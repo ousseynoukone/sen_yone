@@ -44,7 +44,11 @@ Future<void> showModalBottom(context, Trajet trajet) async {
     builder: (BuildContext context) {
       return Padding(
         padding: const EdgeInsets.all(15),
-        child: TrajectComponent(trajet: trajet),
+        child: ListView(
+          children: [
+            TrajectComponent(trajet: trajet),
+          ],
+        ),
       );
     },
   );

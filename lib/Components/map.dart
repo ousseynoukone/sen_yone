@@ -132,7 +132,6 @@ class _MapsState extends State<Maps> {
             CurrentLocationLayer(
                 headingStream: _headingStream,
                 positionStream: _locationStreamController.stream,
-                turnOnHeadingUpdate: TurnOnHeadingUpdate.always,
                 style: LocationMarkerStyle(
                     headingSectorColor: Theme.of(context).primaryColor)),
           ],

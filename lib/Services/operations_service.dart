@@ -92,9 +92,9 @@ class OpsServices {
 
         // Extract DirectLines list
         List<dynamic> directLinesJson = jsonResponse['DirectLines'];
-        List<dynamic> indirectLinesJson = jsonResponse['IndirectLines'][0];
+        List<dynamic> indirectLinesJson = jsonResponse['IndirectLines']["0"];
+       var indirectLinesDistance = jsonResponse['IndirectLines']["distance"];
 
-        log(jsonResponse.toString());
 
         List<IndirectLine> indirectLines = indirectLinesJson
             .map((indirectLineJson) => IndirectLine.fromJson(indirectLineJson))
@@ -105,7 +105,7 @@ class OpsServices {
             .map((directLineJson) => DirectLine.fromJson(directLineJson))
             .toList();
 
-        return Trajet(directLines: directLines, indirectLines: indirectLines);
+        return Trajet(directLines: directLines, indirectLines: indirectLines,indirectLinesDistance:indirectLinesDistance.round());
       } catch (e) {
         log(e.toString());
       }
