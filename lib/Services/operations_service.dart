@@ -75,44 +75,52 @@ class OpsServices {
         .forEach((RegExpMatch match) => print(match.group(0)));
   }
 
-  static Future<Trajet?> searchForTraject(
-      RouteRequestDTO routeRequestDTO) async {
+ static Future<Trajet?> searchForTraject(RouteRequestDTO routeRequestDTO) async {
+  try {
     var rep = await HttpOpsRequest.searchForTraject(routeRequestDTO);
-
-    print(routeRequestDTO.departLatitude);
-    print(routeRequestDTO.departLongitude);
-    print(routeRequestDTO.arriveLatitude);
-    print(routeRequestDTO.arriveLongitude);
 
     if (rep.statusCode == 200) {
       // Parse JSON response
+      Map<String, dynamic> jsonResponse = json.decode(rep.body);
 
+      // Extract DirectLines list
+      List<dynamic> directLinesJson = jsonResponse['DirectLines'] ?? [];
+      List<DirectLine> directLines = directLinesJson
+          .map((directLineJson) => DirectLine.fromJson(directLineJson))
+          .toList();
+
+      List<IndirectLine>? indirectLines;
+      double? indirectLinesDistance;
+
+      // Extract IndirectLines list if available
       try {
-        Map<String, dynamic> jsonResponse = json.decode(rep.body);
-
-        // Extract DirectLines list
-        List<dynamic> directLinesJson = jsonResponse['DirectLines'];
-        List<dynamic> indirectLinesJson = jsonResponse['IndirectLines']["0"];
-       var indirectLinesDistance = jsonResponse['IndirectLines']["distance"];
-
-
-        List<IndirectLine> indirectLines = indirectLinesJson
+        List<dynamic> indirectLinesJson =
+            jsonResponse['IndirectLines']?["0"] ?? [];
+        indirectLines = indirectLinesJson
             .map((indirectLineJson) => IndirectLine.fromJson(indirectLineJson))
             .toList();
-
-        // Create DirectLine objects
-        List<DirectLine> directLines = directLinesJson
-            .map((directLineJson) => DirectLine.fromJson(directLineJson))
-            .toList();
-
-        return Trajet(directLines: directLines, indirectLines: indirectLines,indirectLinesDistance:indirectLinesDistance.round());
+        indirectLinesDistance = double.parse(
+            (jsonResponse['IndirectLines']?["distance"] ?? 0.0)
+                .toStringAsFixed(2));
       } catch (e) {
-        log(e.toString());
+        // Handle IndirectLines parsing error
+        print("Error parsing IndirectLines: $e");
       }
+
+      return Trajet(
+        directLines: directLines,
+        indirectLines: indirectLines ?? [],
+        indirectLinesDistance: indirectLinesDistance ?? 0.0,
+      );
     } else {
-      // Handle error
-      print("Error: ${rep.statusCode}");
+      // Handle HTTP error
+      print("HTTP Error: ${rep.statusCode}");
       return null;
     }
+  } catch (e) {
+    // Handle general error
+    print("Error: $e");
+    return null;
   }
+}
 }

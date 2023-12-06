@@ -4,15 +4,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import '../Components/map_request/map_get_current_position.dart';
 
-class MapScreenWithPolyline extends StatefulWidget {
+class MapScreenWithPolylineIndirectTrajet extends StatefulWidget {
   final List<LatLng> polylineCoordinates;
-  const MapScreenWithPolyline({super.key, required this.polylineCoordinates});
+  const MapScreenWithPolylineIndirectTrajet({super.key, required this.polylineCoordinates});
 
   @override
-  State<MapScreenWithPolyline> createState() => _MapScreenWithPolylineState();
+  State<MapScreenWithPolylineIndirectTrajet> createState() => _MapScreenWithPolylineIndirectTrajetState();
 }
 
-class _MapScreenWithPolylineState extends State<MapScreenWithPolyline> {
+class _MapScreenWithPolylineIndirectTrajetState extends State<MapScreenWithPolylineIndirectTrajet> {
   LatLng basePosition = LatLng(14.7168734, -17.4443997);
 
   //  void _fetchCurrentPosition() async {
@@ -83,8 +83,6 @@ class _MapsPolylineState extends State<MapsPolyline> {
       borderRadius: BorderRadius.circular(10 * fem),
       child: FlutterMap(
         options: MapOptions(
-                    enableMultiFingerGestureRace: true,
-
           center: widget.latLng,
           zoom: 12,
         ),

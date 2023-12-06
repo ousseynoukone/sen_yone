@@ -121,6 +121,7 @@ class _MapsState extends State<Maps> {
         borderRadius: BorderRadius.circular(10 * fem),
         child: FlutterMap(
           options: MapOptions(
+            enableMultiFingerGestureRace: true,
             center: widget.latLng,
             zoom: 17.2,
           ),
