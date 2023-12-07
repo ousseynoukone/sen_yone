@@ -228,17 +228,30 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                                 children: [
                                   Visibility(
                                     visible: switchValue,
-                                    child: SizedBox(
-                                        height: height * 0.047,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text("Lieu de départ"),
-                                            Icon(Icons.arrow_forward_rounded),
-                                            Text("Votre postition actuelle"),
-                                          ],
-                                        )),
+                                    child: LayoutBuilder(
+                                      builder: (BuildContext context,
+                                          BoxConstraints constraints) {
+                                        double width = constraints.maxWidth;
+
+                                        return Visibility(
+                                          visible: switchValue,
+                                          child: SizedBox(
+                                            height: width / 7.2,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                    "Lieu de départ "),
+                                                Icon(Icons
+                                                    .arrow_forward_rounded),
+                                                Text("Votre position actuelle"),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                   Visibility(
                                     visible: !switchValue,
@@ -421,12 +434,17 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                       ],
                     ),
 
-                    Container(
-                        // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
-                        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                        width: double.infinity,
-                        height: 0.6 * height,
-                        child: const MapScreen()),
+                    LayoutBuilder(builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      double width = constraints.maxWidth;
+
+                      return Container(
+                          // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
+                          margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                          width: double.infinity,
+                          height: width * 1.08,
+                          child: const MapScreen());
+                    }),
                   ],
                 ),
                 Column(

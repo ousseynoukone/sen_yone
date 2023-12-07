@@ -13,7 +13,7 @@ class TrajectComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double scaleFactor = MediaQuery.of(context).textScaleFactor;
-
+    print(width);
     return Column(
       children: [
         Column(
@@ -44,7 +44,14 @@ class TrajectComponent extends StatelessWidget {
                               busNumero(directLine.numero, context),
                             ],
                           ),
-                          trajectDetail(directLine, width, context),
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              double width = constraints.maxWidth;
+
+                              // Assuming trajectDetail is a function that takes directLine, width, and context as parameters
+                              return trajectDetail(directLine, width, context);
+                            },
+                          )
                         ],
                       ),
                     ),
@@ -76,30 +83,39 @@ class TrajectComponent extends StatelessWidget {
                                 color: Theme.of(context).primaryColorLight,
                                 fontWeight: FontWeight.w400),
                           ),
-                          SizedBox(
-                            height: 31,
-                            width: 210,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              itemCount: trajet.indirectLines.length,
-                              itemBuilder: (context, index) {
-                                var indirectLineNumero =
-                                    trajet.indirectLines[index].numero;
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: busNumero(indirectLineNumero, context),
-                                );
-                              },
-                            ),
-                          )
+                          LayoutBuilder(builder: (context, constraints) {
+                            double width = constraints.maxWidth;
+                            double height = constraints.maxHeight;
+                            return SizedBox(
+                              height: 31,
+                              width: 210,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount: trajet.indirectLines.length,
+                                itemBuilder: (context, index) {
+                                  var indirectLineNumero =
+                                      trajet.indirectLines[index].numero;
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 10),
+                                    child:
+                                        busNumero(indirectLineNumero, context),
+                                  );
+                                },
+                              ),
+                            );
+                          })
                         ],
                       ),
-                      Row(
-                        children: [
-                          IndirecttrajectDetail(trajet.indirectLines, width)
-                        ],
-                      ),
+                      LayoutBuilder(builder: (context, constraints) {
+                        double width = constraints.maxWidth;
+                        double height = constraints.maxHeight;
+                        return Row(
+                          children: [
+                            IndirecttrajectDetail(trajet.indirectLines, width)
+                          ],
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -171,38 +187,44 @@ class TrajectComponent extends StatelessWidget {
                   ),
                 ),
               ),
-              RichText(
+              SizedBox(
+                width: width /
+                    1.5, // Set a fixed width or use constraints to control overflow
+                child: RichText(
                   text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                      text: "Prendre le ",
-                      children: <TextSpan>[
-                    TextSpan(
-                      text: directLine.numero.toString(),
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
-                      ),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Color(0xffffffff),
                     ),
-                    TextSpan(
-                      text: " à ",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
+                    text: "Prendre le ",
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: directLine.numero.toString(),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xffffffff),
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: directLine.busStopD.street,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
+                      TextSpan(
+                        text: " à ",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xffffffff),
+                        ),
                       ),
-                    )
-                  ]))
+                      TextSpan(
+                        text: directLine.busStopD.street,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xffffffff),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -221,23 +243,26 @@ class TrajectComponent extends StatelessWidget {
                   ),
                 ),
               ),
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                      text: "Descendre  à ",
-                      children: <TextSpan>[
-                    TextSpan(
-                      text: directLine.busStopA.street,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
-                      ),
-                    )
-                  ]))
+              SizedBox(
+                width: width / 1.5,
+                child: RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xffffffff),
+                        ),
+                        text: "Descendre  à ",
+                        children: <TextSpan>[
+                      TextSpan(
+                        text: directLine.busStopA.street,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xffffffff),
+                        ),
+                      )
+                    ])),
+              )
             ],
           ),
         ),
@@ -315,7 +340,7 @@ class TrajectComponent extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: width / 1.94,
+                    width: width / 2.4,
                   ),
                 ],
               ),
@@ -323,7 +348,7 @@ class TrajectComponent extends StatelessWidget {
             Visibility(
               visible: !directLine.status,
               child: SizedBox(
-                width: width / 1.555,
+                width: width / 1.4,
               ),
             ),
             InkWell(
@@ -380,8 +405,8 @@ class TrajectComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: width /
-              1.6, // Provide a fixed height or use a height based on your needs
+          width:
+              width, // Provide a fixed height or use a height based on your needs
           child: IndirecttrajectDetailIterating(indirectLines, width),
         ),
         Container(
@@ -437,7 +462,7 @@ class TrajectComponent extends StatelessWidget {
         Row(
           children: [
             SizedBox(
-              width: width / 1.555,
+              width: width / 1.4,
             ),
             Container(
               padding: EdgeInsets.all(10),
@@ -498,38 +523,42 @@ class TrajectComponent extends StatelessWidget {
                       color: Color(0xffffffff),
                     ),
                   ),
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
+                  Container(
+                    width: width / 1.5,
+                    child: RichText(
+                      overflow: TextOverflow.visible,
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xffffffff),
+                        ),
+                        text: "Prendre le ",
+                        children: <TextSpan>[
+                          TextSpan(
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                            text: indirectLine.numero.toString(),
+                          ),
+                          TextSpan(
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xffffffff),
+                            ),
+                            text: " à ",
+                          ),
+                          TextSpan(
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                            text: indirectLine.ArretbusD.street,
+                          ),
+                        ],
                       ),
-                      text: "Prendre le ",
-                      children: <TextSpan>[
-                        TextSpan(
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xffffffff),
-                          ),
-                          text: indirectLine.numero.toString(),
-                        ),
-                        TextSpan(
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Color(0xffffffff),
-                          ),
-                          text: " à ",
-                        ),
-                        TextSpan(
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xffffffff),
-                          ),
-                          text: indirectLine.ArretbusD.street,
-                        ),
-                      ],
                     ),
                   ),
                 ],

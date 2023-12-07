@@ -240,8 +240,8 @@ class _MapsPolylineState extends State<MapsPolyline> {
                   width: 80,
                   height: 80,
                   child: Icon(
-                    Icons.location_on_sharp,
-                    color: Theme.of(context).primaryColor,
+                    Icons.location_on,
+                    color: Color.fromARGB(255, 255, 103, 103),
                     size: 40,
                   ),
                 ),
@@ -255,7 +255,7 @@ class _MapsPolylineState extends State<MapsPolyline> {
                   height: 80,
                   child: Icon(
                     Icons.location_on_sharp,
-                    color: Theme.of(context).primaryColor,
+                    color: Colors.blueAccent,
                     size: 40,
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:SenYone/Components/map_polylines_direct_trajet.dart';
+import 'package:SenYone/Interfaces/Trajet/tarifs_detail.dart';
 import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
 import 'package:SenYone/Models/trajet.dart';
 import 'package:SenYone/utils.dart';
@@ -104,7 +105,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
             ),
           ),
           SizedBox(
-            height: _height / 2,
+            height: _height / 1.80,
             child: MapScreenWithPolylineDirectTrajet(
               polylineCoordinates: polylineCoordinates,
               departMarker: departPoint,
@@ -125,7 +126,12 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  trajectDetail(widget.directLine, _width, context),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      double width = constraints.maxWidth;
+                      return trajectDetail(widget.directLine, width, context);
+                    },
+                  ),
                 ],
               ),
             ),
@@ -153,38 +159,42 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                   ),
                 ),
               ),
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                      text: "Prendre le ",
-                      children: <TextSpan>[
-                    TextSpan(
-                      text: directLine.numero.toString(),
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                    TextSpan(
-                      text: " à ",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                    TextSpan(
-                      text: directLine.busStopD.street,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
-                      ),
-                    )
-                  ]))
+              Container(
+                width: width / 1.4,
+                child: RichText(
+                    overflow: TextOverflow.visible,
+                    text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xffffffff),
+                        ),
+                        text: "Prendre le ",
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: directLine.numero.toString(),
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                          TextSpan(
+                            text: " à ",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                          TextSpan(
+                            text: directLine.busStopD.street,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                          )
+                        ])),
+              )
             ],
           ),
         ),
@@ -203,23 +213,27 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                   ),
                 ),
               ),
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                      text: "Descendre  à ",
-                      children: <TextSpan>[
-                    TextSpan(
-                      text: directLine.busStopA.street,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
-                      ),
-                    )
-                  ]))
+              Container(
+                width: width / 1.4,
+                child: RichText(
+                    overflow: TextOverflow.visible,
+                    text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xffffffff),
+                        ),
+                        text: "Descendre  à ",
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: directLine.busStopA.street,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                          )
+                        ])),
+              )
             ],
           ),
         ),
@@ -244,7 +258,12 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TarifsViewer(
+                            tarifs: directLine.tarifs,
+                          )));
+                },
                 style: TextButton.styleFrom(padding: EdgeInsets.zero),
                 child: Container(
                   width: 125,
@@ -353,7 +372,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                     ),
                   ),
                   SizedBox(
-                    width: width / 1.60,
+                    width: width / 3.4,
                   ),
                 ],
               ),

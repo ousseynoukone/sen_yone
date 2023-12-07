@@ -15,6 +15,8 @@ class _CheckPointListeState extends State<CheckPointListe> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double scaleFactor = MediaQuery.of(context).textScaleFactor;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Ligne " + widget.ligne.numero.toString()),
@@ -37,7 +39,7 @@ class _CheckPointListeState extends State<CheckPointListe> {
                         : widget.ligne.check_points.firstOrNull ?? ''),
                 style: TextStyle(
                   fontFamily: 'Red Hat Display',
-                  fontSize: 18,
+                  fontSize: 14 * scaleFactor,
                   fontWeight: FontWeight.w400,
                   height: 1.3225,
                   color: Theme.of(context).primaryColorLight,
@@ -76,7 +78,7 @@ class _CheckPointListeState extends State<CheckPointListe> {
                         : widget.ligne.check_points.lastOrNull ?? ''),
                 style: TextStyle(
                   fontFamily: 'Red Hat Display',
-                  fontSize: 18,
+                  fontSize: 14 * scaleFactor,
                   fontWeight: FontWeight.w400,
                   height: 1.3225,
                   color: Theme.of(context).primaryColorLight,

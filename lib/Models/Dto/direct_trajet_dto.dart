@@ -4,20 +4,21 @@ class DirectLine {
   int numero;
   double distance;
   bool status;
+  var tarifs;
   List<double> endingPoint;
   BusStop busStopD;
   BusStop busStopA;
 
-  DirectLine({
-    required this.startingPoint,
-    required this.line,
-    required this.endingPoint,
-    required this.busStopD,
-    required this.busStopA,
-    required this.numero,
-    required this.distance,
-    required this.status,
-  });
+  DirectLine(
+      {required this.startingPoint,
+      required this.line,
+      required this.endingPoint,
+      required this.busStopD,
+      required this.busStopA,
+      required this.numero,
+      required this.distance,
+      required this.status,
+      required this.tarifs});
 
   factory DirectLine.fromJson(Map<String, dynamic> json) {
     return DirectLine(
@@ -29,6 +30,7 @@ class DirectLine {
       busStopD: BusStop.fromJson(json['busStopD']),
       distance: json['distance'],
       status: json['status'],
+      tarifs: json['tarifs'][0]["tarifs"],
     );
   }
 }

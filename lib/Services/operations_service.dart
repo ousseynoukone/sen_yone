@@ -75,52 +75,57 @@ class OpsServices {
         .forEach((RegExpMatch match) => print(match.group(0)));
   }
 
- static Future<Trajet?> searchForTraject(RouteRequestDTO routeRequestDTO) async {
-  try {
-    var rep = await HttpOpsRequest.searchForTraject(routeRequestDTO);
+  static Future<Trajet?> searchForTraject(
+      RouteRequestDTO routeRequestDTO) async {
+    try {
+      var rep = await HttpOpsRequest.searchForTraject(routeRequestDTO);
 
-    if (rep.statusCode == 200) {
-      // Parse JSON response
-      Map<String, dynamic> jsonResponse = json.decode(rep.body);
+      if (rep.statusCode == 200) {
+        // Parse JSON response
+        Map<String, dynamic> jsonResponse = json.decode(rep.body);
 
-      // Extract DirectLines list
-      List<dynamic> directLinesJson = jsonResponse['DirectLines'] ?? [];
-      List<DirectLine> directLines = directLinesJson
-          .map((directLineJson) => DirectLine.fromJson(directLineJson))
-          .toList();
-
-      List<IndirectLine>? indirectLines;
-      double? indirectLinesDistance;
-
-      // Extract IndirectLines list if available
-      try {
-        List<dynamic> indirectLinesJson =
-            jsonResponse['IndirectLines']?["0"] ?? [];
-        indirectLines = indirectLinesJson
-            .map((indirectLineJson) => IndirectLine.fromJson(indirectLineJson))
+        // Extract DirectLines list
+        List<dynamic> directLinesJson = jsonResponse['DirectLines'] ?? [];
+        List<DirectLine> directLines = directLinesJson
+            .map((directLineJson) => DirectLine.fromJson(directLineJson))
             .toList();
-        indirectLinesDistance = double.parse(
-            (jsonResponse['IndirectLines']?["distance"] ?? 0.0)
-                .toStringAsFixed(2));
-      } catch (e) {
-        // Handle IndirectLines parsing error
-        print("Error parsing IndirectLines: $e");
-      }
 
-      return Trajet(
-        directLines: directLines,
-        indirectLines: indirectLines ?? [],
-        indirectLinesDistance: indirectLinesDistance ?? 0.0,
-      );
-    } else {
-      // Handle HTTP error
-      print("HTTP Error: ${rep.statusCode}");
+                Logger().w(directLines.first.tarifs);
+
+
+        List<IndirectLine>? indirectLines;
+        double? indirectLinesDistance;
+
+        // Extract IndirectLines list if available
+        try {
+          List<dynamic> indirectLinesJson =
+              jsonResponse['IndirectLines']?["0"] ?? [];
+          indirectLines = indirectLinesJson
+              .map(
+                  (indirectLineJson) => IndirectLine.fromJson(indirectLineJson))
+              .toList();
+          indirectLinesDistance = double.parse(
+              (jsonResponse['IndirectLines']?["distance"] ?? 0.0)
+                  .toStringAsFixed(2));
+        } catch (e) {
+          // Handle IndirectLines parsing error
+          print("Error parsing IndirectLines: $e");
+        }
+
+        return Trajet(
+          directLines: directLines,
+          indirectLines: indirectLines ?? [],
+          indirectLinesDistance: indirectLinesDistance ?? 0.0,
+        );
+      } else {
+        // Handle HTTP error
+        print("HTTP Error: ${rep.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      // Handle general error
+      print("Error: $e");
       return null;
     }
-  } catch (e) {
-    // Handle general error
-    print("Error: $e");
-    return null;
   }
-}
 }

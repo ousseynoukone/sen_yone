@@ -38,6 +38,7 @@ class _DetailLineState extends State<DetailLine> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double scaleFactor = MediaQuery.of(context).textScaleFactor;
 
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +64,7 @@ class _DetailLineState extends State<DetailLine> {
                               : widget.ligne.check_points.firstOrNull ?? ''),
                       style: TextStyle(
                         fontFamily: 'Red Hat Display',
-                        fontSize: 18,
+                        fontSize: 14 * scaleFactor,
                         fontWeight: FontWeight.w400,
                         height: 1.3225,
                         color: Theme.of(context).primaryColorLight,
@@ -78,7 +79,7 @@ class _DetailLineState extends State<DetailLine> {
                     // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
                     margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.infinity,
-                    height: height * 0.82,
+                    height: height * 0.75,
                     child: MapScreenWithPolyline(
                       polylineCoordinates: polylineCoordinates,
                     )),
@@ -98,7 +99,7 @@ class _DetailLineState extends State<DetailLine> {
                           : widget.ligne.check_points.lastOrNull ?? ''),
                   style: TextStyle(
                     fontFamily: 'Red Hat Display',
-                    fontSize: 18,
+                    fontSize: 14 * scaleFactor,
                     fontWeight: FontWeight.w400,
                     height: 1.3225,
                     color: Theme.of(context).primaryColorLight,
