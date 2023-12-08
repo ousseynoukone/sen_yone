@@ -34,13 +34,13 @@ class ModalManager {
                     text: TextSpan(
                       text: 'Nous cherchons pour vous.',
                       style: DefaultTextStyle.of(context).style.copyWith(
-                            fontSize: scaleFactor * 18,
+                            fontSize: scaleFactor * 16 ,
                             fontWeight: FontWeight.w400,
                           ),
                       children: <TextSpan>[
                         TextSpan(
                           text: '🚀😎',
-                          style: TextStyle(fontSize: scaleFactor * 18),
+                          style: TextStyle(fontSize: scaleFactor * 16),
                         ),
                       ],
                     ),
@@ -90,7 +90,7 @@ class ModalManager {
                   child: Text(
                       "Oups , une erreur s'est produite...Veuillez réesayer.",
                       style: DefaultTextStyle.of(context).style.copyWith(
-                            fontSize: scaleFactor * 18,
+                            fontSize: scaleFactor * 16,
                             fontWeight: FontWeight.w400,
                           ),
                       textAlign: TextAlign.center),

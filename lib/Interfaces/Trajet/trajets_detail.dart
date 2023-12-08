@@ -2,6 +2,7 @@ import 'package:SenYone/Components/map_polylines_direct_trajet.dart';
 import 'package:SenYone/Interfaces/Trajet/tarifs_detail.dart';
 import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
 import 'package:SenYone/Models/trajet.dart';
+import 'package:SenYone/Responsiveness/responsive.dart';
 import 'package:SenYone/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -67,6 +68,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
         children: [
           Container(
             margin: EdgeInsets.only(top: _height / 90),
+            height: _height / 20,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
                 Radius.circular(20.0),
@@ -97,23 +99,49 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                   "Directives du trajet",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18.0,
+                    fontSize: 16.0 * scaleFactor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(
-            height: _height / 1.80,
-            child: MapScreenWithPolylineDirectTrajet(
-              polylineCoordinates: polylineCoordinates,
-              departMarker: departPoint,
-              arriveMarker: arrivePoint,
-              busStopArrive: busStopArrive,
-              busStopDepart: busStopDepart,
-            ),
-          ),
+
+          ///RESPONSIVENESS AREA
+          Responsive(
+              mobile: SizedBox(
+                height: _width,
+                child: MapScreenWithPolylineDirectTrajet(
+                  polylineCoordinates: polylineCoordinates,
+                  departMarker: departPoint,
+                  arriveMarker: arrivePoint,
+                  busStopArrive: busStopArrive,
+                  busStopDepart: busStopDepart,
+                ),
+              ),
+              tablet: SizedBox(
+                height: _width / 1.2,
+                child: MapScreenWithPolylineDirectTrajet(
+                  polylineCoordinates: polylineCoordinates,
+                  departMarker: departPoint,
+                  arriveMarker: arrivePoint,
+                  busStopArrive: busStopArrive,
+                  busStopDepart: busStopDepart,
+                ),
+              ),
+              desktop: SizedBox(
+                height: _width,
+                child: MapScreenWithPolylineDirectTrajet(
+                  polylineCoordinates: polylineCoordinates,
+                  departMarker: departPoint,
+                  arriveMarker: arrivePoint,
+                  busStopArrive: busStopArrive,
+                  busStopDepart: busStopDepart,
+                ),
+              )),
+
+          /// END RESPONSIVENESS AREA
+
           Container(
               child: Card(
             color: Theme.of(context).primaryColor,
@@ -371,9 +399,20 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                       color: Color(0xffffffff),
                     ),
                   ),
-                  SizedBox(
-                    width: width / 3.4,
-                  ),
+
+                  //RESPONSIVENESS AREA
+                  Responsive(
+                      mobile: SizedBox(
+                        width: width / 3.9,
+                      ),
+                      tablet: SizedBox(
+                        width: width / 1.55,
+                      ),
+                      desktop: SizedBox(
+                        width: width / 3.9,
+                      )),
+
+                  //END RESPONSIVENESS AREA
                 ],
               ),
             ),
@@ -386,12 +425,13 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                             directTrajetsDetails(directLine: directLine)));
               },
               child: Container(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Color(0xff810000),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     TextButton(
                       onPressed: () {},

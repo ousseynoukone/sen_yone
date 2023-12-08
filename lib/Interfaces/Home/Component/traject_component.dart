@@ -1,6 +1,7 @@
 import 'package:SenYone/Interfaces/Trajet/trajets_detail.dart';
 import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
 import 'package:SenYone/Models/Dto/undirect_trajet_dto.dart';
+import 'package:SenYone/Responsiveness/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:SenYone/Models/trajet.dart';
 
@@ -191,6 +192,7 @@ class TrajectComponent extends StatelessWidget {
                 width: width /
                     1.5, // Set a fixed width or use constraints to control overflow
                 child: RichText(
+                  overflow: TextOverflow.visible,
                   text: TextSpan(
                     style: TextStyle(
                       fontSize: 15,
@@ -246,6 +248,7 @@ class TrajectComponent extends StatelessWidget {
               SizedBox(
                 width: width / 1.5,
                 child: RichText(
+                    overflow: TextOverflow.visible,
                     text: TextSpan(
                         style: TextStyle(
                           fontSize: 15,
@@ -253,15 +256,15 @@ class TrajectComponent extends StatelessWidget {
                         ),
                         text: "Descendre  à ",
                         children: <TextSpan>[
-                      TextSpan(
-                        text: directLine.busStopA.street,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xffffffff),
-                        ),
-                      )
-                    ])),
+                          TextSpan(
+                            text: directLine.busStopA.street,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                          )
+                        ])),
               )
             ],
           ),
@@ -339,18 +342,38 @@ class TrajectComponent extends StatelessWidget {
                       color: Color(0xffffffff),
                     ),
                   ),
-                  SizedBox(
-                    width: width / 2.4,
-                  ),
+                  Responsive(
+                      mobile: SizedBox(
+                        width: width / 2.35,
+                      ),
+                      tablet: SizedBox(
+                        width: width / 1.5,
+                      ),
+                      desktop: SizedBox(
+                        width: width / 0.5,
+                      ))
                 ],
               ),
             ),
-            Visibility(
-              visible: !directLine.status,
-              child: SizedBox(
-                width: width / 1.4,
-              ),
-            ),
+            Responsive(
+                mobile: Visibility(
+                  visible: !directLine.status,
+                  child: SizedBox(
+                    width: width / 1.4,
+                  ),
+                ),
+                tablet: Visibility(
+                  visible: !directLine.status,
+                  child: SizedBox(
+                    width: width / 1.2,
+                  ),
+                ),
+                desktop: Visibility(
+                  visible: !directLine.status,
+                  child: SizedBox(
+                    width: width / 0.2,
+                  ),
+                )),
             InkWell(
               onTap: () {
                 Navigator.push(
@@ -586,23 +609,27 @@ class TrajectComponent extends StatelessWidget {
                             color: Color(0xffffffff),
                           ),
                         ),
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                      text: "Descendre à ",
-                      children: <TextSpan>[
-                        TextSpan(
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xffffffff),
-                          ),
-                          text: indirectLine.ArretbusA.street,
+                  Container(
+                    width: width / 1.5,
+                    child: RichText(
+                      overflow: TextOverflow.visible,
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xffffffff),
                         ),
-                      ],
+                        text: "Descendre à ",
+                        children: <TextSpan>[
+                          TextSpan(
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                            text: indirectLine.ArretbusA.street,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

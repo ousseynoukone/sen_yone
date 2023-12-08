@@ -8,7 +8,7 @@ class TarifsViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Replace ellipsis characters with appropriate spacing
-    String formattedTarifs = tarifs.replaceAll('…', '');
+    String formattedTarifs = tarifs.replaceAll('………', '');
 
     return SafeArea(
       child: Scaffold(

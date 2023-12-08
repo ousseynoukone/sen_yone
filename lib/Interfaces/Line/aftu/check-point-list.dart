@@ -57,8 +57,12 @@ class _CheckPointListeState extends State<CheckPointListe> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Iterate over checkpoints and create CheckpointItem for each
-                  for (String checkpoint in widget.ligne.check_points)
-                    CheckpointItem(checkPoint: checkpoint, width: width),
+                  for (int i = 1; i < widget.ligne.check_points.length - 1; i++)
+                    CheckpointItem(
+                      checkPoint: widget.ligne.check_points[i],
+                      width: width,
+                      scaleFactor: scaleFactor,
+                    ),
                 ],
               ),
             ),
@@ -72,10 +76,7 @@ class _CheckPointListeState extends State<CheckPointListe> {
             ),
             child: Center(
               child: Text(
-                'Arrivé ' +
-                    (widget.ligne.check_points.lastOrNull.length > 50
-                        ? '${widget.ligne.check_points.lastOrNull.substring(0, 47)}...'
-                        : widget.ligne.check_points.lastOrNull ?? ''),
+                'Arrivé ' + (widget.ligne.check_points.lastOrNull),
                 style: TextStyle(
                   fontFamily: 'Red Hat Display',
                   fontSize: 14 * scaleFactor,
@@ -83,6 +84,8 @@ class _CheckPointListeState extends State<CheckPointListe> {
                   height: 1.3225,
                   color: Theme.of(context).primaryColorLight,
                 ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ),
           ),
@@ -170,15 +173,17 @@ class _CheckPointListeState extends State<CheckPointListe> {
 class CheckpointItem extends StatelessWidget {
   final String checkPoint;
   final double width;
+  final double scaleFactor;
 
-  CheckpointItem({required this.checkPoint, required this.width});
+  CheckpointItem(
+      {required this.checkPoint,
+      required this.scaleFactor,
+      required this.width});
 
   @override
   Widget build(BuildContext context) {
     // Truncate the string to 50 characters and add "..." if it exceeds
-    String truncatedText = checkPoint.length > 60
-        ? '${checkPoint.substring(0, 57)}...'
-        : checkPoint;
+
     print(width);
     return Container(
       margin: EdgeInsets.fromLTRB(10, 5, 10, 1),
@@ -202,13 +207,16 @@ class CheckpointItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    truncatedText,
+                    checkPoint,
                     style: TextStyle(
                       fontFamily: 'Red Hat Display',
-                      fontSize: 16,
+                      fontSize: 14 * scaleFactor,
                       fontWeight: FontWeight.w400,
                       color: Color(0xff000000),
                     ),
+                    overflow:
+                        TextOverflow.ellipsis, // Set the overflow property
+                    maxLines: 1, // Specify the maximum number of lines
                   ),
                   Container(
                     height: 1, // Adjust the height as needed

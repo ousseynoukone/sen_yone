@@ -28,41 +28,39 @@ class MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(0),
-      child: Scaffold(
-        body: FutureBuilder<Position>(
-          future: getPosition.determinePosition(), // async work
-          builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Center(child: CircularProgressIndicator());
-              default:
-                if (snapshot.hasError)
-                  return noLocationError(snapshot.error);
-                else if (snapshot.hasData == false) {
-                  print(" does not have data");
-                  return Maps(latLng: latLng);
-                } else {
-                  return Column(children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 23,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Theme.of(context).primaryColor),
-                      ),
+      child: FutureBuilder<Position>(
+        future: getPosition.determinePosition(), // async work
+        builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            default:
+              if (snapshot.hasError)
+                return noLocationError(snapshot.error);
+              else if (snapshot.hasData == false) {
+                print(" does not have data");
+                return Maps(latLng: latLng);
+              } else {
+                return Column(mainAxisSize: MainAxisSize.min, children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 23,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Theme.of(context).primaryColor),
                     ),
-                    SizedBox(height: 10),
-                    Expanded(
-                      child: Maps(
-                          latLng: LatLng(snapshot.data!.latitude,
-                              snapshot.data!.longitude)),
-                    ),
-                  ]);
-                }
-            }
-          },
-        ),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: Maps(
+                        latLng: LatLng(
+                            snapshot.data!.latitude, snapshot.data!.longitude)),
+                  ),
+                ]);
+              }
+          }
+        },
       ),
     );
   }

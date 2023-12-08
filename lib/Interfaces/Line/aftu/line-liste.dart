@@ -1,6 +1,7 @@
 import 'package:SenYone/Interfaces/Line/aftu/check-point-list.dart';
 import 'package:SenYone/Models/ligne.dart';
 import 'package:SenYone/REST_REQUEST/http_request_operation.dart';
+import 'package:SenYone/Responsiveness/responsive.dart';
 import 'package:SenYone/Services/operations_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -168,8 +169,6 @@ class _LineListeState extends State<LineListe> {
       ),
     );
   }
-
-
 }
 
 class LineItems extends StatelessWidget {
@@ -179,6 +178,7 @@ class LineItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double scaleFactor = MediaQuery.of(context).textScaleFactor;
 
     return InkWell(
       onTap: () {
@@ -281,51 +281,145 @@ class LineItems extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              width: 180,
-              child: Column(
-                children: [
-                  Row(
+            // RESPONSIVE AREA
+
+            Responsive(
+                mobile: SizedBox(
+                  width: width * 0.4,
+                  child: Column(
                     children: [
-                      Expanded(
-                        child: Text(
-                          ligne.check_points.firstOrNull,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontFamily: 'Red Hat Display',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            height: 1,
-                            color: Theme.of(context).primaryColorDark,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              ligne.check_points.firstOrNull,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: 'Red Hat Display',
+                                fontSize: 12 * scaleFactor,
+                                fontWeight: FontWeight.w600,
+                                height: 1,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 0.09 * width,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              ligne.check_points.lastOrNull,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: 'Red Hat Display',
+                                fontSize: 12 * scaleFactor,
+                                fontWeight: FontWeight.w600,
+                                height: 1,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 0.09 * width,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                ),
+                tablet: SizedBox(
+                  width: width * 0.5,
+                  child: Column(
                     children: [
-                      Expanded(
-                        child: Text(
-                          ligne.check_points.lastOrNull,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontFamily: 'Red Hat Display',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            height: 1,
-                            color: Theme.of(context).primaryColorDark,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              ligne.check_points.firstOrNull,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: 'Red Hat Display',
+                                fontSize: 12 * scaleFactor,
+                                fontWeight: FontWeight.w600,
+                                height: 1,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 0.09 * width,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              ligne.check_points.lastOrNull,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: 'Red Hat Display',
+                                fontSize: 12 * scaleFactor,
+                                fontWeight: FontWeight.w600,
+                                height: 1,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
+                ),
+                desktop: SizedBox(
+                  width: width * 0.9,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              ligne.check_points.firstOrNull,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: 'Red Hat Display',
+                                fontSize: 12 * scaleFactor,
+                                fontWeight: FontWeight.w600,
+                                height: 1,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 0.09 * width,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              ligne.check_points.lastOrNull,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: 'Red Hat Display',
+                                fontSize: 12 * scaleFactor,
+                                fontWeight: FontWeight.w600,
+                                height: 1,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+            //END RESPONSIVE AREA
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

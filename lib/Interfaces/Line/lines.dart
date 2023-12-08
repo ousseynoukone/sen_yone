@@ -98,8 +98,7 @@ class _lineState extends State<line> with AutomaticKeepAliveClientMixin {
                             seconds:
                                 4), // Duration for which the SnackBar will be displayed
                         action: SnackBarAction(
-                          label:
-                              'Cette fonctionnalité sera bientôt disponible ! ',
+                          label: 'Bientôt disponible ! ',
                           onPressed: () {
                             // Code to undo the user's action
                           },
