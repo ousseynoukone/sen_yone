@@ -437,7 +437,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                         // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                         width: double.infinity,
-                        height: baseWidth / 0.93,
+                        height: height / 2.2,
                         child: const MapScreen()),
                     tablet: Container(
                         // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
@@ -564,29 +564,50 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     CustumPostionDto userPosition = globals.userLocation;
     if (switchValue == true) {
       log(" actuall positipon");
-
+      var response = null;
       if (userPosition != null) {
         var arrivalLocation =
             await GeoapifyService.fetchCoordinates(_controllerArrival.text);
+        if (arrivalLocation != null) {
+          RouteRequestDTO routeRequestDTO = new RouteRequestDTO(
+              departLatitude: userPosition.latitude,
+              departLongitude: userPosition.longitude,
+              arriveLatitude: arrivalLocation!.latitude,
+              arriveLongitude: arrivalLocation!.longitude,
+              approximation: 1);
 
-        RouteRequestDTO routeRequestDTO = new RouteRequestDTO(
-            departLatitude: userPosition.latitude,
-            departLongitude: userPosition.longitude,
-            arriveLatitude: arrivalLocation!.latitude,
-            arriveLongitude: arrivalLocation!.longitude,
-            approximation: 1);
-        var response = await OpsServices.searchForTraject(routeRequestDTO);
+          print(routeRequestDTO.departLatitude);
+          print(routeRequestDTO.departLongitude);
+          print(routeRequestDTO.arriveLatitude);
+          print(routeRequestDTO.arriveLongitude);
+          response = await OpsServices.searchForTraject(routeRequestDTO);
 
-        if (response != null) {
-          ModalManager.dismissModal(); // Dismiss the loading modal
-          await showModalBottom(context, response);
-        } else {
-          ModalManager.dismissModal();
-          // ignore: use_build_context_synchronously
-          ModalManager.showErrorModal(context);
-          Future.delayed(Duration(seconds: 5), () {
+          if (response != null) {
+            ModalManager.dismissModal(); // Dismiss the loading modal
+            if (context != null && ModalManager.loadingModalContext != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                showModalBottom(ModalManager.loadingModalContext!, response);
+              });
+            }
+          } else {
             ModalManager.dismissModal();
-          });
+            if (mounted) {
+              // Show the error modal
+              ModalManager.showErrorModal(context);
+
+              // Dismiss the modal after a delay
+              Future.delayed(Duration(seconds: 5), () {
+                if (mounted) {
+                  ModalManager.dismissModal();
+                }
+              });
+            }
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Destination inatteignable."),
+            duration: Duration(milliseconds: 3000),
+          ));
         }
       }
     } else {
@@ -597,29 +618,48 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       var arrivalLocation =
           await GeoapifyService.fetchCoordinates(_controllerArrival.text);
 
-      RouteRequestDTO routeRequestDTO = new RouteRequestDTO(
-          departLatitude: userPosition!.latitude,
-          departLongitude: userPosition!.longitude,
-          arriveLatitude: arrivalLocation!.latitude,
-          arriveLongitude: arrivalLocation!.longitude,
-          approximation: 1);
+      if (userPosition != null) {
+        if (arrivalLocation != null) {
+          RouteRequestDTO routeRequestDTO = new RouteRequestDTO(
+              departLatitude: userPosition!.latitude,
+              departLongitude: userPosition!.longitude,
+              arriveLatitude: arrivalLocation!.latitude,
+              arriveLongitude: arrivalLocation!.longitude,
+              approximation: 1);
 
-      print(routeRequestDTO.arriveLatitude);
-      print(routeRequestDTO.arriveLongitude);
-      print(routeRequestDTO.departLatitude);
-      print(routeRequestDTO.departLongitude);
-      var response = await OpsServices.searchForTraject(routeRequestDTO);
-
-      if (response != null) {
-        ModalManager.dismissModal(); // Dismiss the loading modal
-        showModalBottom(context, response);
+          print(routeRequestDTO.arriveLatitude);
+          print(routeRequestDTO.arriveLongitude);
+          print(routeRequestDTO.departLatitude);
+          print(routeRequestDTO.departLongitude);
+          var response = await OpsServices.searchForTraject(routeRequestDTO);
+          if (response != null) {
+            ModalManager.dismissModal(); // Dismiss the loading modal
+            if (context != null && ModalManager.loadingModalContext != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                showModalBottom(ModalManager.loadingModalContext!, response);
+              });
+            }
+          } else {
+            ModalManager.dismissModal();
+            if (context != null) {
+              // ignore: use_build_context_synchronously
+              ModalManager.showErrorModal(context);
+              Future.delayed(Duration(seconds: 5), () {
+                ModalManager.dismissModal();
+              });
+            }
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Destination inatteignable."),
+            duration: Duration(milliseconds: 3000),
+          ));
+        }
       } else {
-        ModalManager.dismissModal();
-        // ignore: use_build_context_synchronously
-        ModalManager.showErrorModal(context);
-        Future.delayed(Duration(seconds: 5), () {
-          ModalManager.dismissModal();
-        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Point de départ inatteignable."),
+          duration: Duration(milliseconds: 3000),
+        ));
       }
     }
 

@@ -38,6 +38,11 @@ class HttpOpsRequest {
 
   static Future<http.Response> searchForTraject(
       RouteRequestDTO routeRequestDTO) async {
+    // routeRequestDTO.departLatitude = 14.7715691;
+    // routeRequestDTO.departLongitude = -17.4206297;
+    // routeRequestDTO.arriveLatitude = 14.68724935;
+    // routeRequestDTO.arriveLongitude = -17.46444644727304;
+
     String endpoint = "api/make-trajets";
     String url = SharedConfig().BASE_URL + endpoint;
 

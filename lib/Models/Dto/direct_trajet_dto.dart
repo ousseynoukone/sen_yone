@@ -1,3 +1,5 @@
+import 'package:SenYone/Models/Dto/globals_dto.dart';
+
 class DirectLine {
   List<double> startingPoint;
   List<List<dynamic>> line;
@@ -8,6 +10,7 @@ class DirectLine {
   List<double> endingPoint;
   BusStop busStopD;
   BusStop busStopA;
+  RouteInfo routeInfo;
 
   DirectLine(
       {required this.startingPoint,
@@ -18,20 +21,21 @@ class DirectLine {
       required this.numero,
       required this.distance,
       required this.status,
-      required this.tarifs});
+      required this.tarifs,
+      required this.routeInfo});
 
   factory DirectLine.fromJson(Map<String, dynamic> json) {
     return DirectLine(
-      startingPoint: List<double>.from(json['StartingPoint']),
-      line: List<List<dynamic>>.from(json['0'][1]),
-      numero: json['0'][0],
-      endingPoint: List<double>.from(json['EndingPoint']),
-      busStopA: BusStop.fromJson(json['busStopA']),
-      busStopD: BusStop.fromJson(json['busStopD']),
-      distance: json['distance'],
-      status: json['status'],
-      tarifs: json['tarifs'][0]["tarifs"],
-    );
+        startingPoint: List<double>.from(json['StartingPoint']),
+        line: List<List<dynamic>>.from(json['0'][1]),
+        numero: json['0'][0],
+        endingPoint: List<double>.from(json['EndingPoint']),
+        busStopA: BusStop.fromJson(json['busStopA']),
+        busStopD: BusStop.fromJson(json['busStopD']),
+        distance: json['distance'],
+        status: json['status'],
+        tarifs: json['tarifs'][0]["tarifs"],
+        routeInfo: RouteInfo.fromJson(json["route"]));
   }
 }
 
@@ -71,3 +75,5 @@ class Coordinates {
     );
   }
 }
+
+

@@ -1,3 +1,4 @@
+import 'package:SenYone/Models/Dto/globals_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -17,12 +18,16 @@ class MapScreenWithPolylineDirectTrajet extends StatefulWidget {
   final LatLng arriveMarker;
   final LatLng busStopArrive;
   final LatLng busStopDepart;
+  final RouteInfo routeInfo;
+  final numero;
   const MapScreenWithPolylineDirectTrajet(
       {super.key,
       required this.arriveMarker,
+      required this.numero,
       required this.departMarker,
       required this.busStopArrive,
       required this.busStopDepart,
+      required this.routeInfo,
       required this.polylineCoordinates});
 
   @override
@@ -43,18 +48,54 @@ class _MapScreenWithPolylineDirectTrajetState
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      SizedBox(
-        width: double.infinity,
-        height: 23,
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).primaryColor),
-        ),
+      // Légende
+      Row(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  LegendItem(
+                    color: Theme.of(context).primaryColor,
+                    text: 'Chemin vers le point de départ',
+                  ),
+                  LegendItem(
+                    color: Colors.blue,
+                    text: 'Ligne ${widget.numero}',
+                  ),
+                  LegendItem(
+                    icon: Icons.location_pin,
+                    iconColor: Color.fromARGB(255, 255, 103, 103),
+                    text: 'Point de départ',
+                  ),
+                  LegendItem(
+                    icon: Icons.bus_alert,
+                    iconColor: Theme.of(context).primaryColor,
+                    text: 'Arret de bus la plus proche',
+                  ),
+                  LegendItem(
+                    icon: Icons.location_pin,
+                    iconColor: Colors.blue,
+                    text: 'Point d\'arrivé',
+                  )
+                ],
+              ),
+            ),
+          ),
+          // Add a fixed right arrow icon outside the SingleChildScrollView
+          Icon(
+            Icons.arrow_forward_ios,
+            color: Colors.black,
+          ),
+        ],
       ),
+
       SizedBox(height: 10),
       Expanded(
         child: MapsPolyline(
+          routeInfo: widget.routeInfo,
           departMarker: widget.departMarker,
           arriveMarker: widget.arriveMarker,
           busStopArrive: widget.busStopArrive,
@@ -74,6 +115,8 @@ class MapsPolyline extends StatefulWidget {
   final LatLng arriveMarker;
   final LatLng busStopArrive;
   final LatLng busStopDepart;
+  final RouteInfo routeInfo;
+
   const MapsPolyline(
       {super.key,
       required this.latLng,
@@ -81,6 +124,7 @@ class MapsPolyline extends StatefulWidget {
       required this.departMarker,
       required this.busStopArrive,
       required this.busStopDepart,
+      required this.routeInfo,
       required this.polylineCoordinates});
 
   @override
@@ -93,6 +137,7 @@ class _MapsPolylineState extends State<MapsPolyline> {
 
   late Stream<LocationMarkerPosition> _locationStream;
   late Stream<LocationMarkerHeading?> _headingStream;
+  late LatLng latLng;
 
   @override
   void initState() {
@@ -102,6 +147,9 @@ class _MapsPolylineState extends State<MapsPolyline> {
 
   _initLocationTracking() {
     _locationStream = Geolocator.getPositionStream().map((position) {
+      setState(() {
+        latLng = LatLng(position.latitude, position.longitude);
+      });
       return LocationMarkerPosition(
           latitude: position.latitude,
           longitude: position.longitude,
@@ -125,14 +173,17 @@ class _MapsPolylineState extends State<MapsPolyline> {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+    MapController _mapController = MapController();
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10 * fem),
       child: FlutterMap(
+        mapController: _mapController,
         options: MapOptions(
           center: widget.latLng,
           enableMultiFingerGestureRace: true,
-          zoom: 12,
+          zoom: 11,
+          maxZoom: 18, // Set the maximum allowed zoom level
         ),
         children: [
           TileLayer(
@@ -140,16 +191,21 @@ class _MapsPolylineState extends State<MapsPolyline> {
             userAgentPackageName: 'com.example.app',
           ),
           CurrentLocationLayer(
-              headingStream: _headingStream,
+              //    turnHeadingUpLocationStream: _headingStream,
               positionStream: _locationStreamController.stream,
-              style: LocationMarkerStyle(
-                  headingSectorColor: Theme.of(context).primaryColor)),
+              style:
+                  LocationMarkerStyle(headingSectorColor: Colors.blueAccent)),
           PolylineLayer(
             polylines: [
               Polyline(
                 points: widget.polylineCoordinates,
                 strokeWidth: 3,
                 color: Theme.of(context).indicatorColor,
+              ),
+              Polyline(
+                points: widget.routeInfo.coordinates,
+                strokeWidth: 3,
+                color: Theme.of(context).primaryColor,
               ),
             ],
           ),
@@ -270,6 +326,36 @@ class _MapsPolylineState extends State<MapsPolyline> {
                 'OpenStreetMap contributors',
                 onTap: () {},
               ),
+            ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end, // Align at the bottom
+            crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: GestureDetector(
+                  onTap: () {
+                    if (latLng != null) {
+                      // Center and zoom the map to the latest user location
+                      _mapController.move(latLng, 18.0);
+                    }
+                  },
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    child: Icon(
+                      Icons.my_location,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              // Add more widgets within the Column if needed
             ],
           ),
         ],

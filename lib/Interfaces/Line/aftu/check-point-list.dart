@@ -1,4 +1,6 @@
 import 'package:SenYone/Interfaces/Line/aftu/details-line/detail-line.dart';
+import 'package:SenYone/Interfaces/Line/aftu/tarifs.dart';
+import 'package:SenYone/Interfaces/Trajet/tarifs_detail.dart';
 import 'package:SenYone/Models/ligne.dart';
 import 'package:flutter/material.dart';
 import 'package:SenYone/utils.dart';
@@ -92,14 +94,10 @@ class _CheckPointListeState extends State<CheckPointListe> {
           SizedBox(height: 10),
 
           Container(
-            // autogroup9sfcXYN (NxMJhE6m1x6MzaXkjG9SfC)
             margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-
             width: double.infinity,
             height: 40,
-
             child: TextButton(
-              // group34007Rte (208:741)
               onPressed: () {
                 Navigator.push(
                   context,
@@ -108,11 +106,9 @@ class _CheckPointListeState extends State<CheckPointListe> {
                   ),
                 );
               },
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-              ),
+              style: TextButton.styleFrom(padding: EdgeInsets.zero),
               child: Container(
-                padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                padding: EdgeInsets.symmetric(vertical: 5),
                 width: double.infinity,
                 height: double.infinity,
                 decoration: BoxDecoration(
@@ -123,42 +119,96 @@ class _CheckPointListeState extends State<CheckPointListe> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                        width: 175,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10),
+                      width: 175,
+                      height: 90,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 1),
+                            child: Text(
+                              'Visualiser',
+                              style: SafeGoogleFont(
+                                'Red Hat Display',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                height: 1.3225,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Container(
+                            margin: EdgeInsets.only(right: 6),
+                            width: 22,
+                            height: 24,
+                            child: Image.asset(
+                              'assets/page-1/images/vector-7zS.png',
+                              width: 22,
+                              height: 24,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          Container(
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            width: double.infinity,
+            height: 40,
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => TarifView(
+                    tarifs: widget.ligne.tarifs.cast<String>(),
+                  ),
+                ));
+              },
+              style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 1),
+                      child: Text(
+                        'Tarifs',
+                        style: SafeGoogleFont(
+                          'Red Hat Display',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          height: 1.3225,
+                          color: Theme.of(context).primaryColorLight,
                         ),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                // trouveruntrajetdzi (207:669)
-                                margin: EdgeInsets.fromLTRB(0, 1, 0, 0),
-                                child: Text(
-                                  'Visualiser',
-                                  style: SafeGoogleFont(
-                                    'Red Hat Display',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    height: 1.3225,
-                                    color: Theme.of(context).primaryColorLight,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Container(
-                                // vectorKUE (208:672)
-                                margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
-                                width: 22,
-                                height: 24,
-                                child: Image.asset(
-                                  'assets/page-1/images/vector-7zS.png',
-                                  width: 22,
-                                  height: 24,
-                                ),
-                              ),
-                            ]))
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Container(
+                      margin: EdgeInsets.only(right: 6),
+                      width: 22,
+                      height: 24,
+                      child: Image.asset(
+                        'assets/page-1/images/vector-1Tx.png',
+                        width: 22,
+                        height: 24,
+                      ),
+                    ),
                   ],
                 ),
               ),

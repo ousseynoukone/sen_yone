@@ -1,6 +1,7 @@
 import 'package:SenYone/Components/map_polylines_direct_trajet.dart';
 import 'package:SenYone/Interfaces/Trajet/tarifs_detail.dart';
 import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
+import 'package:SenYone/Models/Dto/globals_dto.dart';
 import 'package:SenYone/Models/trajet.dart';
 import 'package:SenYone/Responsiveness/responsive.dart';
 import 'package:SenYone/utils.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+
+import 'package:SenYone/Shared/globals.dart';
 
 class directTrajetsDetails extends StatefulWidget {
   final DirectLine directLine;
@@ -23,13 +26,14 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
   late LatLng arrivePoint;
   late LatLng busStopArrive;
   late LatLng busStopDepart;
+  late RouteInfo routeInfo;
 
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
-    polylineCoordinates = _createLatLngList(widget.directLine.line);
+    polylineCoordinates = createLatLngList(widget.directLine.line);
     departPoint = new LatLng(
         widget.directLine.startingPoint[0], widget.directLine.startingPoint[1]);
     arrivePoint = new LatLng(
@@ -40,19 +44,8 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
 
     busStopDepart = new LatLng(widget.directLine.busStopD.coordinates.lat,
         widget.directLine.busStopD.coordinates.lon);
-  }
 
-  List<LatLng> _createLatLngList(List<dynamic> coordinates) {
-    List<LatLng> latLngList = [];
-    for (var coordinate in coordinates) {
-      double latitude = coordinate[0];
-
-      double longitude = coordinate[1];
-
-      latLngList.add(LatLng(latitude, longitude));
-    }
-
-    return latLngList;
+    routeInfo = widget.directLine.routeInfo;
   }
 
   @override
@@ -114,9 +107,11 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                 child: MapScreenWithPolylineDirectTrajet(
                   polylineCoordinates: polylineCoordinates,
                   departMarker: departPoint,
+                  routeInfo: routeInfo,
                   arriveMarker: arrivePoint,
                   busStopArrive: busStopArrive,
                   busStopDepart: busStopDepart,
+                  numero: widget.directLine.numero,
                 ),
               ),
               tablet: SizedBox(
@@ -124,9 +119,11 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                 child: MapScreenWithPolylineDirectTrajet(
                   polylineCoordinates: polylineCoordinates,
                   departMarker: departPoint,
+                  routeInfo: routeInfo,
                   arriveMarker: arrivePoint,
                   busStopArrive: busStopArrive,
                   busStopDepart: busStopDepart,
+                  numero: widget.directLine.numero,
                 ),
               ),
               desktop: SizedBox(
@@ -134,9 +131,11 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                 child: MapScreenWithPolylineDirectTrajet(
                   polylineCoordinates: polylineCoordinates,
                   departMarker: departPoint,
+                  routeInfo: routeInfo,
                   arriveMarker: arrivePoint,
                   busStopArrive: busStopArrive,
                   busStopDepart: busStopDepart,
+                  numero: widget.directLine.numero,
                 ),
               )),
 
@@ -157,7 +156,8 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                   LayoutBuilder(
                     builder: (context, constraints) {
                       double width = constraints.maxWidth;
-                      return trajectDetail(widget.directLine, width, context);
+                      return trajectDetail(
+                          widget.directLine, width, context, scaleFactor);
                     },
                   ),
                 ],
@@ -169,7 +169,8 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
     );
   }
 
-  Widget trajectDetail(DirectLine directLine, width, BuildContext context) {
+  Widget trajectDetail(
+      DirectLine directLine, width, BuildContext context, double scalfactor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -181,7 +182,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                 child: Text(
                   'Départ          : ',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 12 * scalfactor,
                     fontWeight: FontWeight.w700,
                     color: Color(0xffffffff),
                   ),
@@ -193,7 +194,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                     overflow: TextOverflow.visible,
                     text: TextSpan(
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 12 * scalfactor,
                           color: Color(0xffffffff),
                         ),
                         text: "Prendre le ",
@@ -201,7 +202,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                           TextSpan(
                             text: directLine.numero.toString(),
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 12 * scalfactor,
                               fontWeight: FontWeight.w700,
                               color: Color(0xffffffff),
                             ),
@@ -209,14 +210,14 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                           TextSpan(
                             text: " à ",
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 12 * scalfactor,
                               color: Color(0xffffffff),
                             ),
                           ),
                           TextSpan(
                             text: directLine.busStopD.street,
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 12 * scalfactor,
                               fontWeight: FontWeight.w700,
                               color: Color(0xffffffff),
                             ),
@@ -235,7 +236,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                 child: Text(
                   'Arrivé           : ',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 12 * scalfactor,
                     fontWeight: FontWeight.w700,
                     color: Color(0xffffffff),
                   ),
@@ -247,7 +248,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                     overflow: TextOverflow.visible,
                     text: TextSpan(
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 12 * scalfactor,
                           color: Color(0xffffffff),
                         ),
                         text: "Descendre  à ",
@@ -255,7 +256,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                           TextSpan(
                             text: directLine.busStopA.street,
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 12 * scalfactor,
                               fontWeight: FontWeight.w700,
                               color: Color(0xffffffff),
                             ),
@@ -275,10 +276,10 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
               Container(
                 margin: EdgeInsets.fromLTRB(0, 0.37, 6, 0),
                 child: Text(
-                  'Tarifs              :',
+                  'Tarifs             :',
                   style: SafeGoogleFont(
                     'Red Hat Display',
-                    fontSize: 15,
+                    fontSize: 12 * scalfactor,
                     fontWeight: FontWeight.w700,
                     height: 1.3225,
                     color: Color(0xffffffff),
@@ -290,6 +291,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => TarifsViewer(
                             tarifs: directLine.tarifs,
+                            numero: directLine.numero,
                           )));
                 },
                 style: TextButton.styleFrom(padding: EdgeInsets.zero),
@@ -307,7 +309,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                           'Voir détails',
                           style: SafeGoogleFont(
                             'Red Hat Display',
-                            fontSize: 15,
+                            fontSize: 12 * scalfactor,
                             fontWeight: FontWeight.w700,
                             height: 1.3225,
                             color: Color(0xffffffff),
@@ -334,16 +336,16 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                 child: Text(
                   'Fréquence   : ',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 12 * scalfactor,
                     fontWeight: FontWeight.w700,
                     color: Color(0xffffffff),
                   ),
                 ),
               ),
               Text(
-                'Tout les 5 à 15mn',
+                'Tout les 5 à 15',
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 12 * scalfactor,
                   fontWeight: FontWeight.w700,
                   color: Color(0xffffffff),
                 ),
@@ -359,7 +361,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                 child: Text(
                   'Distance      : ',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 12 * scalfactor,
                     fontWeight: FontWeight.w700,
                     color: Color(0xffffffff),
                   ),
@@ -368,7 +370,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
               Text(
                 '${double.parse((directLine.distance).toStringAsFixed(2))} KM',
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 12 * scalfactor,
                   fontWeight: FontWeight.w700,
                   color: Color(0xffffffff),
                 ),
@@ -376,46 +378,54 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
             ],
           ),
         ),
-        Row(
-          children: [
-            Visibility(
-              visible: directLine.status,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 19,
-                    height: 21,
-                    child: Image.asset(
-                      'assets/page-1/images/vector-g3C.png',
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          child: Row(
+            children: [
+              Visibility(
+                visible: directLine.status,
+                child: Row(
+                  children: [
+                    SizedBox(
                       width: 19,
                       height: 21,
-                    ),
-                  ),
-                  Text(
-                    'Moins long',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xffffffff),
-                    ),
-                  ),
-
-                  //RESPONSIVENESS AREA
-                  Responsive(
-                      mobile: SizedBox(
-                        width: width / 3.9,
+                      child: Image.asset(
+                        'assets/page-1/images/vector-g3C.png',
+                        width: 19,
+                        height: 21,
                       ),
-                      tablet: SizedBox(
-                        width: width / 1.55,
+                    ),
+                    Text(
+                      'Moins long',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xffffffff),
                       ),
-                      desktop: SizedBox(
-                        width: width / 3.9,
-                      )),
+                    ),
 
-                  //END RESPONSIVENESS AREA
-                ],
+                    //RESPONSIVENESS AREA
+                    // Responsive(
+                    //     mobile: SizedBox(
+                    //       width: width / 3.9,
+                    //     ),
+                    //     tablet: SizedBox(
+                    //       width: width / 1.55,
+                    //     ),
+                    //     desktop: SizedBox(
+                    //       width: width / 3.9,
+                    //     )),
+
+                    //END RESPONSIVENESS AREA
+                  ],
+                ),
               ),
-            ),
+            ],
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
             InkWell(
               onTap: () {
                 Navigator.push(
@@ -425,7 +435,6 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                             directTrajetsDetails(directLine: directLine)));
               },
               child: Container(
-                padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Color(0xff810000),
                   borderRadius: BorderRadius.circular(10),
@@ -440,6 +449,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                           Text(
                             "Sauvegarder",
                             style: TextStyle(
+                                fontSize: 12,
                                 color: Theme.of(context).primaryColorLight),
                           ),
                           SizedBox(

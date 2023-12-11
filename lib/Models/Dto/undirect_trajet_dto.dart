@@ -1,3 +1,6 @@
+import 'package:SenYone/Models/Dto/globals_dto.dart';
+import 'package:logger/logger.dart';
+
 class IndirectLine {
   List<double> startingPoint;
   List<List<dynamic>> line;
@@ -5,6 +8,8 @@ class IndirectLine {
   List<double>? endingPoint;
   BusStop ArretbusD;
   BusStop ArretbusA;
+  var tarifs;
+  RouteInfo? routeInfo;
 
   IndirectLine({
     required this.startingPoint,
@@ -13,6 +18,8 @@ class IndirectLine {
     required this.ArretbusD,
     required this.ArretbusA,
     required this.numero,
+    required this.tarifs,
+    this.routeInfo,
   });
 
   factory IndirectLine.fromJson(Map<String, dynamic> json) {
@@ -28,14 +35,20 @@ class IndirectLine {
     BusStop ArretbusD = BusStop.fromJson(json['ArretbusD']);
     BusStop ArretbusA = BusStop.fromJson(json['ArretbusA']);
 
+    Logger().e(json["route"]);
+
+    RouteInfo? routeInfo =
+        json["route"] != null ? RouteInfo.fromJson(json["route"]) : null;
+
     return IndirectLine(
-      line: lineList,
-      numero: numero,
-      startingPoint: startingPoint,
-      endingPoint: endingPoint,
-      ArretbusD: ArretbusD,
-      ArretbusA: ArretbusA,
-    );
+        line: lineList,
+        numero: numero,
+        startingPoint: startingPoint,
+        endingPoint: endingPoint,
+        ArretbusD: ArretbusD,
+        ArretbusA: ArretbusA,
+        tarifs: json['tarifs'][0]["tarifs"],
+        routeInfo: routeInfo);
   }
 }
 

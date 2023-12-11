@@ -75,22 +75,26 @@ class Maps extends StatefulWidget {
 }
 
 class _MapsState extends State<Maps> {
-  late LatLng latLng;
   final _locationStreamController = StreamController<LocationMarkerPosition>();
   final _headingStreamController = StreamController<LocationMarkerHeading?>();
 
   late Stream<LocationMarkerPosition> _locationStream;
   late Stream<LocationMarkerHeading?> _headingStream;
+  late MapController _mapController = MapController();
+  late LatLng latLng;
 
   @override
   void initState() {
     super.initState();
-    latLng = widget.latLng;
+
     _initLocationTracking();
   }
 
   _initLocationTracking() {
     _locationStream = Geolocator.getPositionStream().map((position) {
+      setState(() {
+        latLng = LatLng(position.latitude, position.longitude);
+      });
       return LocationMarkerPosition(
           latitude: position.latitude,
           longitude: position.longitude,
@@ -118,10 +122,12 @@ class _MapsState extends State<Maps> {
     return ClipRRect(
         borderRadius: BorderRadius.circular(10 * fem),
         child: FlutterMap(
+          mapController: _mapController,
           options: MapOptions(
             enableMultiFingerGestureRace: true,
             center: widget.latLng,
             zoom: 17.2,
+            maxZoom: 18, // Set the maximum allowed zoom level
           ),
           children: [
             TileLayer(
@@ -129,10 +135,10 @@ class _MapsState extends State<Maps> {
               userAgentPackageName: 'com.example.app',
             ),
             CurrentLocationLayer(
-                headingStream: _headingStream,
+                //    turnHeadingUpLocationStream: _headingStream,
                 positionStream: _locationStreamController.stream,
-                style: LocationMarkerStyle(
-                    headingSectorColor: Theme.of(context).primaryColor)),
+                style:
+                    LocationMarkerStyle(headingSectorColor: Colors.blueAccent)),
           ],
           nonRotatedChildren: [
             RichAttributionWidget(
@@ -141,6 +147,36 @@ class _MapsState extends State<Maps> {
                   'OpenStreetMap contributors',
                   onTap: () {},
                 ),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end, // Align at the bottom
+              crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (latLng != null) {
+                        // Center and zoom the map to the latest user location
+                        _mapController.move(latLng, 18.0);
+                      }
+                    },
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      child: Icon(
+                        Icons.my_location,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                // Add more widgets within the Column if needed
               ],
             ),
           ],

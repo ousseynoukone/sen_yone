@@ -188,8 +188,7 @@ class _chatBotState extends State<chatBot> with AutomaticKeepAliveClientMixin {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      width: double.infinity,
-                      height: 40,
+                      height: 50,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10),
@@ -197,6 +196,7 @@ class _chatBotState extends State<chatBot> with AutomaticKeepAliveClientMixin {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: TextField(
+                          autocorrect: true,
                           controller: controller,
                           textCapitalization: TextCapitalization.sentences,
                           onSubmitted: (value) {

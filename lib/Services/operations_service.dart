@@ -90,8 +90,7 @@ class OpsServices {
             .map((directLineJson) => DirectLine.fromJson(directLineJson))
             .toList();
 
-                Logger().w(directLines.first.tarifs);
-
+        // Logger().w(directLines.first.tarifs);
 
         List<IndirectLine>? indirectLines;
         double? indirectLinesDistance;
@@ -100,6 +99,7 @@ class OpsServices {
         try {
           List<dynamic> indirectLinesJson =
               jsonResponse['IndirectLines']?["0"] ?? [];
+
           indirectLines = indirectLinesJson
               .map(
                   (indirectLineJson) => IndirectLine.fromJson(indirectLineJson))
@@ -107,6 +107,8 @@ class OpsServices {
           indirectLinesDistance = double.parse(
               (jsonResponse['IndirectLines']?["distance"] ?? 0.0)
                   .toStringAsFixed(2));
+
+          Logger().d(indirectLines.length);
         } catch (e) {
           // Handle IndirectLines parsing error
           print("Error parsing IndirectLines: $e");

@@ -1,4 +1,5 @@
 import 'package:SenYone/Interfaces/Trajet/trajets_detail.dart';
+import 'package:SenYone/Interfaces/Trajet/trajets_detail_indirectTrajet.dart';
 import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
 import 'package:SenYone/Models/Dto/undirect_trajet_dto.dart';
 import 'package:SenYone/Responsiveness/responsive.dart';
@@ -113,7 +114,8 @@ class TrajectComponent extends StatelessWidget {
                         double height = constraints.maxHeight;
                         return Row(
                           children: [
-                            IndirecttrajectDetail(trajet.indirectLines, width)
+                            IndirecttrajectDetail(
+                                trajet.indirectLines, width, context)
                           ],
                         );
                       }),
@@ -344,7 +346,7 @@ class TrajectComponent extends StatelessWidget {
                   ),
                   Responsive(
                       mobile: SizedBox(
-                        width: width / 2.35,
+                        width: width / 2.5,
                       ),
                       tablet: SizedBox(
                         width: width / 1.5,
@@ -423,7 +425,8 @@ class TrajectComponent extends StatelessWidget {
 
   //Indirect trajet
 
-  Widget IndirecttrajectDetail(List<IndirectLine> indirectLines, width) {
+  Widget IndirecttrajectDetail(
+      List<IndirectLine> indirectLines, width, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -482,44 +485,64 @@ class TrajectComponent extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          children: [
-            SizedBox(
-              width: width / 1.4,
-            ),
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Color(0xff810000),
-                borderRadius: BorderRadius.circular(10),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => IndirectTrajetsDetails(
+                        indirectLines: indirectLines,
+                        distance: trajet.indirectLinesDistance,
+                      )),
+            );
+          },
+          child: Row(
+            children: [
+              Responsive(
+                mobile: SizedBox(
+                  width: width / 1.4,
+                ),
+                tablet: SizedBox(
+                  width: width / 1.2,
+                ),
+                desktop: SizedBox(
+                  width: width / 1.4,
+                ),
               ),
-              child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
-                    width: 22,
-                    height: 24,
-                    child: Image.asset(
-                      'assets/page-1/images/vector-j22.png',
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Color(0xff810000),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
                       width: 22,
                       height: 24,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 1, 0, 0),
-                    child: Text(
-                      'Détail',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
+                      child: Image.asset(
+                        'assets/page-1/images/vector-j22.png',
+                        width: 22,
+                        height: 24,
                       ),
                     ),
-                  ),
-                ],
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 1, 0, 0),
+                      child: Text(
+                        'Détail',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xffffffff),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

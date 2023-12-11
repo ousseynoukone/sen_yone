@@ -87,6 +87,8 @@ class _MapsPolylineState extends State<MapsPolyline> {
 
           center: widget.latLng,
           zoom: 12,
+                    maxZoom: 18, // Set the maximum allowed zoom level
+
         ),
         children: [
           TileLayer(
