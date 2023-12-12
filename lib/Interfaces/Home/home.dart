@@ -35,6 +35,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   final Box _boxAccount = Hive.box("account_data");
   bool switchValue = true;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   var isLoading = false;
   bool positionPermisionCheck = false;
@@ -94,6 +95,8 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
     return SafeArea(
       child: Scaffold(
+                key: _scaffoldKey,
+
           backgroundColor: Theme.of(context).primaryColorLight,
           body: SingleChildScrollView(
             child: Column(
@@ -153,7 +156,32 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                       ),
                       TextButton(
                         onPressed: () {
-                          showLogOutModal(context);
+                          showDialog<void>(
+                            context: context,
+                            barrierDismissible: false, // user must tap button!
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Container(
+                                  height: 100, // Set your desired height here
+
+                                  child: Center(
+                                      child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Déconnexion...',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      SizedBox(height: 20),
+                                      CircularProgressIndicator(),
+                                    ],
+                                  )),
+                                ),
+                              );
+                            },
+                          );
                           logOut();
                         },
                         style: TextButton.styleFrom(

@@ -139,3 +139,30 @@ class RouteInfo {
     );
   }
 }
+
+
+class LineDto {
+  int id;
+  List<List<double>> itineraire;
+
+  LineDto({
+    required this.id,
+    required this.itineraire,
+  });
+
+  factory LineDto.fromJson(Map<String, dynamic> json) {
+    return LineDto(
+      id: json['id'],
+      itineraire: List<List<double>>.from(json['itineraire'].map((point) =>
+          List<double>.from(point.map((coordinate) => coordinate.toDouble())))),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'itineraire': itineraire.map((point) =>
+          List<double>.from(point.map((coordinate) => coordinate.toDouble()))),
+    };
+  }
+}

@@ -5,6 +5,7 @@ import 'package:SenYone/Interfaces/ChatBot/chatbot.dart';
 import 'package:SenYone/Interfaces/ChatBot/message.dart';
 import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
 import 'package:SenYone/Models/Dto/globals_dto.dart';
+import 'package:SenYone/Models/Dto/trajet_history_dto.dart';
 import 'package:SenYone/Models/ligne.dart';
 import 'package:SenYone/Models/trajet.dart';
 import 'package:SenYone/REST_REQUEST/gpt_request.dart';
@@ -48,9 +49,21 @@ class OpsServices {
     return ligneListe;
   }
 
-  static getOneLine(String id) async {
-    var result = await HttpOpsRequest.getOneLine(id);
-    return result;
+  static Future<LineDto?> getOneLineByNum(String num) async {
+    try {
+      var result = await HttpOpsRequest.getOneLine(num);
+
+      if (result.statusCode == 200) {
+        return LineDto.fromJson(json.decode(result.body));
+      } else {
+        Logger().e("Error: ${result.statusCode}");
+      }
+    } catch (e) {
+      Logger().e(e);
+    }
+
+    // If an error occurs or the status code is not 200, return null or provide a default LineDto
+    return null;
   }
 
   static sendMessageToGpt(String message, List<Message> conversation) async {
@@ -129,5 +142,23 @@ class OpsServices {
       print("Error: $e");
       return null;
     }
+  }
+
+  static createDirectTraject(TrajetDirectDto trajetDirectDto) async {
+    var result = null;
+
+    result = await HttpOpsRequest.createDirectTrajet(trajetDirectDto);
+
+    return result;
+  }
+
+  static createIndirectTraject(TrajetIndirectDto trajetIndirectDto) async {
+    var result = null;
+    try {
+      result = await HttpOpsRequest.createIndirectTrajet(trajetIndirectDto);
+    } catch (e) {
+      Logger().e(e);
+    }
+    return result;
   }
 }

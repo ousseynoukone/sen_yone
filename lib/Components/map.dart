@@ -81,7 +81,7 @@ class _MapsState extends State<Maps> {
   late Stream<LocationMarkerPosition> _locationStream;
   late Stream<LocationMarkerHeading?> _headingStream;
   late MapController _mapController = MapController();
-  late LatLng latLng;
+  LatLng? latLng;
 
   @override
   void initState() {
@@ -159,7 +159,7 @@ class _MapsState extends State<Maps> {
                     onTap: () {
                       if (latLng != null) {
                         // Center and zoom the map to the latest user location
-                        _mapController.move(latLng, 18.0);
+                        _mapController.move(latLng!, 18.0);
                       }
                     },
                     child: Container(

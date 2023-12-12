@@ -1,4 +1,5 @@
 import 'package:SenYone/Models/Dto/globals_dto.dart';
+import 'package:SenYone/Models/Dto/trajet_history_dto.dart';
 import 'package:logger/logger.dart';
 
 import '../Models/user.dart';
@@ -24,12 +25,14 @@ class HttpOpsRequest {
     }
   }
 
-  static Future<http.Response> getOneLine(String id) async {
-    String endpoint = "api/lignes/${id}";
+  static Future<http.Response> getOneLine(String num) async {
+    String endpoint = "api/lignes/${num}";
     String url = SharedConfig().BASE_URL + endpoint;
 
     try {
-      return await http.get(Uri.parse(url), headers: _setHeadersToken());
+      var response =
+          await http.get(Uri.parse(url), headers: _setHeadersToken());
+      return response;
     } catch (e) {
       print("response from getOneLine" + e.toString());
       return http.Response("Serveur indisponible", 404);
@@ -53,6 +56,50 @@ class HttpOpsRequest {
       new Logger().d(url);
 
       return http.Response("Serveur indisponible", 404);
+    }
+  }
+
+  static Future<http.Response> createDirectTrajet(
+      TrajetDirectDto trajetDirectDto) async {
+    String endpoint =
+        "api/trajets-historiqueD"; // Adjust the endpoint based on your API
+    String url = SharedConfig().BASE_URL + endpoint;
+
+    var any = trajetDirectDto.toJson();
+
+    Logger().w(any);
+
+    try {
+      return await http.post(
+        Uri.parse(url),
+        headers: _setHeadersToken(),
+        body: trajetDirectDto
+            .toJson(), // Assuming toJson is implemented in TrajetDto
+      );
+    } catch (e) {
+      print("Error from createTrajet: $e");
+      return http.Response("Server unavailable", 404);
+    }
+  }
+
+  static Future<http.Response> createIndirectTrajet(
+      TrajetIndirectDto trajetInDirectDto) async {
+    String endpoint =
+        "api/trajets-historiqueI"; // Adjust the endpoint based on your API
+    String url = SharedConfig().BASE_URL + endpoint;
+
+    try {
+      var responose = await http.post(
+        Uri.parse(url),
+        headers: _setHeadersToken(),
+        body: trajetInDirectDto
+            .toJson(), // Assuming toJson is implemented in TrajetDto
+      );
+      Logger().d(responose.body);
+      return responose;
+    } catch (e) {
+      print("Error from createIndirectTrajet: $e");
+      return http.Response("Server unavailable", 404);
     }
   }
 }

@@ -1,10 +1,12 @@
 import 'package:SenYone/Interfaces/Trajet/trajets_detail.dart';
 import 'package:SenYone/Interfaces/Trajet/trajets_detail_indirectTrajet.dart';
 import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
+import 'package:SenYone/Models/Dto/trajet_history_dto.dart';
 import 'package:SenYone/Models/Dto/undirect_trajet_dto.dart';
 import 'package:SenYone/Responsiveness/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:SenYone/Models/trajet.dart';
+import 'package:logger/logger.dart';
 
 class TrajectComponent extends StatelessWidget {
   final Trajet trajet;
@@ -16,117 +18,146 @@ class TrajectComponent extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double scaleFactor = MediaQuery.of(context).textScaleFactor;
     print(width);
-    return Column(
-      children: [
-        Column(
-          children: [
-            if (trajet.directLines.isNotEmpty)
-              Column(
-                children: trajet.directLines.map((directLine) {
-                  return Card(
-                    color: Theme.of(context).primaryColor,
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "Trajet direct : ",
-                                style: TextStyle(
-                                    fontSize: 13 * scaleFactor,
-                                    color: Theme.of(context).primaryColorLight,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              busNumero(directLine.numero, context),
-                            ],
-                          ),
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              double width = constraints.maxWidth;
-
-                              // Assuming trajectDetail is a function that takes directLine, width, and context as parameters
-                              return trajectDetail(directLine, width, context);
-                            },
-                          )
-                        ],
+    if (trajet.directLines.isNotEmpty || trajet.indirectLines.isNotEmpty) {
+      return Column(
+        children: [
+          Column(
+            children: [
+              if (trajet.directLines.isNotEmpty)
+                Column(
+                  children: trajet.directLines.map((directLine) {
+                    return Card(
+                      color: Theme.of(context).primaryColor,
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    ),
-                  );
-                }).toList(),
-              ),
-
-            //indirecte traject
-            SizedBox(
-              height: 20,
-            ),
-            if (trajet.indirectLines.isNotEmpty)
-              Card(
-                color: Theme.of(context).primaryColor,
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Trajet indirect : ",
-                            style: TextStyle(
-                                fontSize: 13 * scaleFactor,
-                                color: Theme.of(context).primaryColorLight,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          LayoutBuilder(builder: (context, constraints) {
-                            double width = constraints.maxWidth;
-                            double height = constraints.maxHeight;
-                            return SizedBox(
-                              height: 31,
-                              width: 210,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemCount: trajet.indirectLines.length,
-                                itemBuilder: (context, index) {
-                                  var indirectLineNumero =
-                                      trajet.indirectLines[index].numero;
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child:
-                                        busNumero(indirectLineNumero, context),
-                                  );
-                                },
-                              ),
-                            );
-                          })
-                        ],
-                      ),
-                      LayoutBuilder(builder: (context, constraints) {
-                        double width = constraints.maxWidth;
-                        double height = constraints.maxHeight;
-                        return Row(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            IndirecttrajectDetail(
-                                trajet.indirectLines, width, context)
+                            Row(
+                              children: [
+                                Text(
+                                  "Trajet direct : ",
+                                  style: TextStyle(
+                                      fontSize: 13 * scaleFactor,
+                                      color:
+                                          Theme.of(context).primaryColorLight,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                busNumero(directLine.numero, context),
+                              ],
+                            ),
+                            LayoutBuilder(
+                              builder: (context, constraints) {
+                                double width = constraints.maxWidth;
+
+                                // Assuming trajectDetail is a function that takes directLine, width, and context as parameters
+                                return trajectDetail(
+                                    directLine, width, context);
+                              },
+                            )
                           ],
-                        );
-                      }),
-                    ],
-                  ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
-              )
+
+              //indirecte traject
+              SizedBox(
+                height: 20,
+              ),
+              if (trajet.indirectLines.isNotEmpty)
+                Card(
+                  color: Theme.of(context).primaryColor,
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Trajet indirect : ",
+                              style: TextStyle(
+                                  fontSize: 13 * scaleFactor,
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            LayoutBuilder(builder: (context, constraints) {
+                              double width = constraints.maxWidth;
+                              double height = constraints.maxHeight;
+                              return SizedBox(
+                                height: 31,
+                                width: 210,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: trajet.indirectLines.length,
+                                  itemBuilder: (context, index) {
+                                    var indirectLineNumero =
+                                        trajet.indirectLines[index].numero;
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: busNumero(
+                                          indirectLineNumero, context),
+                                    );
+                                  },
+                                ),
+                              );
+                            })
+                          ],
+                        ),
+                        LayoutBuilder(builder: (context, constraints) {
+                          double width = constraints.maxWidth;
+                          double height = constraints.maxHeight;
+                          return Row(
+                            children: [
+                              IndirecttrajectDetail(
+                                  trajet.indirectLines, width, context)
+                            ],
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                )
+            ],
+          ),
+        ],
+      );
+    } else {
+      return Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "😞",
+              style: DefaultTextStyle.of(context).style.copyWith(
+                    fontSize: scaleFactor * 40,
+                    fontWeight: FontWeight.w400,
+                  ),
+            ),
+            SizedBox(height: 16.0),
+            Center(
+              child: Text("Oups ,nous avons trouvé aucun trajet.",
+                  style: DefaultTextStyle.of(context).style.copyWith(
+                        fontSize: scaleFactor * 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                  textAlign: TextAlign.center),
+            ),
           ],
         ),
-      ],
-    );
+      );
+    }
   }
 
   Widget busNumero(numero, context) {
@@ -381,8 +412,18 @@ class TrajectComponent extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            directTrajetsDetails(directLine: directLine)));
+                        builder: (context) => directTrajetsDetails(
+                            directLine: directLine,
+                            trajetDirectDto: TrajetDirectDto(
+                                distance: directLine.distance,
+                                depart: directLine.busStopD.street,
+                                arrive: directLine.busStopA.street,
+                                departLat: directLine.startingPoint.first,
+                                departLon: directLine.startingPoint.last,
+                                arriveLat: directLine.endingPoint.first,
+                                arriveLon: directLine.endingPoint.last,
+                                frequence: 15,
+                                ligneId: directLine.numero.toString()))));
               },
               child: Container(
                 padding: EdgeInsets.all(10),
@@ -427,6 +468,9 @@ class TrajectComponent extends StatelessWidget {
 
   Widget IndirecttrajectDetail(
       List<IndirectLine> indirectLines, width, BuildContext context) {
+    var ConcatenedNumero =
+        indirectLines.map((line) => line.numero.toString()).join("-");
+    Logger().w(ConcatenedNumero);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -493,6 +537,11 @@ class TrajectComponent extends StatelessWidget {
                   builder: (context) => IndirectTrajetsDetails(
                         indirectLines: indirectLines,
                         distance: trajet.indirectLinesDistance,
+                        trajetIndirectDto: TrajetIndirectDto(
+                            depart: indirectLines.first.ArretbusD.street,
+                            arrive: indirectLines.first.ArretbusA.street,
+                            lignes: ConcatenedNumero,
+                            distance: trajet.indirectLinesDistance),
                       )),
             );
           },

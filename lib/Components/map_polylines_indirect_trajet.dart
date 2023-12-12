@@ -124,7 +124,7 @@ class _MapsPolylineState extends State<MapsPolyline> {
   final _locationStreamController = StreamController<LocationMarkerPosition>();
   final _headingStreamController = StreamController<LocationMarkerHeading?>();
   MapController _mapController = MapController();
-  late LatLng latLng;
+   LatLng? latLng;
 
   late Stream<LocationMarkerPosition> _locationStream;
   late Stream<LocationMarkerHeading?> _headingStream;
@@ -297,7 +297,7 @@ class _MapsPolylineState extends State<MapsPolyline> {
                   onTap: () {
                     if (latLng != null) {
                       // Center and zoom the map to the latest user location
-                      _mapController.move(latLng, 18.0);
+                      _mapController.move(latLng!, 18.0);
                     }
                   },
                   child: Container(

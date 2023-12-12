@@ -1,9 +1,12 @@
 import 'package:SenYone/Components/map_polylines_direct_trajet.dart';
+import 'package:SenYone/Interfaces/Home/Component/modal.dart';
 import 'package:SenYone/Interfaces/Trajet/tarifs_detail.dart';
 import 'package:SenYone/Models/Dto/direct_trajet_dto.dart';
 import 'package:SenYone/Models/Dto/globals_dto.dart';
+import 'package:SenYone/Models/Dto/trajet_history_dto.dart';
 import 'package:SenYone/Models/trajet.dart';
 import 'package:SenYone/Responsiveness/responsive.dart';
+import 'package:SenYone/Services/operations_service.dart';
 import 'package:SenYone/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -11,10 +14,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:SenYone/Shared/globals.dart';
+import 'package:logger/logger.dart';
 
 class directTrajetsDetails extends StatefulWidget {
   final DirectLine directLine;
-  const directTrajetsDetails({super.key, required this.directLine});
+  final TrajetDirectDto trajetDirectDto;
+  const directTrajetsDetails(
+      {super.key, required this.directLine, required this.trajetDirectDto});
 
   @override
   State<directTrajetsDetails> createState() => _directTrajetsDetailsState();
@@ -54,6 +60,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
     double _height = MediaQuery.of(context).size.height;
     Size screenSize = MediaQuery.of(context).size;
     double scaleFactor = MediaQuery.of(context).textScaleFactor;
+
     return Scaffold(
       body: SafeArea(
           child: Column(
@@ -171,6 +178,81 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
 
   Widget trajectDetail(
       DirectLine directLine, width, BuildContext context, double scalfactor) {
+    saveHistorique() async {
+      try {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Text("Sauvegarde en cours "),
+                SizedBox(width: 8),
+                CircularProgressIndicator(),
+              ],
+            ),
+            duration: Duration(milliseconds: 2000),
+          ),
+        );
+        TrajetDirectDto trajetDirectDto = widget.trajetDirectDto;
+
+        if (trajetDirectDto != null) {
+          var result = await OpsServices.getOneLineByNum(
+              trajetDirectDto.ligneId.toString());
+
+          if (result != null) {
+            trajetDirectDto.ligneId = result!.id.toString();
+            var response =
+                await OpsServices.createDirectTraject(trajetDirectDto);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    Text("Sauvegarde effectuée ! "),
+                    SizedBox(width: 8),
+                    Icon(Icons.check,
+                        color: Colors.green), // Use a check icon for success
+                  ],
+                ),
+                duration: Duration(milliseconds: 2000),
+              ),
+            );
+
+            Logger().d(response.statusCode);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    Text("Erreur lors de la sauvegarde"),
+                    SizedBox(width: 8),
+                    Icon(Icons.error,
+                        color: Colors.red), // Use an error icon for failure
+                  ],
+                ),
+                duration: Duration(milliseconds: 2000),
+              ),
+            );
+          }
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Text("Erreur lors de la sauvegarde"),
+                SizedBox(width: 8),
+                Icon(Icons.error,
+                    color: Colors.red), // Use an error icon for failure
+              ],
+            ),
+            duration: Duration(milliseconds: 2000),
+          ),
+        );
+
+        Logger().e("Error in saveHistorique: $e");
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -403,20 +485,6 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                         color: Color(0xffffffff),
                       ),
                     ),
-
-                    //RESPONSIVENESS AREA
-                    // Responsive(
-                    //     mobile: SizedBox(
-                    //       width: width / 3.9,
-                    //     ),
-                    //     tablet: SizedBox(
-                    //       width: width / 1.55,
-                    //     ),
-                    //     desktop: SizedBox(
-                    //       width: width / 3.9,
-                    //     )),
-
-                    //END RESPONSIVENESS AREA
                   ],
                 ),
               ),
@@ -428,11 +496,9 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
           children: [
             InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            directTrajetsDetails(directLine: directLine)));
+                // Perform your desired action when the button is tapped
+                // For example, you can call a different function or navigate to another screen.
+                // replace the code below with your desired functionality
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -443,22 +509,27 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        // Perform your desired action when the button is pressed
+                        // For example, you can call a different function or navigate to another screen.
+                        // replace the code below with your desired functionality
+                        saveHistorique();
+                      },
                       child: Row(
                         children: [
                           Text(
-                            "Sauvegarder",
+                            "Sauvegarder", // Change the button text here
                             style: TextStyle(
-                                fontSize: 12,
-                                color: Theme.of(context).primaryColorLight),
+                              fontSize: 12,
+                              color: Theme.of(context).primaryColorLight,
+                            ),
                           ),
                           SizedBox(
                               width: 8), // Adjust spacing between text and icon
-
                           Icon(
-                            Icons.save,
+                            Icons.save, // Change the icon here
                             color: Theme.of(context).primaryColorLight,
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -467,7 +538,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
               ),
             ),
           ],
-        ),
+        )
       ],
     );
   }
