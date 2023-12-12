@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:SenYone/Interfaces/History/history.dart';
 import 'package:SenYone/Interfaces/Home/Component/modal.dart';
 import 'package:SenYone/Interfaces/Home/start.dart';
 import 'package:SenYone/Layouts/mainLayout.dart';
@@ -95,8 +96,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
     return SafeArea(
       child: Scaffold(
-                key: _scaffoldKey,
-
+          key: _scaffoldKey,
           backgroundColor: Theme.of(context).primaryColorLight,
           body: SingleChildScrollView(
             child: Column(
@@ -120,7 +120,10 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => HistoriqueTrajet()));
+                        },
                         child: Container(
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,

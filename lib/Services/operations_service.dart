@@ -8,6 +8,7 @@ import 'package:SenYone/Models/Dto/globals_dto.dart';
 import 'package:SenYone/Models/Dto/trajet_history_dto.dart';
 import 'package:SenYone/Models/ligne.dart';
 import 'package:SenYone/Models/trajet.dart';
+import 'package:SenYone/Models/trajetHistorique.dart';
 import 'package:SenYone/REST_REQUEST/gpt_request.dart';
 import 'package:SenYone/REST_REQUEST/http_request_operation.dart';
 import 'package:SenYone/Shared/globals.dart';
@@ -161,4 +162,88 @@ class OpsServices {
     }
     return result;
   }
+
+  static Future<TrajetHistorique?> getHistoriques({DateTime? dateToSearch}) async {
+    List<TrajetDirectDto> trajetDirect = [];
+    List<TrajetIndirectDto> trajetInDirect = [];
+
+    try {
+      var response = await HttpOpsRequest.getHistoriques();
+
+      if (response.statusCode == 200) {
+        var result = jsonDecode(response.body);
+        Logger().d(result);
+
+        if (result['directTrajets'] != null) {
+          List<dynamic> directTrajetList = result['directTrajets'];
+          trajetDirect = directTrajetList
+              .map((json) => TrajetDirectDto.fromJson(json))
+              .toList();
+        }
+
+        if (result['inDirectTrajets'] != null) {
+          List<dynamic> inDirectTrajetList = result['inDirectTrajets'];
+          trajetInDirect = inDirectTrajetList
+              .map((json) => TrajetIndirectDto.fromJson(json))
+              .toList();
+        }
+
+        return TrajetHistorique(
+          trajetDirect: trajetDirect,
+          trajetIndirect: trajetInDirect,
+        );
+      } else {
+        // Handle HTTP error status code
+        Logger().e("HTTP error: ${response.statusCode}  ${response.body}");
+        return null;
+      }
+    } catch (e) {
+      // Handle exception
+      Logger().e("Error in getHistoriques: $e");
+      return null;
+    }
+  }
+
+
+
+  //   static Future<TrajetHistorique?> getHistoriquesFilterByDate(DateTime dateToSearch) async {
+  //   List<TrajetDirectDto> trajetDirect = [];
+  //   List<TrajetIndirectDto> trajetInDirect = [];
+
+  //   try {
+  //     var response = await HttpOpsRequest.getHistoriquesByDate(dateToSearch);
+
+  //     if (response.statusCode == 200) {
+  //       var result = jsonDecode(response.body);
+  //       Logger().d(result);
+
+  //       if (result['directTrajets'] != null) {
+  //         List<dynamic> directTrajetList = result['directTrajets'];
+  //         trajetDirect = directTrajetList
+  //             .map((json) => TrajetDirectDto.fromJson(json))
+  //             .toList();
+  //       }
+
+  //       if (result['inDirectTrajets'] != null) {
+  //         List<dynamic> inDirectTrajetList = result['inDirectTrajets'];
+  //         trajetInDirect = inDirectTrajetList
+  //             .map((json) => TrajetIndirectDto.fromJson(json))
+  //             .toList();
+  //       }
+
+  //       return TrajetHistorique(
+  //         trajetDirect: trajetDirect,
+  //         trajetIndirect: trajetInDirect,
+  //       );
+  //     } else {
+  //       // Handle HTTP error status code
+  //       Logger().e("HTTP error: ${response.statusCode}  ${response.body}");
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     // Handle exception
+  //     Logger().e("Error in getHistoriques: $e");
+  //     return null;
+  //   }
+  // }
 }

@@ -10,6 +10,7 @@ class TrajetDirectDto {
   double distance;
   int frequence;
   String ligneId;
+  String ?numero;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -23,22 +24,38 @@ class TrajetDirectDto {
       required this.distance,
       required this.frequence,
       required this.ligneId,
+      this.numero,
       this.createdAt,
       this.updatedAt});
 
-  factory TrajetDirectDto.fromJson(Map<String, dynamic> json) =>
-      TrajetDirectDto(
-        depart: json['depart'],
-        arrive: json['arrive'],
-        departLat: json['departLat'],
-        departLon: json['departLon'],
-        arriveLat: json['arriveLat']?.cast<double>(),
-        arriveLon: json['arriveLon']?.cast<double>(),
-        distance: json['distance'],
-        frequence: json['frequence'],
-        ligneId: json['ligne_id'],
-        createdAt: DateTime.parse(json['created_at']),
-      );
+  factory TrajetDirectDto.fromJson(Map<String, dynamic> json) {
+    return TrajetDirectDto(
+      depart: json['depart'],
+      arrive: json['arrive'],
+      departLat: _parseDouble(json['departLat']) ??
+          0.0, // Use a default value (e.g., 0.0) or handle null as needed
+      departLon: _parseDouble(json['departLon']) ?? 0.0,
+      arriveLat: _parseDouble(json['arriveLat']) ?? 0.0,
+      arriveLon: _parseDouble(json['arriveLon']) ?? 0.0,
+      distance: _parseDouble(json['distance']) ?? 0.0,
+      frequence: json['frequence'],
+      numero: json['numero'],
+      ligneId: json['ligne_id'].toString(), // Explicitly cast to int
+      createdAt: DateTime.parse(json['created_at']),
+    );
+  }
+
+  static double _parseDouble(dynamic value) {
+    if (value is int) {
+      return value.toDouble();
+    } else if (value is double) {
+      return value;
+    } else if (value is String) {
+      return double.tryParse(value) ??
+          0.0; // Use a default value (e.g., 0.0) or handle null as needed
+    }
+    return 0.0; // Use a default value (e.g., 0.0) or handle null as needed
+  }
 
   Map<String, dynamic> toJson() {
     return {

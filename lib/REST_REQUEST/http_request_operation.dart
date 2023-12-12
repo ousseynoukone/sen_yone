@@ -25,6 +25,33 @@ class HttpOpsRequest {
     }
   }
 
+
+  
+
+  //   static Future<http.Response> getHistoriquesByDate(DateTime dateToSearch) async {
+  //   String endpoint = "api/trajets-historiqueD";
+  //   String url = SharedConfig().BASE_URL + endpoint;
+
+  //   try {
+  //     return await http.get(Uri.parse(url), headers: _setHeadersToken());
+  //   } catch (e) {
+  //     print("response from getHistoriques" + e.toString());
+  //     return http.Response("Serveur indisponible", 404);
+  //   }
+  // }
+
+  static Future<http.Response> getHistoriques() async {
+    String endpoint = "api/trajets-historiqueD";
+    String url = SharedConfig().BASE_URL + endpoint;
+
+    try {
+      return await http.get(Uri.parse(url), headers: _setHeadersToken());
+    } catch (e) {
+      print("response from getHistoriques" + e.toString());
+      return http.Response("Serveur indisponible", 404);
+    }
+  }
+
   static Future<http.Response> getOneLine(String num) async {
     String endpoint = "api/lignes/${num}";
     String url = SharedConfig().BASE_URL + endpoint;
