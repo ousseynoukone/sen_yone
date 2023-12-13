@@ -8,4 +8,8 @@ class SharedConfig {
   //GeoApify
   String geoApiFyApiKeyForPredictionLocation =
       "2cdfb6f02cee478e8fd1ba294681cf9c";
+
+  //Google maps api key
+
+  String googleMapsApiKey = "AIzaSyDuPEC5wc0dXX97ziGAo9rA-TKRsYGI4nk";
 }

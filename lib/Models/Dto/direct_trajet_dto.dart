@@ -33,7 +33,7 @@ class DirectLine {
         busStopA: BusStop.fromJson(json['busStopA']),
         busStopD: BusStop.fromJson(json['busStopD']),
         distance: json['distance'],
-        status: json['status'],
+        status: json['status'] ?? false,
         tarifs: json['tarifs'][0]["tarifs"],
         routeInfo: RouteInfo.fromJson(json["route"]));
   }
@@ -75,5 +75,3 @@ class Coordinates {
     );
   }
 }
-
-

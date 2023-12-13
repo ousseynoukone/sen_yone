@@ -7,6 +7,7 @@ import 'package:SenYone/Layouts/mainLayout.dart';
 import 'package:SenYone/Models/Dto/custom_position_dto.dart';
 import 'package:SenYone/Models/Dto/globals_dto.dart';
 import 'package:SenYone/Responsiveness/responsive.dart';
+import 'package:SenYone/Shared/shared_config.dart';
 import 'package:logger/logger.dart';
 import '../../Shared/globals.dart' as globals;
 import 'package:SenYone/REST_REQUEST/maps_request.dart';
@@ -25,6 +26,7 @@ import '../../Components/map.dart';
 import '../../utils.dart';
 import '../../Services/auth_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -37,8 +39,12 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   final Box _boxAccount = Hive.box("account_data");
   bool switchValue = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final placesApiClient =
+      GoogleMapsPlaces(apiKey: SharedConfig().googleMapsApiKey);
 
   var isLoading = false;
+  var isSeekingLoading = false;
+
   bool positionPermisionCheck = false;
 
   final GeoapifyApi geoapifyApi = GeoapifyApi();
@@ -305,11 +311,27 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                                     ),
                                   ),
                                   onChanged: (value) async {
-                                    final suggestions = await geoapifyApi
-                                        .getAutocompleteSuggestions(value);
-                                    setState(() {
-                                      autocompleteSuggestionsD = suggestions;
-                                    });
+                                    final response =
+                                        await placesApiClient.autocomplete(
+                                      value,
+                                      components: [
+                                        Component(Component.country, "sn")
+                                      ],
+
+// Adjust as needed
+                                    );
+
+                                    if (response.isOkay) {
+                                      setState(() {
+                                        autocompleteSuggestionsD = response
+                                            .predictions
+                                            .where((prediction) =>
+                                                prediction.description != null)
+                                            .map((prediction) =>
+                                                prediction.description!)
+                                            .toList();
+                                      });
+                                    }
                                   },
                                 ),
                               ),
@@ -387,11 +409,27 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                                   ),
                                 ),
                                 onChanged: (value) async {
-                                  final suggestions = await geoapifyApi
-                                      .getAutocompleteSuggestions(value);
-                                  setState(() {
-                                    autocompleteSuggestionsA = suggestions;
-                                  });
+                                  final response =
+                                      await placesApiClient.autocomplete(
+                                    value,
+                                    components: [
+                                      Component(Component.country, "sn")
+                                    ],
+
+// Adjust as needed
+                                  );
+
+                                  if (response.isOkay) {
+                                    setState(() {
+                                      autocompleteSuggestionsA = response
+                                          .predictions
+                                          .where((prediction) =>
+                                              prediction.description != null)
+                                          .map((prediction) =>
+                                              prediction.description!)
+                                          .toList();
+                                    });
+                                  }
                                 },
                               ),
                               if (autocompleteSuggestionsA.isNotEmpty)
@@ -494,29 +532,34 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
                   child: TextButton(
                     // group34007Rte (208:741)
-                    onPressed: () async {
-                      if (switchValue == true) {
-                        if (_controllerArrival.text.isNotEmpty) {
-                          searchForTraject();
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Veuillez saisir votre destination."),
-                            duration: Duration(milliseconds: 2000),
-                          ));
-                        }
-                      } else {
-                        if (_controllerArrival.text.isNotEmpty &&
-                            _controllerDeparture.text.isNotEmpty) {
-                          searchForTraject();
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                "Verifiez d'avoir bien saisit votre adresse de départ et votre destination."),
-                            duration: Duration(milliseconds: 4000),
-                          ));
-                        }
-                      }
-                    },
+                    onPressed: isSeekingLoading
+                        ? null
+                        : () async {
+                            if (switchValue == true) {
+                              if (_controllerArrival.text.isNotEmpty) {
+                                searchForTraject();
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      "Veuillez saisir votre destination."),
+                                  duration: Duration(milliseconds: 2000),
+                                ));
+                              }
+                            } else {
+                              if (_controllerArrival.text.isNotEmpty &&
+                                  _controllerDeparture.text.isNotEmpty) {
+                                searchForTraject();
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      "Verifiez d'avoir bien saisit votre adresse de départ et votre destination."),
+                                  duration: Duration(milliseconds: 4000),
+                                ));
+                              }
+                            }
+                          },
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                     ),
@@ -541,28 +584,40 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    SizedBox(
-                                      // vectorKUE (208:672)
+                                    isSeekingLoading
+                                        ? Transform.rotate(
+                                            angle:
+                                                3.14, // Rotate by half a circle (180 degrees)
+                                            child: CircularProgressIndicator(
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        : SizedBox(
+                                            // vectorKUE (208:672)
 
-                                      width: 22,
-                                      height: 24,
-                                      child: Image.asset(
-                                        'assets/page-1/images/vector-6HY.png',
-                                        width: 22,
-                                        height: 24,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Trouver un trajet',
-                                      style: SafeGoogleFont(
-                                        'Red Hat Display',
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        height: 1.3225,
-                                        color:
-                                            Theme.of(context).primaryColorLight,
-                                      ),
-                                    ),
+                                            width: 22,
+                                            height: 24,
+                                            child: Image.asset(
+                                              'assets/page-1/images/vector-6HY.png',
+                                              width: 22,
+                                              height: 24,
+                                            ),
+                                          ),
+                                    isSeekingLoading
+                                        ? CircularProgressIndicator(
+                                            color: Colors.white,
+                                          )
+                                        : Text(
+                                            'Trouver un trajet',
+                                            style: SafeGoogleFont(
+                                              'Red Hat Display',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1.3225,
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                            ),
+                                          ),
                                   ]))
                         ],
                       ),
@@ -590,7 +645,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   Future<void> searchForTraject() async {
-    ModalManager.showLoadingModal(context);
+    setState(() {
+      isSeekingLoading = true;
+    });
 
     CustumPostionDto userPosition = globals.userLocation;
     if (switchValue == true) {
@@ -614,48 +671,61 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
           response = await OpsServices.searchForTraject(routeRequestDTO);
 
           if (response != null) {
-            ModalManager.dismissModal(); // Dismiss the loading modal
-            if (context != null && ModalManager.loadingModalContext != null) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                showModalBottom(ModalManager.loadingModalContext!, response);
-              });
-            }
-          } else {
-            ModalManager.dismissModal();
-            if (mounted) {
-              // Show the error modal
-              ModalManager.showErrorModal(context);
+            setState(() {
+              isSeekingLoading = false;
+            });
 
-              // Dismiss the modal after a delay
-              Future.delayed(Duration(seconds: 5), () {
-                if (mounted) {
-                  ModalManager.dismissModal();
-                }
-              });
-            }
+            showModalBottom(context, response);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  "Oups , une erreur s'est produite...Veuillez réesayer 😞."),
+              duration: Duration(milliseconds: 3000),
+            ));
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Destination inatteignable."),
-            duration: Duration(milliseconds: 3000),
+            duration: Duration(milliseconds: 5000),
           ));
         }
       }
     } else {
       log("not actuall positipon");
+      var userPosition = null;
+      var arrivalLocation = null;
 
-      var userPosition =
-          await GeoapifyService.fetchCoordinates(_controllerDeparture.text);
-      var arrivalLocation =
-          await GeoapifyService.fetchCoordinates(_controllerArrival.text);
+      final detailsResponseD =
+          await placesApiClient.searchByText(_controllerDeparture.text);
+
+      final detailsResponseA =
+          await placesApiClient.searchByText(_controllerArrival.text);
+
+      if (detailsResponseA.isOkay) {
+        final location = detailsResponseA.results.first.geometry?.location;
+        if (location != null) {
+          double latitude = location.lat;
+          double longitude = location.lng;
+          arrivalLocation = Location(lat: latitude, lng: longitude);
+        }
+      }
+
+      if (detailsResponseD.isOkay) {
+        final location = detailsResponseD.results.first.geometry?.location;
+        if (location != null) {
+          double latitude = location.lat;
+          double longitude = location.lng;
+          userPosition = Location(lat: latitude, lng: longitude);
+        }
+      }
 
       if (userPosition != null) {
         if (arrivalLocation != null) {
           RouteRequestDTO routeRequestDTO = new RouteRequestDTO(
-              departLatitude: userPosition!.latitude,
-              departLongitude: userPosition!.longitude,
-              arriveLatitude: arrivalLocation!.latitude,
-              arriveLongitude: arrivalLocation!.longitude,
+              departLatitude: userPosition!.lat,
+              departLongitude: userPosition!.lng,
+              arriveLatitude: arrivalLocation!.lat,
+              arriveLongitude: arrivalLocation!.lng,
               approximation: 1);
 
           print(routeRequestDTO.arriveLatitude);
@@ -664,26 +734,22 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
           print(routeRequestDTO.departLongitude);
           var response = await OpsServices.searchForTraject(routeRequestDTO);
           if (response != null) {
-            ModalManager.dismissModal(); // Dismiss the loading modal
-            if (context != null && ModalManager.loadingModalContext != null) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                showModalBottom(ModalManager.loadingModalContext!, response);
-              });
-            }
+            setState(() {
+              isSeekingLoading = false;
+            });
+
+            showModalBottom(context, response);
           } else {
-            ModalManager.dismissModal();
-            if (context != null) {
-              // ignore: use_build_context_synchronously
-              ModalManager.showErrorModal(context);
-              Future.delayed(Duration(seconds: 5), () {
-                ModalManager.dismissModal();
-              });
-            }
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  "😞 Oups , une erreur s'est produite...Veuillez réesayer."),
+              duration: Duration(milliseconds: 5000),
+            ));
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Destination inatteignable."),
-            duration: Duration(milliseconds: 3000),
+            duration: Duration(milliseconds: 4000),
           ));
         }
       } else {
@@ -694,6 +760,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       }
     }
 
+    setState(() {
+      isSeekingLoading = false;
+    });
     // showModalBottom(context);
   }
 }
