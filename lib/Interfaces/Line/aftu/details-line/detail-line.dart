@@ -1,6 +1,7 @@
 import 'package:SenYone/Components/map.dart';
 import 'package:SenYone/Components/map_polylines.dart';
 import 'package:SenYone/Models/ligne.dart';
+import 'package:SenYone/Responsiveness/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -75,14 +76,31 @@ class _DetailLineState extends State<DetailLine> {
                 SizedBox(
                   height: 10,
                 ),
-                Container(
-                    // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
-                    margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                    width: double.infinity,
-                    height: height * 0.75,
-                    child: MapScreenWithPolyline(
-                      polylineCoordinates: polylineCoordinates,
-                    )),
+                Responsive(
+                    mobile: Container(
+                        // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        width: double.infinity,
+                        height: height * 0.74,
+                        child: MapScreenWithPolyline(
+                          polylineCoordinates: polylineCoordinates,
+                        )),
+                    tablet: Container(
+                        // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        width: double.infinity,
+                        height: height * 0.75,
+                        child: MapScreenWithPolyline(
+                          polylineCoordinates: polylineCoordinates,
+                        )),
+                    desktop: Container(
+                        // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        width: double.infinity,
+                        height: height * 0.75,
+                        child: MapScreenWithPolyline(
+                          polylineCoordinates: polylineCoordinates,
+                        )))
               ],
             ),
             Container(

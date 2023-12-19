@@ -9,8 +9,8 @@ class TarifView extends StatelessWidget {
   Widget build(BuildContext context) {
     // Remove occurrences of '………' from each string in tarifs
     List<String> formattedTarifs =
-        tarifs.map((tarif) => tarif.replaceAll('………', '')).toList();
-
+        tarifs.map((tarif) => tarif.replaceAll('…', '')).toList();
+    var ScallFactor = MediaQuery.of(context).textScaleFactor;
     return Scaffold(
       appBar: AppBar(
         title: Text('Tarifs'),
@@ -32,12 +32,16 @@ class TarifView extends StatelessWidget {
                 cells: [
                   DataCell(
                     Text(
+                      style: TextStyle(fontSize: 12 * ScallFactor),
+
                       section,
                       // Apply styling if needed
                     ),
                   ),
                   DataCell(
                     Text(
+                      style: TextStyle(fontSize: 12 * ScallFactor),
+
                       price,
                       // Apply styling if needed
                     ),

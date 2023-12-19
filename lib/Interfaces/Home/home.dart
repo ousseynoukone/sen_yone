@@ -164,35 +164,11 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          showDialog<void>(
-                            context: context,
-                            barrierDismissible: false, // user must tap button!
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Container(
-                                  height: 100, // Set your desired height here
-
-                                  child: Center(
-                                      child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Déconnexion...',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      SizedBox(height: 20),
-                                      CircularProgressIndicator(),
-                                    ],
-                                  )),
-                                ),
-                              );
-                            },
-                          );
-                          logOut();
-                        },
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                logOut();
+                              },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                         ),
@@ -225,11 +201,17 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                                   style: TextButton.styleFrom(
                                     padding: EdgeInsets.zero,
                                   ),
-                                  child: Image.asset(
-                                    'assets/page-1/images/vector-A6v.png',
-                                    width: 0.090 * baseWidth,
-                                    height: 0.12 * baseWidth,
-                                  ),
+                                  child: isLoading
+                                      ? SizedBox(
+                                          child: CircularProgressIndicator(),
+                                          width: 0.090 * baseWidth,
+                                          height: 0.12 * baseWidth,
+                                        )
+                                      : Image.asset(
+                                          'assets/page-1/images/vector-A6v.png',
+                                          width: 0.090 * baseWidth,
+                                          height: 0.12 * baseWidth,
+                                        ),
                                 ),
                               )
                             ],

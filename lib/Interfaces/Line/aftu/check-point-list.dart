@@ -34,17 +34,20 @@ class _CheckPointListeState extends State<CheckPointListe> {
               color: Theme.of(context).primaryColor,
             ),
             child: Center(
-              child: Text(
-                'Depart ' +
-                    (widget.ligne.check_points.firstOrNull.length > 50
-                        ? '${widget.ligne.check_points.firstOrNull.substring(0, 47)}...'
-                        : widget.ligne.check_points.firstOrNull ?? ''),
-                style: TextStyle(
-                  fontFamily: 'Red Hat Display',
-                  fontSize: 14 * scaleFactor,
-                  fontWeight: FontWeight.w400,
-                  height: 1.3225,
-                  color: Theme.of(context).primaryColorLight,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Text(
+                  'Depart ' +
+                      (widget.ligne.check_points.firstOrNull.length > 50
+                          ? '${widget.ligne.check_points.firstOrNull.substring(0, 47)}...'
+                          : widget.ligne.check_points.firstOrNull ?? ''),
+                  style: TextStyle(
+                    fontFamily: 'Red Hat Display',
+                    fontSize: 14 * scaleFactor,
+                    fontWeight: FontWeight.w400,
+                    height: 1.3225,
+                    color: Theme.of(context).primaryColorLight,
+                  ),
                 ),
               ),
             ),
@@ -77,17 +80,20 @@ class _CheckPointListeState extends State<CheckPointListe> {
               color: Theme.of(context).primaryColor,
             ),
             child: Center(
-              child: Text(
-                'Arrivé ' + (widget.ligne.check_points.lastOrNull),
-                style: TextStyle(
-                  fontFamily: 'Red Hat Display',
-                  fontSize: 14 * scaleFactor,
-                  fontWeight: FontWeight.w400,
-                  height: 1.3225,
-                  color: Theme.of(context).primaryColorLight,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Text(
+                  'Arrivé ' + (widget.ligne.check_points.lastOrNull),
+                  style: TextStyle(
+                    fontFamily: 'Red Hat Display',
+                    fontSize: 14 * scaleFactor,
+                    fontWeight: FontWeight.w400,
+                    height: 1.3225,
+                    color: Theme.of(context).primaryColorLight,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
               ),
             ),
           ),
