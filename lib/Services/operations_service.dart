@@ -163,7 +163,8 @@ class OpsServices {
     return result;
   }
 
-  static Future<TrajetHistorique?> getHistoriques({DateTime? dateToSearch}) async {
+  static Future<TrajetHistorique?> getHistoriques(
+      {DateTime? dateToSearch}) async {
     List<TrajetDirectDto> trajetDirect = [];
     List<TrajetIndirectDto> trajetInDirect = [];
 
@@ -172,9 +173,10 @@ class OpsServices {
 
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
-        Logger().d(result);
 
         if (result['directTrajets'] != null) {
+          Logger().d(result['directTrajets']);
+
           List<dynamic> directTrajetList = result['directTrajets'];
           trajetDirect = directTrajetList
               .map((json) => TrajetDirectDto.fromJson(json))
@@ -203,8 +205,6 @@ class OpsServices {
       return null;
     }
   }
-
-
 
   //   static Future<TrajetHistorique?> getHistoriquesFilterByDate(DateTime dateToSearch) async {
   //   List<TrajetDirectDto> trajetDirect = [];
@@ -246,4 +246,20 @@ class OpsServices {
   //     return null;
   //   }
   // }
+
+  static deleteDirectTraject(String id) async {
+    var result = null;
+
+    result = await HttpOpsRequest.deleteDirectTrajet(id);
+
+    return result;
+  }
+
+  static deleteInDirectTraject(String id) async {
+    var result = null;
+
+    result = await HttpOpsRequest.deleteInDirectTrajet(id);
+
+    return result;
+  }
 }

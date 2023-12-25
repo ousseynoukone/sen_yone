@@ -1,7 +1,9 @@
+import 'package:SenYone/Interfaces/History/direct_trajet_history_details.dart';
 import 'package:SenYone/Interfaces/Trajet/trajets_detail.dart';
 import 'package:SenYone/Models/Dto/trajet_history_dto.dart';
 import 'package:SenYone/Models/trajetHistorique.dart';
 import 'package:SenYone/Services/operations_service.dart';
+import 'package:SenYone/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:date_field/date_field.dart';
@@ -104,7 +106,7 @@ class _HistoriqueTrajetState extends State<HistoriqueTrajet> {
                       child: SingleChildScrollView(
                         child: Center(
                           child: buildHistoriqueWidget(
-                              snapshot.data!, dateToSearch),
+                              snapshot.data!, dateToSearch, context),
                         ),
                       ),
                     ),
@@ -152,7 +154,7 @@ class _HistoriqueTrajetState extends State<HistoriqueTrajet> {
   }
 
   Widget buildHistoriqueWidget(
-      TrajetHistorique historique, DateTime? dateToSearch) {
+      TrajetHistorique historique, DateTime? dateToSearch, context) {
     // Check if there are direct and indirect trajets
     if (historique.trajetDirect.isNotEmpty ||
         historique.trajetIndirect.isNotEmpty) {
@@ -179,8 +181,8 @@ class _HistoriqueTrajetState extends State<HistoriqueTrajet> {
           // Display indirect trajets
           if (filteredIndirectTrajets.isNotEmpty)
             ...filteredIndirectTrajets
-                .map(
-                    (indirectTrajet) => buildIndirectTrajetCard(indirectTrajet))
+                .map((indirectTrajet) =>
+                    buildIndirectTrajetCard(indirectTrajet, context))
                 .toList()
         ],
       );
@@ -192,7 +194,7 @@ class _HistoriqueTrajetState extends State<HistoriqueTrajet> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "😞",
+              "😅",
               style: DefaultTextStyle.of(context).style.copyWith(
                     fontSize: MediaQuery.of(context).textScaleFactor * 40,
                     fontWeight: FontWeight.w400,
@@ -268,233 +270,238 @@ class _HistoriqueTrajetState extends State<HistoriqueTrajet> {
 
   Widget buildDirectTrajetCard(TrajetDirectDto directTrajet) {
     // Placeholder code for displaying direct trajet card
-    return Card(
-      color: Theme.of(context).primaryColor,
-      elevation: 10,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  "Trajet direct : ",
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Theme.of(context).primaryColorLight,
-                      fontWeight: FontWeight.w900),
+    var scalFactor = MediaQuery.of(context).textScaler;
+
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => directTrajetsHistoryDetails(
+                    trajetDirectDto: directTrajet,
+                  )),
+        );
+      },
+      child: Card(
+        color: Theme.of(context).primaryColor,
+        elevation: 10,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Trajet direct : ",
+                        style: TextStyle(
+                            fontSize: 13,
+                            color: Theme.of(context).primaryColorLight,
+                            fontWeight: FontWeight.w900),
+                      ),
+                      busNumero(directTrajet.numero, context),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Text(
+                            'Départ          : ',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            overflow: TextOverflow.visible,
+                            directTrajet.depart.toString(),
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Text(
+                            'Arrivé           : ',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            overflow: TextOverflow.visible,
+                            directTrajet.arrive.toString(),
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Text(
+                            'Fréquence   : ',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            overflow: TextOverflow.visible,
+                            "De 5 à ${directTrajet.frequence.toString()} mn",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Text(
+                            'Distance      : ',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            '${double.parse((directTrajet.distance).toStringAsFixed(2))} KM',
+                            style: TextStyle(
+                              overflow: TextOverflow.visible,
+                              fontSize: 15,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Text(
+                            'Date             : ',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            overflow: TextOverflow.visible,
+                            DateFormat('yyyy-MM-dd HH:mm:ss')
+                                .format(directTrajet.createdAt!),
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      OpsServices.deleteDirectTraject(
+                          directTrajet.id.toString());
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HistoriqueTrajet()),
+                      );
+                    },
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(7, 7, 7, 4.63),
+                            child: Text(
+                              'Supprimer',
+                              style: SafeGoogleFont(
+                                'Red Hat Display',
+                                fontSize: scalFactor.scale(12),
+                                fontWeight: FontWeight.w700,
+                                height: 1.3225,
+                                color: Color.fromARGB(255, 97, 0, 0),
+                              ),
+                            ),
+                          ),
+                          Icon(Icons.remove_circle_sharp)
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              IntrinsicWidth(
+                child: ElevatedButton(
+                  onPressed: null,
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue, // Customize the button color
+                  ),
+                  child: Row(
+                    children: [
+                      Text("Plus de détails",
+                          style: TextStyle(color: Colors.white)),
+                      Icon(Icons.arrow_forward_ios, color: Colors.white),
+                      SizedBox(width: 8),
+                    ],
+                  ),
                 ),
-                busNumero(directTrajet.numero, context),
-              ],
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Row(
-                children: [
-                  Container(
-                    child: Text(
-                      'Départ          : ',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      overflow: TextOverflow.visible,
-                      directTrajet.depart.toString(),
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                  ),
-                ],
               ),
-            ),
-
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Row(
-                children: [
-                  Container(
-                    child: Text(
-                      'Arrivé           : ',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      overflow: TextOverflow.visible,
-                      directTrajet.arrive.toString(),
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Row(
-                children: [
-                  Container(
-                    child: Text(
-                      'Fréquence   : ',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      overflow: TextOverflow.visible,
-                      "De 5 à ${directTrajet.frequence.toString()} mn",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Row(
-                children: [
-                  Container(
-                    child: Text(
-                      'Distance      : ',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      '${double.parse((directTrajet.distance).toStringAsFixed(2))} KM',
-                      style: TextStyle(
-                        overflow: TextOverflow.visible,
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Row(
-                children: [
-                  Container(
-                    child: Text(
-                      'Date             : ',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      overflow: TextOverflow.visible,
-                      DateFormat('yyyy-MM-dd HH:mm:ss')
-                          .format(directTrajet.createdAt!),
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // InkWell(
-            //   onTap: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) => IndirectTrajetsDetails(
-            //                 indirectLines: indirectLines,
-            //                 distance: trajet.indirectLinesDistance,
-            //                 trajetIndirectDto: TrajetIndirectDto(
-            //                     depart: indirectLines.first.ArretbusD.street,
-            //                     arrive: indirectLines.first.ArretbusA.street,
-            //                     lignes: ConcatenedNumero,
-            //                     distance: trajet.indirectLinesDistance),
-            //               )),
-            //     );
-            //   },
-            //   child: Row(
-            //     children: [
-            //       Responsive(
-            //         mobile: SizedBox(
-            //           width: width / 1.4,
-            //         ),
-            //         tablet: SizedBox(
-            //           width: width / 1.2,
-            //         ),
-            //         desktop: SizedBox(
-            //           width: width / 1.4,
-            //         ),
-            //       ),
-            //       Container(
-            //         padding: EdgeInsets.all(10),
-            //         decoration: BoxDecoration(
-            //           color: Color(0xff810000),
-            //           borderRadius: BorderRadius.circular(10),
-            //         ),
-            //         child: Row(
-            //           children: [
-            //             Container(
-            //               margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
-            //               width: 22,
-            //               height: 24,
-            //               child: Image.asset(
-            //                 'assets/page-1/images/vector-j22.png',
-            //                 width: 22,
-            //                 height: 24,
-            //               ),
-            //             ),
-            //             Container(
-            //               margin: EdgeInsets.fromLTRB(0, 1, 0, 0),
-            //               child: Text(
-            //                 'Détail',
-            //                 style: TextStyle(
-            //                   fontSize: 14,
-            //                   fontWeight: FontWeight.w700,
-            //                   color: Color(0xffffffff),
-            //                 ),
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -544,8 +551,10 @@ class _HistoriqueTrajetState extends State<HistoriqueTrajet> {
     );
   }
 
-  Widget buildIndirectTrajetCard(TrajetIndirectDto indirectTrajets) {
+  Widget buildIndirectTrajetCard(TrajetIndirectDto indirectTrajets, context) {
     List<String> ligneList = indirectTrajets.lignes.split('-');
+
+    var scalFactor = MediaQuery.of(context).textScaler;
 
     return Card(
       color: Theme.of(context).primaryColor,
@@ -677,6 +686,45 @@ class _HistoriqueTrajetState extends State<HistoriqueTrajet> {
                     ),
                   ),
                 ],
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  OpsServices.deleteInDirectTraject(
+                      indirectTrajets.id.toString());
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HistoriqueTrajet()),
+                  );
+                });
+              },
+              style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(7, 7, 7, 4.63),
+                      child: Text(
+                        'Supprimer',
+                        style: SafeGoogleFont(
+                          'Red Hat Display',
+                          fontSize: scalFactor.scale(12),
+                          fontWeight: FontWeight.w700,
+                          height: 1.3225,
+                          color: Color.fromARGB(255, 97, 0, 0),
+                        ),
+                      ),
+                    ),
+                    Icon(Icons.remove_circle_sharp)
+                  ],
+                ),
               ),
             ),
           ],

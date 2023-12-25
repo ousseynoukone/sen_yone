@@ -249,7 +249,7 @@ class TrajectComponent extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: directLine.busStopD.street,
+                        text: directLine.startingPointName,
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -290,7 +290,7 @@ class TrajectComponent extends StatelessWidget {
                         text: "Descendre  à ",
                         children: <TextSpan>[
                           TextSpan(
-                            text: directLine.busStopA.street,
+                            text: directLine.endingPointName,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
@@ -415,9 +415,12 @@ class TrajectComponent extends StatelessWidget {
                         builder: (context) => directTrajetsDetails(
                             directLine: directLine,
                             trajetDirectDto: TrajetDirectDto(
+                                tarifs: directLine.tarifs,
+                                line: directLine.line,
+                                routeInfo: directLine.routeInfo,
                                 distance: directLine.distance,
-                                depart: directLine.busStopD.street,
-                                arrive: directLine.busStopA.street,
+                                depart: directLine.startingPointName,
+                                arrive: directLine.endingPointName,
                                 departLat: directLine.startingPoint.first,
                                 departLon: directLine.startingPoint.last,
                                 arriveLat: directLine.endingPoint.first,
@@ -538,8 +541,8 @@ class TrajectComponent extends StatelessWidget {
                         indirectLines: indirectLines,
                         distance: trajet.indirectLinesDistance,
                         trajetIndirectDto: TrajetIndirectDto(
-                            depart: indirectLines.first.ArretbusD.street,
-                            arrive: indirectLines.first.ArretbusA.street,
+                            depart: indirectLines.first.startingPointName,
+                            arrive: indirectLines.first.endingPointName,
                             lignes: ConcatenedNumero,
                             distance: trajet.indirectLinesDistance),
                       )),
@@ -650,7 +653,7 @@ class TrajectComponent extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               color: Color(0xffffffff),
                             ),
-                            text: indirectLine.ArretbusD.street,
+                            text: indirectLine.startingPointName,
                           ),
                         ],
                       ),
@@ -698,7 +701,7 @@ class TrajectComponent extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               color: Color(0xffffffff),
                             ),
-                            text: indirectLine.ArretbusA.street,
+                            text: indirectLine.endingPointName,
                           ),
                         ],
                       ),

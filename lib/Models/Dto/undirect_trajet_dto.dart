@@ -8,12 +8,16 @@ class IndirectLine {
   List<double>? endingPoint;
   BusStop ArretbusD;
   BusStop ArretbusA;
+    String startingPointName;
+  String endingPointName;
   var tarifs;
   RouteInfo? routeInfo;
 
   IndirectLine({
     required this.startingPoint,
     required this.line,
+          required this.startingPointName,
+      required this.endingPointName,
     required this.endingPoint,
     required this.ArretbusD,
     required this.ArretbusA,
@@ -41,6 +45,8 @@ class IndirectLine {
         json["route"] != null ? RouteInfo.fromJson(json["route"]) : null;
 
     return IndirectLine(
+              endingPointName: json['EndingPointName'],
+        startingPointName: json['StartingPointName'],
         line: lineList,
         numero: numero,
         startingPoint: startingPoint,

@@ -111,7 +111,7 @@ class LegendItem extends StatelessWidget {
 }
 
 class RouteInfo {
-  int distance;
+  var distance;
   var duration;
   List<LatLng> coordinates;
 
@@ -139,7 +139,6 @@ class RouteInfo {
     );
   }
 }
-
 
 class LineDto {
   int id;

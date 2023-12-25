@@ -81,7 +81,7 @@ class _DetailLineState extends State<DetailLine> {
                         // autogroupdveav2n (NxMJd4Z2q1LEKwGSa4DVEA)
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                         width: double.infinity,
-                        height: height * 0.74,
+                        height: height * 0.65,
                         child: MapScreenWithPolyline(
                           polylineCoordinates: polylineCoordinates,
                         )),

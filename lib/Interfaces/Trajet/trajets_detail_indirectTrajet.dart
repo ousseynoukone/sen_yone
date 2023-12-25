@@ -207,33 +207,37 @@ class _IndirectTrajetsDetailsState extends State<IndirectTrajetsDetails> {
               .hideCurrentSnackBar(); // Hide the previous snackbar
 
           if (response.statusCode == 201) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Row(
-                  children: [
-                    Text("Sauvegarde effectuée ! "),
-                    SizedBox(width: 8),
-                    Icon(Icons.check,
-                        color: Colors.green), // Use a check icon for success
-                  ],
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      Text("Sauvegarde effectuée ! "),
+                      SizedBox(width: 8),
+                      Icon(Icons.check,
+                          color: Colors.green), // Use a check icon for success
+                    ],
+                  ),
+                  duration: Duration(milliseconds: 2000),
                 ),
-                duration: Duration(milliseconds: 2000),
-              ),
-            );
+              );
+            }
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Row(
-                  children: [
-                    Text("Erreur lors de la sauvegarde"),
-                    SizedBox(width: 8),
-                    Icon(Icons.error,
-                        color: Colors.red), // Use an error icon for failure
-                  ],
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      Text("Erreur lors de la sauvegarde"),
+                      SizedBox(width: 8),
+                      Icon(Icons.error,
+                          color: Colors.red), // Use an error icon for failure
+                    ],
+                  ),
+                  duration: Duration(milliseconds: 2000),
                 ),
-                duration: Duration(milliseconds: 2000),
-              ),
-            );
+              );
+            }
           }
           Logger().d(response.statusCode);
         }
@@ -506,7 +510,7 @@ class _IndirectTrajetsDetailsState extends State<IndirectTrajetsDetails> {
                               fontWeight: FontWeight.w700,
                               color: Color(0xffffffff),
                             ),
-                            text: indirectLine.ArretbusD.street,
+                            text: indirectLine.startingPointName,
                           ),
                         ],
                       ),
@@ -554,7 +558,7 @@ class _IndirectTrajetsDetailsState extends State<IndirectTrajetsDetails> {
                               fontWeight: FontWeight.w700,
                               color: Color(0xffffffff),
                             ),
-                            text: indirectLine.ArretbusA.street,
+                            text: indirectLine.endingPointName,
                           ),
                         ],
                       ),

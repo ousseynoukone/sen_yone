@@ -178,6 +178,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
 
   Widget trajectDetail(
       DirectLine directLine, width, BuildContext context, double scalfactor) {
+    bool saved = true;
     saveHistorique() async {
       try {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -203,22 +204,46 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
             var response =
                 await OpsServices.createDirectTraject(trajetDirectDto);
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Row(
-                  children: [
-                    Text("Sauvegarde effectuée ! "),
-                    SizedBox(width: 8),
-                    Icon(Icons.check,
-                        color: Colors.green), // Use a check icon for success
-                  ],
+            if (response.statusCode == 201) {
+
+              if(mounted){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      Text("Sauvegarde effectuée ! "),
+                      SizedBox(width: 8),
+                      Icon(Icons.check,
+                          color: Colors.green), // Use a check icon for success
+                    ],
+                  ),
+                  duration: Duration(milliseconds: 2000),
                 ),
-                duration: Duration(milliseconds: 2000),
-              ),
-            );
+              );
+              }
+
+            } else {
+              if(mounted){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      Text("Erreur lors de la sauvegarde"),
+                      SizedBox(width: 8),
+                      Icon(Icons.error,
+                          color: Colors.red), // Use an error icon for failure
+                    ],
+                  ),
+                  duration: Duration(milliseconds: 2000),
+                ),
+              );
+              }
+
+            }
 
             Logger().d(response.statusCode);
           } else {
+            if(mounted){
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Row(
@@ -232,22 +257,26 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                 duration: Duration(milliseconds: 2000),
               ),
             );
+            }
+
           }
         }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                Text("Erreur lors de la sauvegarde"),
-                SizedBox(width: 8),
-                Icon(Icons.error,
-                    color: Colors.red), // Use an error icon for failure
-              ],
-            ),
-            duration: Duration(milliseconds: 2000),
-          ),
-        );
+if (mounted) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Row(
+        children: [
+          Text("Erreur lors de la sauvegarde"),
+          SizedBox(width: 8),
+          Icon(Icons.error, color: Colors.red),
+        ],
+      ),
+      duration: Duration(milliseconds: 2000),
+    ),
+  );
+}
+
 
         Logger().e("Error in saveHistorique: $e");
       }
@@ -297,7 +326,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                             ),
                           ),
                           TextSpan(
-                            text: directLine.busStopD.street,
+                            text: directLine.startingPointName,
                             style: TextStyle(
                               fontSize: 12 * scalfactor,
                               fontWeight: FontWeight.w700,
@@ -336,7 +365,7 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
                         text: "Descendre  à ",
                         children: <TextSpan>[
                           TextSpan(
-                            text: directLine.busStopA.street,
+                            text: directLine.endingPointName,
                             style: TextStyle(
                               fontSize: 12 * scalfactor,
                               fontWeight: FontWeight.w700,
@@ -491,53 +520,60 @@ class _directTrajetsDetailsState extends State<directTrajetsDetails> {
             ],
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            InkWell(
-              onTap: () {
-                // Perform your desired action when the button is tapped
-                // For example, you can call a different function or navigate to another screen.
-                // replace the code below with your desired functionality
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xff810000),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        // Perform your desired action when the button is pressed
-                        // For example, you can call a different function or navigate to another screen.
-                        // replace the code below with your desired functionality
-                        saveHistorique();
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            "Sauvegarder", // Change the button text here
-                            style: TextStyle(
-                              fontSize: 12,
+        Visibility(
+          visible: saved,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: () {
+                  // Perform your desired action when the button is tapped
+                  // For example, you can call a different function or navigate to another screen.
+                  // replace the code below with your desired functionality
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xff810000),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          // Perform your desired action when the button is pressed
+                          // For example, you can call a different function or navigate to another screen.
+                          // replace the code below with your desired functionality
+                          saveHistorique();
+                          setState(() {
+                            saved = true;
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              "Sauvegarder", // Change the button text here
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
+                            ),
+                            SizedBox(
+                                width:
+                                    8), // Adjust spacing between text and icon
+                            Icon(
+                              Icons.save, // Change the icon here
                               color: Theme.of(context).primaryColorLight,
                             ),
-                          ),
-                          SizedBox(
-                              width: 8), // Adjust spacing between text and icon
-                          Icon(
-                            Icons.save, // Change the icon here
-                            color: Theme.of(context).primaryColorLight,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         )
       ],
     );

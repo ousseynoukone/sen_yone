@@ -25,9 +25,6 @@ class HttpOpsRequest {
     }
   }
 
-
-  
-
   //   static Future<http.Response> getHistoriquesByDate(DateTime dateToSearch) async {
   //   String endpoint = "api/trajets-historiqueD";
   //   String url = SharedConfig().BASE_URL + endpoint;
@@ -96,17 +93,11 @@ class HttpOpsRequest {
 
     Logger().w(any);
 
-    try {
-      return await http.post(
-        Uri.parse(url),
-        headers: _setHeadersToken(),
-        body: trajetDirectDto
-            .toJson(), // Assuming toJson is implemented in TrajetDto
-      );
-    } catch (e) {
-      print("Error from createTrajet: $e");
-      return http.Response("Server unavailable", 404);
-    }
+    return await http.post(
+      Uri.parse(url),
+      headers: _setHeadersToken(),
+      body: trajetDirectDto.toJson(), //  toJson is implemented in TrajetDto
+    );
   }
 
   static Future<http.Response> createIndirectTrajet(
@@ -126,6 +117,50 @@ class HttpOpsRequest {
       return responose;
     } catch (e) {
       print("Error from createIndirectTrajet: $e");
+      return http.Response("Server unavailable", 404);
+    }
+  }
+
+
+  
+  static Future<http.Response> deleteDirectTrajet(
+     String id) async {
+    String endpoint =
+        "api/trajets-historiqueD/$id"; // Adjust the endpoint based on your API
+    String url = SharedConfig().BASE_URL + endpoint;
+
+    try {
+      var responose = await http.delete(
+        Uri.parse(url),
+        headers: _setHeadersToken(),
+     
+      );
+      Logger().d(responose.body);
+      return responose;
+    } catch (e) {
+      print("Error from deleteDirectTrajet: $e");
+      return http.Response("Server unavailable", 404);
+    }
+  }
+
+
+
+    static Future<http.Response> deleteInDirectTrajet(
+     String id) async {
+    String endpoint =
+        "api/trajets-historiqueI/$id"; // Adjust the endpoint based on your API
+    String url = SharedConfig().BASE_URL + endpoint;
+
+    try {
+      var responose = await http.delete(
+        Uri.parse(url),
+        headers: _setHeadersToken(),
+     
+      );
+      Logger().d(responose.body);
+      return responose;
+    } catch (e) {
+      print("Error from deleteInDirectTrajet: $e");
       return http.Response("Server unavailable", 404);
     }
   }

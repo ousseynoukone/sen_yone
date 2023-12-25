@@ -1,12 +1,14 @@
 import 'package:SenYone/Models/Dto/globals_dto.dart';
 
 class DirectLine {
-  List<double> startingPoint;
+  String startingPointName;
+  String endingPointName;
   List<List<dynamic>> line;
   int numero;
   double distance;
   bool status;
   var tarifs;
+  List<double> startingPoint;
   List<double> endingPoint;
   BusStop busStopD;
   BusStop busStopA;
@@ -15,6 +17,8 @@ class DirectLine {
   DirectLine(
       {required this.startingPoint,
       required this.line,
+      required this.startingPointName,
+      required this.endingPointName,
       required this.endingPoint,
       required this.busStopD,
       required this.busStopA,
@@ -33,9 +37,13 @@ class DirectLine {
         busStopA: BusStop.fromJson(json['busStopA']),
         busStopD: BusStop.fromJson(json['busStopD']),
         distance: json['distance'],
+        endingPointName: json['EndingPointName'],
+        startingPointName: json['StartingPointName'],
         status: json['status'] ?? false,
         tarifs: json['tarifs'][0]["tarifs"],
-        routeInfo: RouteInfo.fromJson(json["route"]));
+        routeInfo: RouteInfo.fromJson(json["route"])
+        
+        );
   }
 }
 

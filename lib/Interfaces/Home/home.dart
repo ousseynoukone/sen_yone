@@ -48,7 +48,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   bool positionPermisionCheck = false;
 
   final GeoapifyApi geoapifyApi = GeoapifyApi();
-  //Tableau qui vas tocker les prediction de completion D pour depart et A pour arrivé
+  //Tableau qui vas stocker les prediction de completion D pour depart et A pour arrivé
   List<String> autocompleteSuggestionsD = [];
   List<String> autocompleteSuggestionsA = [];
   final TextEditingController _controllerDeparture = TextEditingController();
