@@ -248,24 +248,26 @@ class _HistoriqueTrajetState extends State<HistoriqueTrajet> {
     if (dateToSearch == null) {
       return true; // No date specified, consider all trajets
     }
+    DateTime dateToSearchWithoutTime = DateTime(
+      dateToSearch.year,
+      dateToSearch.month,
+      dateToSearch.day,
+    );
 
-    DateTime trajetCreatedAt = indirectTrajet.createdAt ?? DateTime.now();
+    DateTime trajetCreatedAt = DateTime(
+      indirectTrajet.createdAt!.year,
+      indirectTrajet.createdAt!.month,
+      indirectTrajet.createdAt!.day,
+    );
 
     // Check if trajet's createdAt is on the specified date
-    if (trajetCreatedAt.toLocal() != dateToSearch.toLocal()) {
+
+    Logger().e(dateToSearchWithoutTime);
+    Logger().e(trajetCreatedAt);
+    if (!trajetCreatedAt.isAtSameMomentAs(dateToSearchWithoutTime)) {
       return false;
     }
-
-    // Check if trajet's createdAt is within the same day and time range
-    // Add your specific time range conditions here
-    // Example: Check if trajet's createdAt is between 8:00 AM and 5:00 PM
-    final startTime =
-        DateTime(dateToSearch.year, dateToSearch.month, dateToSearch.day, 8, 0);
-    final endTime = DateTime(
-        dateToSearch.year, dateToSearch.month, dateToSearch.day, 17, 0);
-
-    return trajetCreatedAt.isAfter(startTime) &&
-        trajetCreatedAt.isBefore(endTime);
+    return true;
   }
 
   Widget buildDirectTrajetCard(TrajetDirectDto directTrajet) {

@@ -110,7 +110,7 @@ class _directTrajetsHistoryDetailsState
           ///RESPONSIVENESS AREA
           Responsive(
               mobile: SizedBox(
-                height: _width / 1.5,
+                height: _width,
                 child: MapScreenWithPolylineDirectTrajetHistory(
                   polylineCoordinates: polylineCoordinates,
                   departMarker: departPoint,
@@ -438,7 +438,6 @@ class _directTrajetsHistoryDetailsState
                 ],
               ),
             ),
-            
           ],
         ),
       ),
