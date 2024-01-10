@@ -1,16 +1,6 @@
 # SenYone
 
-A new Flutter project.
+Une application de planification de trajet en bus a DAKAR/SENEGAL
 
-## Getting Started
+![image](https://github.com/ousseynoukone/sen_yone/assets/79483988/a9409fcb-e722-4ff5-b379-e5ea8b8a7c5d)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
