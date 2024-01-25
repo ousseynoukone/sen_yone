@@ -96,7 +96,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       });
       if (response.toString().isNotEmpty) {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Login()));
+            .pushReplacement(MaterialPageRoute(builder: (context) => Login()));
       }
     }
 

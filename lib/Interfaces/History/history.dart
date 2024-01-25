@@ -51,7 +51,7 @@ class _HistoriqueTrajetState extends State<HistoriqueTrajet> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: TextField(
-                        readOnly: true,
+                          readOnly: true,
                         controller: _datePickerController,
                         decoration: InputDecoration(
                           hintText: 'Choisir une date',
